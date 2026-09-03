@@ -1,0 +1,25 @@
+@* Premium responsive navigation for Sengele Ministries *@
+<nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top navbar-dark">
+	<div class="container-fluid px-4">
+		<a class="navbar-brand fw-bold text-uppercase" asp-controller="Home" asp-action="Index">Sengele Ministries</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="mainNav">
+			<ul class="navbar-nav ms-auto align-items-lg-center">
+				<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+				<li class="nav-item"><a class="nav-link" asp-controller="About" asp-action="Index">About</a></li>
+				<li class="nav-item"><a class="nav-link" asp-controller="Ministries" asp-action="Index">Ministries</a></li>
+				<li class="nav-item"><a class="nav-link" asp-controller="Messages" asp-action="Index">Messages</a></li>
+				<li class="nav-item"><a class="nav-link" asp-controller="Events" asp-action="Index">Events</a></li>
+				<li class="nav-item"><a class="nav-link" asp-controller="Prayer" asp-action="Index">Prayer</a></li>
+				<li class="nav-item"><a class="nav-link" asp-controller="Gallery" asp-action="Index">Gallery</a></li>
+				<li class="nav-item"><a class="nav-link" asp-controller="Contact" asp-action="Index">Contact</a></li>
+				<li class="nav-item ms-lg-3">
+					<a class="btn btn-cta btn-sm" asp-controller="Messages" asp-action="Index">Watch Now</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>

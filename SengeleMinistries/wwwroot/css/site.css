@@ -1,0 +1,95 @@
+:root{
+  --color-bg: #fbf9f6; /* warm off-white */
+  --color-dark: #111114; /* deep charcoal */
+  --color-muted: #6b6b6b;
+  --color-accent: #c9b78a; /* muted gold / champagne */
+  --max-width: 1200px;
+}
+
+/* Base */
+*{box-sizing:border-box}
+html{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; -webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--color-bg);color:var(--color-dark);line-height:1.6;overflow-x:hidden}
+
+/* global image defaults: keep images responsive and prevent oversizing */
+img{max-width:100%;height:auto;display:block}
+
+.site-main{margin-top:72px}
+
+/* NAVBAR */
+#mainNavbar{transition:background-color .3s ease,box-shadow .3s ease;padding:0.5rem 0}
+#mainNavbar .navbar-brand{font-size:1.05rem;letter-spacing:.08rem}
+#mainNavbar .nav-link{color:rgba(255,255,255,0.9);transition:color .15s ease}
+#mainNavbar.navbar-dark .nav-link:focus,#mainNavbar.navbar-dark .nav-link:hover{color:var(--color-accent)}
+
+/* Transparent by default - over hero */
+#mainNavbar{background:transparent}
+#mainNavbar.scrolled{background:var(--color-dark);box-shadow:0 6px 18px rgba(17,17,20,0.25)}
+#mainNavbar.scrolled .nav-link{color:rgba(255,255,255,0.9)}
+
+.btn-cta{background:var(--color-accent);color:var(--color-dark);border:none;padding:.5rem .85rem;border-radius:6px;font-weight:600}
+.btn-cta:hover{opacity:.92}
+
+.btn-outline-cta{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.15);padding:.5rem .85rem;border-radius:6px}
+.btn-outline-cta:hover{border-color:var(--color-accent);color:var(--color-accent);background:rgba(255,255,255,0.02)}
+
+/* HERO */
+.hero{
+  min-height:85vh;display:flex;align-items:center;
+  color:#fff;position:relative;overflow:hidden
+}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.55));mix-blend-mode:multiply}
+.hero-inner{position:relative;z-index:2;max-width:var(--max-width);margin:0 auto;padding:6rem 2rem}
+.hero-grid{display:grid;grid-template-columns:1fr 420px;gap:3rem;align-items:center}
+.hero-title{font-size:clamp(2rem,4.8vw,4rem);line-height:1.02;font-weight:700;margin:0 0 1rem}
+.hero-sub{font-size:clamp(1rem,2.2vw,1.25rem);opacity:.95;margin-bottom:1.75rem}
+.hero-kicker{font-size:.9rem;letter-spacing:.12rem;font-weight:700;color:var(--color-accent);margin-bottom:.6rem}
+
+/* Intro / editorial */
+.section{padding:4rem 2rem}
+.container-wide{max-width:var(--max-width);margin:0 auto}
+.who-label{font-size:.9rem;color:var(--color-muted);letter-spacing:.12rem;margin-bottom:.5rem}
+.lead-heading{font-size:clamp(1.4rem,2.6vw,2.4rem);font-weight:700;margin:0 0 1rem}
+.muted{color:var(--color-muted)}
+
+/* Core values */
+.core-values{display:grid;grid-template-columns:repeat(2,1fr);gap:2.5rem;align-items:start}
+.value-num{font-weight:800;font-size:1.25rem;color:var(--color-dark);opacity:.9}
+.value-title{font-size:1.4rem;font-weight:700;color:var(--color-dark)}
+.value-desc{color:var(--color-muted);margin-top:.5rem}
+
+/* Latest message */
+.message-card{display:grid;grid-template-columns:1fr 420px;gap:2rem;align-items:center}
+.message-media{width:100%;height:320px;background-size:cover;background-position:center;border-radius:6px;box-shadow:0 10px 30px rgba(17,17,20,0.12)}
+
+/* Programs */
+.programs{display:flex;flex-wrap:wrap;gap:1rem}
+.program{flex:1 1 220px;padding:1.2rem;border-radius:6px;background:#fff;border:1px solid rgba(17,17,20,0.04)}
+.program h4{margin:0 0 .5rem}
+
+/* Prayer CTA - dark */
+.prayer-cta{background:var(--color-dark);color:#fff;padding:3rem 2rem;text-align:center;border-radius:6px}
+.prayer-cta h2{color:#fff;margin:0 0 1rem}
+.prayer-cta p{color:rgba(255,255,255,.85)}
+
+/* Gallery preview */
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gallery-grid img{width:100%;height:160px;object-fit:cover;border-radius:6px}
+
+/* Footer */
+.site-footer{background:var(--color-dark);color:#fff}
+.site-footer a{color:var(--color-accent)}
+.footer-brand{font-weight:700;font-size:1.15rem}
+
+/* Responsive */
+@media (max-width:991px){
+  .hero-grid{grid-template-columns:1fr}
+  .message-card{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .core-values{grid-template-columns:1fr}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+}
+

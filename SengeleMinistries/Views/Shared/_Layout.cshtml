@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sengele Ministries</title>
+    <meta name="description" content="Sengele Ministries - Hope, Prayer and The Word" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="site-body">
+    @* Navigation (sticky, transparent over hero) *@
+    @await Html.PartialAsync("_Navigation")
+
+    <main class="site-main">
+        @RenderBody()
+    </main>
+
+    @* Professional dark footer *@
+    <footer class="site-footer">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="footer-brand">Sengele Ministries</h5>
+                    <p class="muted">Hope • Prayer • The Word</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6>Navigation</h6>
+                    <ul class="list-unstyled">
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="About" asp-action="Index">About</a></li>
+                        <li><a asp-controller="Ministries" asp-action="Index">Ministries</a></li>
+                        <li><a asp-controller="Messages" asp-action="Index">Messages</a></li>
+                        <li><a asp-controller="Events" asp-action="Index">Events</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6>Contact</h6>
+                    <p class="mb-1">Des Moines, Washington</p>
+                    <p class="mb-1">Phone: <a href="tel:+14255249990">+1 (425) 524-9990</a></p>
+                    <p class="mb-1">Email: <a href="mailto:contact@francis.sengele@gmail.com">contact@francis.sengele@gmail.com</a></p>
+                    <p class="mt-2"><a class="footer-yt" href="https://www.youtube.com/shorts/sxGPjDPDCOc" target="_blank" rel="noopener">YouTube</a></p>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 text-center muted">© 2026 Sengele Ministries</div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

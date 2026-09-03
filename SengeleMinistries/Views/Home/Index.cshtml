@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<header class="hero" role="banner" aria-label="Sengele Ministries hero" style="background-image:url('/images/TUEQ6134.JPG')">
+    <div class="hero-inner container-wide">
+        <div class="hero-grid">
+            <div>
+                <div class="hero-kicker">SENGELE MINISTRIES</div>
+                <h1 class="hero-title">HOPE. PRAYER. THE WORD.</h1>
+                <p class="hero-sub">Bienvenue à Sengele Ministries — un lieu de prière, d'enseignement et d'espérance.</p>
+
+                <p>
+                    <a class="btn btn-cta me-2" asp-controller="Messages" asp-action="Index">Watch Message</a>
+                    <a class="btn btn-outline-cta" asp-controller="Events" asp-action="Index">Join Us</a>
+                </p>
+            </div>
+            <div>
+                @* Empty right column for visual balance; could hold a highlighted image later *@
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="section">
+        <div class="container-wide">
+            <div class="who-label">WHO WE ARE</div>
+            <h2 class="lead-heading">Un ministère d'espérance, de prière et de la Parole.</h2>
+            <p class="muted">À Sengele Ministries, nous appelons les personnes à la prière persistante, à l'enseignement biblique et à la guérison spirituelle. Nos programmes et messages visent à amener espoir et restauration.</p>
+            <p><a asp-controller="About" asp-action="Index" class="text-decoration-none">DISCOVER OUR STORY →</a></p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container-wide core-values">
+            <article>
+                <div class="value-num">01</div>
+                <div class="value-title">ESPOIR</div>
+                <div class="value-desc">Nous proclamons l'espérance du message de l'Évangile et accompagnons les personnes vers une restauration complète.</div>
+            </article>
+            <article>
+                <div class="value-num">02</div>
+                <div class="value-title">PRIÈRE</div>
+                <div class="value-desc">La prière est le coeur de notre ministère. Nous croyons en la puissance de l'intercession et en la direction divine.</div>
+            </article>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container-wide message-card">
+            <div>
+                <h3 class="muted">LATEST MESSAGE</h3>
+                <h4>Message d'espérance</h4>
+                <p class="muted">Short description or excerpt from the latest sermon. This links to the Messages page where visitors can watch more content.</p>
+                <p><a class="btn btn-cta" asp-controller="Messages" asp-action="Index">Watch Now →</a></p>
+            </div>
+            <div>
+                <div class="message-media" style="background-image:url('/images/IMG_7497.JPG')" role="img" aria-label="Latest message image"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container-wide">
+            <h3>REJOIGNEZ-NOUS</h3>
+            <div class="programs">
+                <div class="program">
+                    <h4>Daily Prayer</h4>
+                    <p class="muted">Join us Monday–Friday for daily online prayer and teaching.</p>
+                </div>
+                <div class="program">
+                    <h4>Monthly Program</h4>
+                    <p class="muted">Chaque premier samedi du mois: prière, message et édification.</p>
+                </div>
+                <div class="program">
+                    <h4>Online Services</h4>
+                    <p class="muted">Live and recorded messages available online.</p>
+                </div>
+            </div>
+            <p class="mt-3"><a class="text-decoration-none" asp-controller="Events" asp-action="Index">VIEW ALL EVENTS →</a></p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container-wide prayer-cta">
+            <h4 class="muted">WE BELIEVE IN PRAYER</h4>
+            <h2>Comment pouvons-nous prier pour vous ?</h2>
+            <p class="muted">Soumettez une requête, et notre équipe priera pour vous.</p>
+            <p><a class="btn btn-cta" asp-controller="Prayer" asp-action="Index">Send a Prayer Request</a></p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container-wide">
+            <h3>GALLERY PREVIEW</h3>
+            <div class="gallery-grid mt-3">
+                <img src="/images/AZWM6413.JPG" alt="Sengele Ministries photo 1" />
+                <img src="/images/image.JPG" alt="Sengele Ministries photo 2" />
+                <img src="/images/IMG_7495.JPG" alt="Sengele Ministries photo 3" />
+                <img src="/images/IMG_7498.JPG" alt="Sengele Ministries photo 4" />
+            </div>
+            <p class="mt-3"><a asp-controller="Gallery" asp-action="Index" class="text-decoration-none">VIEW GALLERY →</a></p>
+        </div>
+    </section>
+
+</main>
+
+@* Shared interactions (hero rotation + navbar behavior) are in wwwroot/js/site.js *@
