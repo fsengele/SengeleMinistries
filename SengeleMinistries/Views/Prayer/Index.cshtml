@@ -1,18 +1,66 @@
 @{
-	ViewData["Title"] = "Prayer";
+	ViewData["Title"] = "REQUÊTE DE PRIÈRE";
 }
 
-<h1>Prayer</h1>
+<section class="section section--soft prayer-hero">
+	<div class="container-wide text-center">
+		<h1 class="hero-heading">REQUÊTE DE PRIÈRE</h1>
+		<p class="hero-sub large">Comment pouvons-nous prier pour vous ?</p>
+		<p class="muted">Vous n'êtes pas seul. Partagez avec nous votre sujet de prière. Notre équipe prendra le temps de prier pour vous.</p>
+		<p class="muted small">Votre requête sera traitée avec respect et confidentialité.</p>
+	</div>
+</section>
 
-<p>
-	La Prière : Le Fondement de Toute Chose
-</p>
+<main>
+	<section class="section section--white">
+		<div class="container-wide">
+			<div class="prayer-grid">
+				<div class="prayer-form-card">
+					<h3 class="card-heading">Envoyer une requête de prière</h3>
 
-<p>
-	La Bible nous enseigne dans Hébreux 11:3 : “C’est par la foi que nous comprenons que le monde a été formé par la parole de Dieu.” Avant toute manifestation visible, il y a une réalité spirituelle. Par la prière nous croyons que le monde physique est dirigé par le monde spirituel.
-</p>
+					<form action="https://formspree.io/f/xgaezoaz" method="POST">
+						<div class="form-row">
+							<div class="form-group">
+								<label for="firstName">Prénom</label>
+								<input id="firstName" name="FirstName" type="text" placeholder="Votre prénom" class="form-control" required />
+							</div>
+							<div class="form-group">
+								<label for="lastName">Nom</label>
+								<input id="lastName" name="LastName" type="text" placeholder="Votre nom" class="form-control" required />
+							</div>
+						</div>
 
-<p>
-	À Sengele Ministries, nous plaçons la prière au centre de tout ce que nous faisons. Vous pouvez soumettre une requête de prière via notre page de Contact.
+						<div class="form-row">
+							<div class="form-group">
+								<label for="phone">Numéro de téléphone</label>
+								<input id="phone" name="Phone" type="tel" placeholder="+1 (425) 524-9990" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="email">Adresse email</label>
+								<input id="email" name="Email" type="email" placeholder="votre@email.com" class="form-control" required />
+							</div>
+						</div>
 
-</p>
+						<div class="form-group">
+							<label for="prayer">Requête de prière</label>
+							<textarea id="prayer" name="PrayerRequest" rows="8" placeholder="Partagez votre requête de prière ici" class="form-control" required></textarea>
+						</div>
+
+						<div class="form-actions">
+							<button type="submit" class="btn btn-cta">ENVOYER MA REQUÊTE</button>
+						</div>
+					</form>
+				</div>
+
+				<aside class="prayer-side">
+					<div class="prayer-note">
+						<h4 class="muted small-uppercase">NOUS CROYONS EN LA PRIÈRE</h4>
+						<h3 class="prayer-verse">"Priez les uns pour les autres."</h3>
+						<p class="muted">— Jacques 5:16</p>
+						<p class="muted mt-3">Notre équipe prie régulièrement pour les requêtes soumises. Vous êtes accueilli avec compassion et confidentialité.</p>
+					</div>
+				</aside>
+			</div>
+		</div>
+	</section>
+</main>
