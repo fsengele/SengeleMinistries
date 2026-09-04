@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home";
 }
 
-<header class="hero" role="banner" aria-label="Sengele Ministries hero" style="background-image:url('/images/TUEQ6134.JPG')">
+<header class="hero hero--cinematic" role="banner" aria-label="Sengele Ministries hero">
     <div class="hero-inner container-wide">
         <div class="hero-grid">
             <div>
@@ -15,31 +15,38 @@
                     <a class="btn btn-outline-cta" asp-controller="Events" asp-action="Index">Join Us</a>
                 </p>
             </div>
-            <div>
-                @* Empty right column for visual balance; could hold a highlighted image later *@
+            
+                <div class="message-visual">
+                    <img src="~/images/Francis5.jpeg"
+                         alt="Sengele Ministries"
+                         class="message-media" />
+                
             </div>
         </div>
     </div>
 </header>
 
 <main>
-    <section class="section">
-        <div class="container-wide">
-            <div class="who-label">WHO WE ARE</div>
+    <section class="section section--soft">
+        <div class="container-wide who-section">
+            <div class="who-meta">
+                <div class="who-label">QUI SOMMES-NOUS</div>
+                <div class="who-accent"></div>
+            </div>
             <h2 class="lead-heading">Un ministère d'espérance, de prière et de la Parole.</h2>
-            <p class="muted">À Sengele Ministries, nous appelons les personnes à la prière persistante, à l'enseignement biblique et à la guérison spirituelle. Nos programmes et messages visent à amener espoir et restauration.</p>
-            <p><a asp-controller="About" asp-action="Index" class="text-decoration-none">DISCOVER OUR STORY →</a></p>
+            <p class="muted who-text">À Sengele Ministries, nous appelons les personnes à la prière persistante, à l'enseignement biblique et à la guérison spirituelle. Nos programmes et messages visent à amener espoir et restauration.</p>
+            <p><a asp-controller="About" asp-action="Index" class="link-accent">DÉCOUVRIR NOTRE HISTOIRE →</a></p>
         </div>
     </section>
 
-    <section class="section">
+    <section class="section section--white">
         <div class="container-wide core-values">
-            <article>
+            <article class="value-article">
                 <div class="value-num">01</div>
                 <div class="value-title">ESPOIR</div>
                 <div class="value-desc">Nous proclamons l'espérance du message de l'Évangile et accompagnons les personnes vers une restauration complète.</div>
             </article>
-            <article>
+            <article class="value-article">
                 <div class="value-num">02</div>
                 <div class="value-title">PRIÈRE</div>
                 <div class="value-desc">La prière est le coeur de notre ministère. Nous croyons en la puissance de l'intercession et en la direction divine.</div>
@@ -47,60 +54,66 @@
         </div>
     </section>
 
-    <section class="section">
-        <div class="container-wide message-card">
-            <div>
-                <h3 class="muted">LATEST MESSAGE</h3>
-                <h4>Message d'espérance</h4>
-                <p class="muted">Short description or excerpt from the latest sermon. This links to the Messages page where visitors can watch more content.</p>
-                <p><a class="btn btn-cta" asp-controller="Messages" asp-action="Index">Watch Now →</a></p>
+    <section class="section section--soft">
+        <div class="container-wide message-card message-card--feature">
+            <div class="message-info">
+                <div class="label-small muted">DERNIER MESSAGE</div>
+                <h3 class="message-title">Message d'espérance</h3>
+                <p class="muted message-excerpt">Short description or excerpt from the latest sermon. This links to the Messages page where visitors can watch more content.</p>
+                <p><a class="btn btn-cta" asp-controller="Messages" asp-action="Index">Voir le message →</a></p>
             </div>
-            <div>
-                <div class="message-media" style="background-image:url('/images/IMG_7497.JPG')" role="img" aria-label="Latest message image"></div>
+            <div class="message-visual">
+                <div class="message-visual">
+                    <img src="~/images/Francis12.jpeg"
+                         alt="Sengele Ministries"
+                         class="message-media" />
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="section">
+    <section class="section section--white">
         <div class="container-wide">
-            <h3>REJOIGNEZ-NOUS</h3>
-            <div class="programs">
+            <h3 class="section-heading">REJOIGNEZ-NOUS</h3>
+            <div class="programs programs--feature">
                 <div class="program">
-                    <h4>Daily Prayer</h4>
-                    <p class="muted">Join us Monday–Friday for daily online prayer and teaching.</p>
+                    <h4>Prière quotidienne</h4>
+                    <p class="muted">Rejoignez-nous du lundi au vendredi pour la prière et l'enseignement en ligne.</p>
                 </div>
                 <div class="program">
-                    <h4>Monthly Program</h4>
-                    <p class="muted">Chaque premier samedi du mois: prière, message et édification.</p>
+                    <h4>Programme mensuel</h4>
+                    <p class="muted">Chaque premier samedi du mois : prière, message et édification.</p>
                 </div>
                 <div class="program">
-                    <h4>Online Services</h4>
-                    <p class="muted">Live and recorded messages available online.</p>
+                    <h4>Services en ligne</h4>
+                    <p class="muted">Messages en direct et en replay disponibles en ligne.</p>
                 </div>
             </div>
-            <p class="mt-3"><a class="text-decoration-none" asp-controller="Events" asp-action="Index">VIEW ALL EVENTS →</a></p>
+            <p class="mt-3"><a class="text-decoration-none link-accent" asp-controller="Events" asp-action="Index">VIEW ALL EVENTS →</a></p>
         </div>
     </section>
 
-    <section class="section">
+    <section class="section section--dark prayer-section">
         <div class="container-wide prayer-cta">
-            <h4 class="muted">WE BELIEVE IN PRAYER</h4>
+            <h4 class="muted">NOUS CROYONS EN LA PRIÈRE</h4>
             <h2>Comment pouvons-nous prier pour vous ?</h2>
             <p class="muted">Soumettez une requête, et notre équipe priera pour vous.</p>
-            <p><a class="btn btn-cta" asp-controller="Prayer" asp-action="Index">Send a Prayer Request</a></p>
+            <p><a class="btn btn-cta" asp-controller="Prayer" asp-action="Index">Envoyer une requête de prière</a></p>
         </div>
     </section>
 
-    <section class="section">
+    <section class="section section--soft">
         <div class="container-wide">
-            <h3>GALLERY PREVIEW</h3>
-            <div class="gallery-grid mt-3">
-                <img src="/images/AZWM6413.JPG" alt="Sengele Ministries photo 1" />
-                <img src="/images/image.JPG" alt="Sengele Ministries photo 2" />
-                <img src="/images/IMG_7495.JPG" alt="Sengele Ministries photo 3" />
-                <img src="/images/IMG_7498.JPG" alt="Sengele Ministries photo 4" />
+            <h3>APERÇU DE LA GALERIE</h3>
+            <div class="gallery-composite mt-3">
+                <div class="gallery-large"><img src="/images/IMG_7498.JPG" alt="Sengele Ministries photo large" /></div>
+                <div class="gallery-side">
+                    <img src="/images/AZWM6413.JPG" alt="Sengele Ministries photo side 1" />
+                    <img src="/images/image.JPG" alt="Sengele Ministries photo side 2" />
+                    <img src="/images/IMG_7495.JPG" alt="Sengele Ministries photo side 3" />
+                </div>
             </div>
-            <p class="mt-3"><a asp-controller="Gallery" asp-action="Index" class="text-decoration-none">VIEW GALLERY →</a></p>
+            <p class="mt-3"><a asp-controller="Gallery" asp-action="Index" class="text-decoration-none link-accent">VOIR LA GALERIE →</a></p>
         </div>
     </section>
 
