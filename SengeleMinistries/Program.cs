@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+// Add EF Core DbContext (SQLite) for ContactMessages
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=SengeleMinistries.db";
+builder.Services.AddDbContext<SengeleMinistries.Data.ApplicationDbContext>(options =>
+    options.UseSqlite(connectionString)
+);
 
 var app = builder.Build();
 
