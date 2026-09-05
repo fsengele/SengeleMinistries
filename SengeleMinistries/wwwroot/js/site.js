@@ -43,3 +43,56 @@ const SengeleSite = (() => {
 
     return { init };
 })();
+
+// Gallery lightbox functionality
+(function () {
+    const grid = document.getElementById('masonryGrid');
+    if (!grid) return;
+
+    const imgs = Array.from(grid.querySelectorAll('.gallery-image'));
+    const lightbox = document.getElementById('lightbox');
+    const lbImage = document.getElementById('lbImage');
+    const btnClose = document.querySelector('.lb-close');
+    const btnPrev = document.querySelector('.lb-prev');
+    const btnNext = document.querySelector('.lb-next');
+    let current = 0;
+
+    function openAt(index) {
+        current = index;
+        lbImage.src = imgs[current].src;
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+        lightbox.setAttribute('aria-hidden', 'true');
+        lbImage.src = '';
+        document.body.style.overflow = '';
+    }
+
+    function prev() {
+        current = (current - 1 + imgs.length) % imgs.length;
+        lbImage.src = imgs[current].src;
+    }
+
+    function next() {
+        current = (current + 1) % imgs.length;
+        lbImage.src = imgs[current].src;
+    }
+
+    imgs.forEach((img, idx) => {
+        img.addEventListener('click', () => openAt(idx));
+    });
+
+    btnClose?.addEventListener('click', close);
+    btnPrev?.addEventListener('click', prev);
+    btnNext?.addEventListener('click', next);
+
+    document.addEventListener('keydown', (e) => {
+        if (lightbox.getAttribute('aria-hidden') === 'false') {
+            if (e.key === 'Escape') close();
+            if (e.key === 'ArrowLeft') prev();
+            if (e.key === 'ArrowRight') next();
+        }
+    });
+})();

@@ -1,37 +1,52 @@
 @{
 	ViewData["Title"] = "Gallery";
-	}
+}
 
-
-	<h1>Gallery</h1>
-
-	<p>Photos from our ministries and programs. Click any image to view more.</p>
-
-	<div class="gallery row g-2">
-		@for (int i = 0; i < 7; i++)
-		{
-			<div class="col-6 col-md-3"><img src="/images/AZWM6413.JPG" alt="photo 1" /></div>
-			<div class="col-6 col-md-3"><img src="/images/image.JPG" alt="photo 2" /></div>
-			<div class="col-6 col-md-3"><img src="/images/IMG_7495.JPG" alt="photo 3" /></div>
-			<div class="col-6 col-md-3"><img src="/images/TUEQ6134.JPG" alt="photo 4" /></div>
-            <div class="col-6 col-md-3"><img src="/images/Francis2.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis3.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis4.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis5.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis6.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis7.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis8.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis9.jpeg" alt="photo 5" /></div>
-	    	<div class="col-6 col-md-3"><img src="/images/Francis10.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis11.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis12.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis13.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis15.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis16.jpeg" alt="photo 5" /></div>
-	    	<div class="col-6 col-md-3"><img src="/images/Francis17.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis18.jpeg" alt="photo 5" /></div>
-		    <div class="col-6 col-md-3"><img src="/images/Francis19.jpeg" alt="photo 5" /></div>
-		}
+<section class="messages-hero gallery-hero">
+	<div class="hero-inner container-wide">
+		<div class="eyebrow">MOMENTS DE FOI</div>
+		<h1 class="messages-headline">PLUS QUE DES IMAGES. UNE HISTOIRE.</h1>
+		<p class="messages-sub muted">Une sélection de moments capturés lors de nos services, temps de prière et événements. Cliquez pour agrandir.</p>
 	</div>
+</section>
 
-	<p>Gallery images are stored in wwwroot/images and have been preserved.</p>
+<main>
+	<section class="section section--white">
+		<div class="container-wide">
+			<div class="masonry-grid" id="masonryGrid">
+				@* Use existing images from wwwroot/images *@
+				@{
+					var images = new string[] {
+						"/images/IMG_7497.JPG",
+						"/images/IMG_7498.JPG",
+						"/images/AZWM6413.JPG",
+						"/images/image.JPG",
+						"/images/IMG_7495.JPG",
+						"/images/TUEQ6134.JPG"
+					};
+				}
+
+				@for (int i = 0; i < images.Length; i++)
+				{
+					<div class="masonry-item" data-index="@i">
+						<img src="@images[i]" alt="Sengele Ministries photo @(i+1)" class="gallery-image" data-index="@i" />
+					</div>
+				}
+			</div>
+		</div>
+	</section>
+</main>
+
+@* Lightbox overlay *@
+<div id="lightbox" class="gallery-lightbox" aria-hidden="true">
+	<button class="lb-close" aria-label="Close">×</button>
+	<button class="lb-prev" aria-label="Previous">‹</button>
+	<div class="lb-content">
+		<img id="lbImage" src="" alt="" />
+	</div>
+	<button class="lb-next" aria-label="Next">›</button>
+</div>
+
+n@section Scripts {
+	<script src="~/js/site.js"></script>
+}
