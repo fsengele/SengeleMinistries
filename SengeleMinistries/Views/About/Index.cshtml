@@ -2,19 +2,424 @@
 	ViewData["Title"] = "About";
 }
 
-<h1>About Sengele Ministries</h1>
-<p>
-	Sengele Ministries exists to bring prayer, teaching and hope to people in need. We focus on prayerful intercession, biblical teaching and practical ministry to help individuals experience spiritual renewal.
-</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<h3>Our mission</h3>
-<p>
-	To call people into deeper relationship with God through persistent prayer, clear biblical teaching, and compassionate community service.
-</p>
+    <title>À propos | Sengele Ministries</title>
 
-<h3>What we believe</h3>
-<p>
-	We believe in the power of prayer, the authority of Scripture, and the transformative work of the Holy Spirit in people’s lives. Our services and resources are designed to encourage faith, healing and spiritual growth.
-</p>
+    <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
 
-<p>Content from the original homepage (testimonies, program descriptions and teaching summaries) will be organized into the dedicated pages for Ministries, Messages and Prayer.</p>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                background: #f7f5ef;
+                color: #1b1b1b;
+                line-height: 1.7;
+            }
+
+            /* HERO */
+            .about-hero {
+                background: #111111;
+                color: white;
+                padding: 100px 20px 90px;
+                text-align: center;
+            }
+
+                .about-hero .eyebrow {
+                    color: #c8a85b;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                    letter-spacing: 4px;
+                    text-transform: uppercase;
+                    margin-bottom: 18px;
+                }
+
+                .about-hero h1 {
+                    font-size: clamp(2.5rem, 6vw, 5rem);
+                    line-height: 1;
+                    margin-bottom: 25px;
+                    font-weight: 800;
+                }
+
+                .about-hero p {
+                    max-width: 650px;
+                    margin: auto;
+                    color: #d5d5d5;
+                    font-size: 1.05rem;
+                }
+
+            .gold-line {
+                width: 60px;
+                height: 2px;
+                background: #c8a85b;
+                margin: 30px auto 0;
+            }
+
+            /* MAIN CONTENT */
+            .vision-container {
+                max-width: 1100px;
+                margin: auto;
+                padding: 90px 25px;
+            }
+
+            .vision-section {
+                display: grid;
+                grid-template-columns: 90px 1fr;
+                gap: 35px;
+                padding: 55px 0;
+                border-bottom: 1px solid #d9d4c8;
+                opacity: 0;
+                transform: translateY(30px);
+                transition: opacity 0.8s ease, transform 0.8s ease;
+            }
+
+                .vision-section.visible {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+
+            .number {
+                color: #c8a85b;
+                font-size: 1.1rem;
+                font-weight: 700;
+                letter-spacing: 2px;
+            }
+
+            .section-label {
+                color: #9a7b38;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+                font-size: 0.75rem;
+                font-weight: 700;
+                margin-bottom: 12px;
+            }
+
+            .vision-section h2 {
+                font-size: clamp(1.8rem, 4vw, 3rem);
+                line-height: 1.15;
+                margin-bottom: 22px;
+            }
+
+            .vision-section p {
+                max-width: 760px;
+                font-size: 1.05rem;
+                color: #444;
+                margin-bottom: 22px;
+            }
+
+            .vision-section strong {
+                color: #111;
+            }
+
+            /* VERSES */
+            .verse {
+                margin-top: 30px;
+                padding-left: 25px;
+                border-left: 2px solid #c8a85b;
+                max-width: 700px;
+            }
+
+                .verse p {
+                    font-family: Georgia, "Times New Roman", serif;
+                    font-style: italic;
+                    font-size: 1.08rem;
+                    color: #252525;
+                    margin-bottom: 7px;
+                }
+
+                .verse span {
+                    color: #9a7b38;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                    letter-spacing: 1px;
+                    text-transform: uppercase;
+                }
+
+            /* FINAL STATEMENT */
+            .final-message {
+                background: #111;
+                color: white;
+                text-align: center;
+                padding: 90px 25px;
+            }
+
+                .final-message .small-title {
+                    color: #c8a85b;
+                    letter-spacing: 4px;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    margin-bottom: 20px;
+                }
+
+                .final-message h2 {
+                    max-width: 850px;
+                    margin: auto;
+                    font-family: Georgia, "Times New Roman", serif;
+                    font-size: clamp(2rem, 5vw, 4rem);
+                    line-height: 1.2;
+                    font-weight: 400;
+                }
+
+                .final-message strong {
+                    color: #d6b766;
+                }
+
+            /* MOBILE */
+             (max-width: 700px) {
+                .about-hero {
+                    padding: 75px 20px 65px;
+                }
+
+                .vision-container {
+                    padding: 45px 22px;
+                }
+
+                .vision-section {
+                    grid-template-columns: 1fr;
+                    gap: 12px;
+                    padding: 45px 0;
+                }
+
+                .number {
+                    margin-bottom: 5px;
+                }
+
+                .final-message {
+                    padding: 70px 22px;
+                }
+            }
+
+            /* Accessibility */
+             (prefers-reduced-motion: reduce) {
+                .vision-section {
+                    opacity: 1;
+                    transform: none;
+                    transition: none;
+                }
+            }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <section class="about-hero">
+
+        <div class="eyebrow">
+            Sengele Ministries
+        </div>
+
+        <h1>
+            UNE VISION.<br>
+            UNE ESPÉRANCE.
+        </h1>
+
+        <p>
+            Une vision née dans la prière pour rappeler à ceux
+            qui traversent la tempête que leur histoire
+            n'est pas terminée.
+        </p>
+
+        <div class="gold-line"></div>
+
+    </section>
+
+
+    <!-- THREE POINTS -->
+    <main class="vision-container">
+
+        <!-- POINT 1 -->
+        <section class="vision-section">
+
+            <div class="number">01</div>
+
+            <div>
+
+                <div class="section-label">
+                    Notre histoire
+                </div>
+
+                <h2>
+                    Sengele Ministries existe pour...
+                </h2>
+
+                <p>
+                    Sengele Ministries est né d'une vision reçue dans la prière :
+                    <strong>
+                        la colombe revenant vers l'arche de Noé avec une
+                        feuille d'olivier.
+                    </strong>
+                    Après la tempête, ce signe annonçait que
+                    <strong>la vie était encore possible.</strong>
+                </p>
+
+                <p>
+                    C'est le message que Dieu a placé dans notre cœur :
+                    malgré la maladie, l'échec, le rejet ou l'abandon,
+                    <strong>
+                        votre histoire n'est pas terminée.
+                        Il y a encore de l'espérance.
+                    </strong>
+                </p>
+
+                <div class="verse">
+                    <p>
+                        « Afin de vous donner un avenir et de l'espérance. »
+                    </p>
+                    <span>Jérémie 29:11</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- POINT 2 -->
+        <section class="vision-section">
+
+            <div class="number">02</div>
+
+            <div>
+
+                <div class="section-label">
+                    Notre mission
+                </div>
+
+                <h2>
+                    Porter un message d'espérance.
+                </h2>
+
+                <p>
+                    Notre mission est de porter cette
+                    <strong>feuille d'olivier</strong>
+                    à ceux qui traversent leurs propres tempêtes
+                    et de leur annoncer :
+                    <strong>la vie continue encore.</strong>
+                </p>
+
+                <p>
+                    Par la prière et la Parole de Dieu,
+                    nous voulons conduire les personnes à retrouver
+                    l'espérance, à se relever et à croire qu'avec Dieu,
+                    <strong>un nouveau commencement est toujours possible.</strong>
+                </p>
+
+                <div class="verse">
+                    <p>
+                        « Réjouissez-vous en espérance. Soyez patients
+                        dans l'affliction. Persévérez dans la prière. »
+                    </p>
+                    <span>Romains 12:12</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- POINT 3 -->
+        <section class="vision-section">
+
+            <div class="number">03</div>
+
+            <div>
+
+                <div class="section-label">
+                    Ce que nous croyons
+                </div>
+
+                <h2>
+                    La prière est notre source.
+                </h2>
+
+                <p>
+                    Nous croyons que
+                    <strong>
+                        la prière est la source d'une vie qui demeure
+                        dans l'espérance.
+                    </strong>
+                </p>
+
+                <p>
+                    Nous croyons également que le visible n'est pas
+                    toute la réalité et que
+                    <strong>
+                        le monde physique trouve sa véritable force
+                        dans le monde spirituel.
+                    </strong>
+                    C'est pourquoi nous choisissons de prier,
+                    d'intercéder et de marcher par la foi,
+                    même lorsque nos yeux ne voient encore rien.
+                </p>
+
+                <div class="verse">
+                    <p>
+                        « Car nous marchons par la foi et non par la vue. »
+                    </p>
+                    <span>2 Corinthiens 5:7</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FINAL MESSAGE -->
+    <section class="final-message">
+
+        <div class="small-title">
+            HOPE • PRAYER • THE WORD
+        </div>
+
+        <h2>
+            Après la tempête,<br>
+            <strong>il y a encore une espérance.</strong>
+        </h2>
+
+    </section>
+
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                const sections = document.querySelectorAll(".vision-section");
+
+                if (!("IntersectionObserver" in window)) {
+                    sections.forEach(section => {
+                        section.classList.add("visible");
+                    });
+                    return;
+                }
+
+                const observer = new IntersectionObserver(
+                    function (entries) {
+                        entries.forEach(function (entry) {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("visible");
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    {
+                        threshold: 0.15
+                    }
+                );
+
+                sections.forEach(function (section) {
+                    observer.observe(section);
+                });
+
+            });
+    </script>
+
+</body>
+</html>
