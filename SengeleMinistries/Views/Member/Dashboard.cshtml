@@ -1,0 +1,46 @@
+@using System.Security.Claims
+@{
+	ViewData["Title"] = "Dashboard";
+	var name = User?.Identity?.Name ?? "Member";
+}
+
+<div class="section">
+	<div class="container-wide" style="max-width:820px;margin:0 auto">
+		<h1 class="lead-heading">My Account</h1>
+		<p class="muted">Welcome, @name</p>
+
+		<section class="section--white" style="padding:1.5rem;border-radius:8px">
+			<h4>MY PROFILE</h4>
+			<p class="muted">Manage your personal information</p>
+		</section>
+
+		<section class="section--soft mt-3" style="padding:1.5rem;border-radius:8px">
+			<h4>MY PRAYER REQUESTS</h4>
+			<p class="muted">Prayer history and follow-up — coming next</p>
+		</section>
+
+		<section class="section--white mt-3" style="padding:1.5rem;border-radius:8px">
+			<h4>MY EVENTS</h4>
+			<p class="muted">Registrations — coming next</p>
+		</section>
+
+		<section class="section--soft mt-3" style="padding:1.5rem;border-radius:8px">
+			<h4>PROGRAMS &amp; TRAINING</h4>
+			<p class="muted">Programs and enrollments — coming next</p>
+		</section>
+
+		<section class="section--white mt-3" style="padding:1.5rem;border-radius:8px">
+			<h4>SERVE WITH US</h4>
+			<p class="muted">Volunteer applications — coming next</p>
+		</section>
+
+		<section class="section--soft mt-3" style="padding:1.5rem;border-radius:8px">
+			<h4>MY GIVING</h4>
+			<p class="muted">Giving history — coming later</p>
+		</section>
+
+		<form asp-action="Logout" method="post" class="mt-4">
+			<button type="submit" class="btn btn-outline-cta">Sign out</button>
+		</form>
+	</div>
+</div>
