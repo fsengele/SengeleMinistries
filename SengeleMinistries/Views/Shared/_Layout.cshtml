@@ -16,18 +16,30 @@
         @RenderBody()
     </main>
 
-    @* Premium structured footer *@
+    @* Premium structured footer (redesigned) *@
     <footer class="site-footer">
         <div class="container py-5">
-            <div class="row">
-                <div class="col-md-3 mb-4">
-                    <h5 class="footer-brand">Sengele Ministries</h5>
-                    <p class="muted">Hope • Prayer • The Word</p>
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <a class="d-flex align-items-start footer-brand-link" asp-controller="Home" asp-action="Index">
+                        <div class="brand-mark me-3" aria-hidden="true">
+                            <span class="brand-monogram">SM</span>
+                        </div>
+                        <div class="brand-text d-none d-md-block">
+                            <div class="brand-line brand-name">SENGELE</div>
+                            <div class="brand-line brand-sub">MINISTRIES</div>
+                        </div>
+                        <div class="brand-text d-block d-md-none">
+                            <div class="brand-line brand-name-small">SENGELE MINISTRIES</div>
+                        </div>
+                    </a>
+                    <p class="mt-3 text-muted-quiet small-uppercase">HOPE • PRAYER • THE WORD</p>
+                    <p class="mt-2 muted footer-statement">Bringing hope through prayer and the Word of God.</p>
                 </div>
 
-                <div class="col-md-2 mb-3">
-                    <h6>Ministry</h6>
-                    <ul class="list-unstyled">
+                <div class="col-6 col-md-2">
+                    <h6 class="footer-heading">Ministry</h6>
+                    <ul class="list-unstyled footer-list">
                         <li><a asp-controller="About" asp-action="Index">About</a></li>
                         <li><a asp-controller="Messages" asp-action="Index">Messages</a></li>
                         <li><a asp-controller="Events" asp-action="Index">Events</a></li>
@@ -35,40 +47,33 @@
                     </ul>
                 </div>
 
-                <div class="col-md-2 mb-3">
-                    <h6>Connect</h6>
-                    <ul class="list-unstyled">
-                        <li><a asp-controller="Member" asp-action="Login">My Account</a></li>
-                        <li><span class="muted">Serve With Us <small class="muted">(Coming soon)</small></span></li>
-                        <li><span class="muted">Programs <small class="muted">(Coming soon)</small></span></li>
+                <div class="col-6 col-md-2">
+                    <h6 class="footer-heading">Connect</h6>
+                    <ul class="list-unstyled footer-list">
                         <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
+                        <li><a asp-controller="Member" asp-action="Login">My Account</a></li>
+                        <li><a asp-controller="Home" asp-action="Donate">Give</a></li>
+                        <li><a class="btn btn-outline-cta btn-sm px-2 py-1 mt-2" href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN" target="_blank" rel="noopener">Watch Now</a></li>
                     </ul>
                 </div>
 
-                <div class="col-md-2 mb-3">
-                    <h6>Resources</h6>
-                    <ul class="list-unstyled">
-                        <li><span class="muted">Books &amp; Bibles <small class="muted">(Coming soon)</small></span></li>
-                        <li><span class="muted">Teachings &amp; Resources <small class="muted">(Coming soon)</small></span></li>
-                        <li><span class="muted">Event Collections <small class="muted">(Coming soon)</small></span></li>
-                        <li><span class="muted">Apparel <small class="muted">(Coming soon)</small></span></li>
-                    </ul>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <h6>Support</h6>
-                    <p><a class="btn btn-cta btn-sm" asp-controller="Home" asp-action="Donate">Donate</a></p>
-                    <h6 class="mt-3">Follow</h6>
-                    <ul class="list-unstyled d-flex gap-3">
+                <div class="col-12 col-md-4">
+                    <h6 class="footer-heading">Follow</h6>
+                    <ul class="list-unstyled d-flex gap-3 footer-social">
                         <li><a class="footer-yt" href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN" target="_blank" rel="noopener">YouTube</a></li>
-                        <li><a href="#" aria-disabled="true" title="Facebook - official URL required">Facebook</a></li>
-                        <li><a href="#" aria-disabled="true" title="Instagram - official URL required">Instagram</a></li>
+                        <li><a href="#" title="Facebook - official URL required">Facebook</a></li>
+                        <li><a href="#" title="Instagram - official URL required">Instagram</a></li>
                     </ul>
+                    <p class="mt-3 muted small">Support our work by giving or sharing resources with your community.</p>
                 </div>
             </div>
 
-            <div class="row mt-4">
-                <div class="col-12 text-center muted">© 2026 Sengele Ministries</div>
+            <div class="footer-bottom-divider mt-4"></div>
+
+            <div class="row pt-3 align-items-center">
+                <div class="col-6 text-start small muted">© 2026 Sengele Ministries</div>
+                <div class="col-6 text-end small muted d-none d-md-block">HOPE • PRAYER • THE WORD</div>
+                <div class="col-12 text-center small muted d-block d-md-none mt-2">HOPE • PRAYER • THE WORD</div>
             </div>
         </div>
     </footer>
