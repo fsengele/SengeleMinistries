@@ -4,11 +4,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-// Add EF Core DbContext (SQLite) for ContactMessages
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=SengeleMinistries.db";
+// Add EF Core DbContext (SQL Server LocalDB) for application data
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+    "Server=(localdb)\\MSSQLLocalDB;Database=SengeleMinistries;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
 builder.Services.AddDbContext<SengeleMinistries.Data.ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString)
+    options.UseSqlServer(connectionString)
 );
+
+// Configure cookie authentication (simple, non-Identity)
+builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Member/Login";
+        options.LogoutPath = "/Member/Logout";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+    });
 
 var app = builder.Build();
 

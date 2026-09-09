@@ -1,0 +1,51 @@
+@model SengeleMinistries.Models.RegistrationViewModel
+
+@{
+	ViewData["Title"] = "Register";
+}
+
+<div class="section section--soft">
+	<div class="container-wide">
+		<div style="max-width:560px;margin:0 auto;background:var(--sm-white);padding:2rem;border-radius:8px;box-shadow:0 10px 30px rgba(16,16,16,0.06)">
+			<h2 class="lead-heading">Create an account</h2>
+			<p class="muted">Join the Sengele Ministries community.</p>
+
+			<form asp-action="Register" method="post">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+				<div class="mb-3">
+					<label asp-for="FirstName" class="form-label"></label>
+					<input asp-for="FirstName" class="form-control" />
+					<span asp-validation-for="FirstName" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label asp-for="LastName" class="form-label"></label>
+					<input asp-for="LastName" class="form-control" />
+					<span asp-validation-for="LastName" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label asp-for="Email" class="form-label"></label>
+					<input asp-for="Email" class="form-control" />
+					<span asp-validation-for="Email" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label asp-for="Password" class="form-label"></label>
+					<input asp-for="Password" class="form-control" />
+					<span asp-validation-for="Password" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label asp-for="ConfirmPassword" class="form-label"></label>
+					<input asp-for="ConfirmPassword" class="form-control" />
+					<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+				</div>
+
+				<button type="submit" class="btn btn-cta">Register</button>
+				<a asp-action="Login" class="btn btn-outline-cta ms-2">Already have an account?</a>
+			</form>
+		</div>
+	</div>
+</div>

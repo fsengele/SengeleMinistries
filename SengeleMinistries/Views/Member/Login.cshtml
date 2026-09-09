@@ -1,0 +1,37 @@
+@model SengeleMinistries.Models.LoginViewModel
+
+@{
+	ViewData["Title"] = "Login";
+}
+
+<div class="section">
+	<div class="container-wide">
+		<div style="max-width:480px;margin:0 auto;background:var(--sm-white);padding:2rem;border-radius:8px;box-shadow:0 10px 30px rgba(16,16,16,0.06)">
+			<h2 class="lead-heading">Sign in</h2>
+			@if (TempData["SuccessMessage"] != null)
+			{
+				<div class="alert alert-success">@TempData["SuccessMessage"]</div>
+			}
+
+			<form asp-action="Login" method="post">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+				<div class="mb-3">
+					<label asp-for="Email" class="form-label"></label>
+					<input asp-for="Email" class="form-control" />
+					<span asp-validation-for="Email" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label asp-for="Password" class="form-label"></label>
+					<input asp-for="Password" class="form-control" />
+					<span asp-validation-for="Password" class="text-danger"></span>
+				</div>
+
+				<button type="submit" class="btn btn-cta">Sign in</button>
+				<a asp-controller="Member" asp-action="Register" class="btn btn-outline-cta ms-2">Create account</a>
+				<p class="mt-3 muted">Don't have an account? <a asp-controller="Member" asp-action="Register" class="link-accent">Create account</a></p>
+			</form>
+		</div>
+	</div>
+</div>

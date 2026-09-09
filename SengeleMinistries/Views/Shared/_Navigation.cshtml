@@ -8,14 +8,64 @@
 
 		<div class="collapse navbar-collapse" id="mainNav">
 			<ul class="navbar-nav ms-auto align-items-lg-center">
-				<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
 				<li class="nav-item"><a class="nav-link" asp-controller="About" asp-action="Index">About</a></li>
-				<li class="nav-item"><a class="nav-link" asp-controller="Ministries" asp-action="Index">Ministries</a></li>
-				<li class="nav-item"><a class="nav-link" asp-controller="Messages" asp-action="Index">Messages</a></li>
+				<li class="nav-item"><a class="nav-link" asp-controller="Messages" asp-action="Index">Watch</a></li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="connectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Connect</a>
+				<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="connectDropdown">
+					<li><a class="dropdown-item" asp-controller="Member" asp-action="Login">My Account</a></li>
+					<li><a class="dropdown-item" asp-controller="Prayer" asp-action="Index">Prayer Request</a></li>
+						<li>
+							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Programs &amp; Training <small class="muted">(Coming soon)</small></button>
+						</li>
+						<li>
+							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Serve With Us <small class="muted">(Coming soon)</small></button>
+						</li>
+						<li><a class="dropdown-item" asp-controller="Contact" asp-action="Index">Contact</a></li>
+					</ul>
+				</li>
+
 				<li class="nav-item"><a class="nav-link" asp-controller="Events" asp-action="Index">Events</a></li>
-				<li class="nav-item"><a class="nav-link" asp-controller="Prayer" asp-action="Index">Prayer</a></li>
-				<li class="nav-item"><a class="nav-link" asp-controller="Gallery" asp-action="Index">Gallery</a></li>
-				<li class="nav-item"><a class="nav-link" asp-controller="Contact" asp-action="Index">Contact</a></li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+					<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="shopDropdown">
+						<li>
+							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Books &amp; Bibles <small class="muted">(Coming soon)</small></button>
+						</li>
+						<li>
+							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Teachings &amp; Resources <small class="muted">(Coming soon)</small></button>
+						</li>
+						<li>
+							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Event Collections <small class="muted">(Coming soon)</small></button>
+						</li>
+						<li>
+							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Apparel <small class="muted">(Coming soon)</small></button>
+						</li>
+					</ul>
+				</li>
+
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Account</a>
+			<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="accountDropdown">
+				@if (User?.Identity?.IsAuthenticated == true)
+				{
+					<li><a class="dropdown-item" asp-controller="Member" asp-action="Dashboard">Dashboard</a></li>
+					<li>
+						<form asp-controller="Member" asp-action="Logout" method="post" class="m-0 p-0">
+							<button type="submit" class="dropdown-item">Sign out</button>
+						</form>
+					</li>
+				}
+				else
+				{
+					<li><a class="dropdown-item" asp-controller="Member" asp-action="Login">Sign in</a></li>
+					<li><a class="dropdown-item" asp-controller="Member" asp-action="Register">Create account</a></li>
+				}
+			</ul>
+			</li>
+				<li class="nav-item ms-2"><a class="btn btn-outline-cta btn-sm" asp-controller="Home" asp-action="Donate">Donate</a></li>
 				<li class="nav-item ms-lg-3">
 					<a class="btn btn-cta btn-sm" asp-controller="Messages" asp-action="Index">Watch Now</a>
 				</li>
