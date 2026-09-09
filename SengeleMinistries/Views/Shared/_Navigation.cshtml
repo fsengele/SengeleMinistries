@@ -1,21 +1,33 @@
 @* Premium responsive navigation for Sengele Ministries *@
-<nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top navbar-dark">
-	<div class="container-fluid px-4">
-		<a class="navbar-brand fw-bold text-uppercase" asp-controller="Home" asp-action="Index">Sengele Ministries</a>
+<nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top">
+	<div class="container-fluid px-3 px-lg-4">
+		<a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+			<div class="brand-mark" aria-hidden="true">
+				<span class="brand-monogram">SM</span>
+			</div>
+			<div class="brand-text ms-2 d-none d-lg-block">
+				<div class="brand-line brand-name">SENGELE</div>
+				<div class="brand-line brand-sub">MINISTRIES</div>
+			</div>
+			<div class="brand-text ms-2 d-lg-none">
+				<div class="brand-line brand-name-small">SENGELE MINISTRIES</div>
+			</div>
+		</a>
+
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
 		<div class="collapse navbar-collapse" id="mainNav">
 			<ul class="navbar-nav ms-auto align-items-lg-center">
+				<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
 				<li class="nav-item"><a class="nav-link" asp-controller="About" asp-action="Index">About</a></li>
-				<li class="nav-item"><a class="nav-link" asp-controller="Messages" asp-action="Index">Watch</a></li>
-
+				<li class="nav-item"><a class="nav-link" asp-controller="Messages" asp-action="Index">Messages</a></li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="connectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Connect</a>
-				<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="connectDropdown">
-					<li><a class="dropdown-item" asp-controller="Member" asp-action="Login">My Account</a></li>
-					<li><a class="dropdown-item" asp-controller="Prayer" asp-action="Index">Prayer Request</a></li>
+					<ul class="dropdown-menu" aria-labelledby="connectDropdown">
+						<li><a class="dropdown-item" asp-controller="Member" asp-action="Login">My Account</a></li>
+						<li><a class="dropdown-item" asp-controller="Prayer" asp-action="Index">Prayer Request</a></li>
 						<li>
 							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Programs &amp; Training <small class="muted">(Coming soon)</small></button>
 						</li>
@@ -25,12 +37,10 @@
 						<li><a class="dropdown-item" asp-controller="Contact" asp-action="Index">Contact</a></li>
 					</ul>
 				</li>
-
 				<li class="nav-item"><a class="nav-link" asp-controller="Events" asp-action="Index">Events</a></li>
-
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-					<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="shopDropdown">
+					<ul class="dropdown-menu" aria-labelledby="shopDropdown">
 						<li>
 							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Books &amp; Bibles <small class="muted">(Coming soon)</small></button>
 						</li>
@@ -46,28 +56,29 @@
 					</ul>
 				</li>
 
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Account</a>
-			<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="accountDropdown">
-				@if (User?.Identity?.IsAuthenticated == true)
-				{
-					<li><a class="dropdown-item" asp-controller="Member" asp-action="Dashboard">Dashboard</a></li>
-					<li>
-						<form asp-controller="Member" asp-action="Logout" method="post" class="m-0 p-0">
-							<button type="submit" class="dropdown-item">Sign out</button>
-						</form>
-					</li>
-				}
-				else
-				{
-					<li><a class="dropdown-item" asp-controller="Member" asp-action="Login">Sign in</a></li>
-					<li><a class="dropdown-item" asp-controller="Member" asp-action="Register">Create account</a></li>
-				}
-			</ul>
-			</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Account</a>
+					<ul class="dropdown-menu" aria-labelledby="accountDropdown">
+						@if (User?.Identity?.IsAuthenticated == true)
+						{
+							<li><a class="dropdown-item" asp-controller="Member" asp-action="Dashboard">Dashboard</a></li>
+							<li>
+								<form asp-controller="Member" asp-action="Logout" method="post" class="m-0 p-0">
+									<button type="submit" class="dropdown-item">Sign out</button>
+								</form>
+							</li>
+						}
+						else
+						{
+							<li><a class="dropdown-item" asp-controller="Member" asp-action="Login">Sign in</a></li>
+							<li><a class="dropdown-item" asp-controller="Member" asp-action="Register">Create account</a></li>
+						}
+					</ul>
+				</li>
+
 				<li class="nav-item ms-2"><a class="btn btn-outline-cta btn-sm" asp-controller="Home" asp-action="Donate">Donate</a></li>
-				<li class="nav-item ms-lg-3">
-					<a class="btn btn-cta btn-sm" asp-controller="Messages" asp-action="Index">Watch Now</a>
+				<li class="nav-item ms-3">
+					<a class="btn btn-cta btn-sm" href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN" target="_blank" rel="noopener">Watch Now</a>
 				</li>
 			</ul>
 		</div>
