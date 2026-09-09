@@ -18,7 +18,13 @@ const SengeleSite = (() => {
     function handleNavbarScroll() {
         const nav = document.getElementById('mainNavbar');
         if (!nav) return;
-        if (window.scrollY > 60) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+        if (window.scrollY > 60) {
+            nav.classList.add('scrolled');
+            nav.classList.add('nav-scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+            nav.classList.remove('nav-scrolled');
+        }
     }
 
     function init() {
@@ -32,6 +38,35 @@ const SengeleSite = (() => {
         // navbar scroll
         handleNavbarScroll();
         window.addEventListener('scroll', handleNavbarScroll, { passive: true });
+
+        // Serve form country/state toggling
+        const countrySelect = document.getElementById('countrySelect');
+        const stateSelect = document.getElementById('stateSelect');
+        const stateInput = document.getElementById('stateInput');
+        const stateLabel = document.getElementById('stateLabel');
+        const zipLabel = document.getElementById('zipLabel');
+
+        function updateStateControl() {
+            if (!countrySelect) return;
+            const isUS = countrySelect.value === 'United States';
+            if (isUS) {
+                stateSelect.classList.remove('d-none');
+                stateInput.classList.add('d-none');
+                stateLabel.textContent = 'State';
+                zipLabel.textContent = 'ZIP Code';
+            } else {
+                stateSelect.classList.add('d-none');
+                stateInput.classList.remove('d-none');
+                stateLabel.textContent = 'State / Province / Region';
+                zipLabel.textContent = 'Postal Code';
+            }
+        }
+
+        if (countrySelect) {
+            countrySelect.addEventListener('change', updateStateControl);
+            // initialize on load
+            updateStateControl();
+        }
     }
 
     // auto-init on DOM ready

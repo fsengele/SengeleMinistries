@@ -23,5 +23,8 @@ namespace SengeleMinistries.Models
         public string PasswordHash { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Administrator flag - do not expose in public registration forms
+        public bool IsAdmin { get; set; } = false;
     }
 }

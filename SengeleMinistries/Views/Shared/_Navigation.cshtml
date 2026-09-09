@@ -28,33 +28,29 @@
 					<ul class="dropdown-menu" aria-labelledby="connectDropdown">
 						<li><a class="dropdown-item" asp-controller="Member" asp-action="Login">My Account</a></li>
 						<li><a class="dropdown-item" asp-controller="Prayer" asp-action="Index">Prayer Request</a></li>
-						<li>
-							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Programs &amp; Training <small class="muted">(Coming soon)</small></button>
-						</li>
-						<li>
-							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Serve With Us <small class="muted">(Coming soon)</small></button>
-						</li>
+						<li><a class="dropdown-item" asp-controller="Programs" asp-action="Index">Programs &amp; Training</a></li>
+						<li><a class="dropdown-item" asp-controller="Serve" asp-action="Index">Serve With Us</a></li>
 						<li><a class="dropdown-item" asp-controller="Contact" asp-action="Index">Contact</a></li>
 					</ul>
 				</li>
 				<li class="nav-item"><a class="nav-link" asp-controller="Events" asp-action="Index">Events</a></li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-					<ul class="dropdown-menu" aria-labelledby="shopDropdown">
-						<li>
-							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Books &amp; Bibles <small class="muted">(Coming soon)</small></button>
-						</li>
-						<li>
-							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Teachings &amp; Resources <small class="muted">(Coming soon)</small></button>
-						</li>
-						<li>
-							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Event Collections <small class="muted">(Coming soon)</small></button>
-						</li>
-						<li>
-							<button type="button" class="dropdown-item disabled" disabled aria-disabled="true">Apparel <small class="muted">(Coming soon)</small></button>
-						</li>
-					</ul>
-				</li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="@Url.Action("Index", "Shop")" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+				<ul class="dropdown-menu" aria-labelledby="shopDropdown">
+					<li>
+						<a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-category="Books">Books &amp; Bibles</a>
+					</li>
+					<li>
+						<a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-category="Teachings">Teachings &amp; Resources</a>
+					</li>
+					<li>
+						<a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-category="EventCollections">Event Collections</a>
+					</li>
+					<li>
+						<a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-category="Apparel">Apparel</a>
+					</li>
+				</ul>
+			</li>
 
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Account</a>

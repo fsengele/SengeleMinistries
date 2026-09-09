@@ -1,0 +1,49 @@
+@model IEnumerable<SengeleMinistries.Models.Product>
+@{
+	ViewData["Title"] = "Shop";
+}
+
+<section class="section section--soft shop-hero">
+	<div class="container-wide text-center">
+		<h1 class="hero-heading">SHOP</h1>
+		<p class="muted">Discover resources and items to support the ministry and your spiritual growth.</p>
+	</div>
+</section>
+
+<main>
+	<section class="section section--white">
+		<div class="container-wide">
+			<div class="shop-categories mb-4 text-center">
+				<a class="btn btn-outline-cta me-2" asp-controller="Shop" asp-action="Category" asp-route-category="Books">Books &amp; Bibles</a>
+				<a class="btn btn-outline-cta me-2" asp-controller="Shop" asp-action="Category" asp-route-category="Teachings">Teachings &amp; Resources</a>
+				<a class="btn btn-outline-cta me-2" asp-controller="Shop" asp-action="Category" asp-route-category="EventCollections">Event Collections</a>
+				<a class="btn btn-outline-cta" asp-controller="Shop" asp-action="Category" asp-route-category="Apparel">Apparel</a>
+			</div>
+
+			<div class="product-grid">
+				@if (Model != null && Model.Any())
+				{
+					<div class="grid">
+						@foreach (var p in Model)
+						{
+							<article class="product-card">
+								<a asp-controller="Shop" asp-action="Details" asp-route-id="@p.ProductId">
+									<div class="product-image" style="background-image:url('@(p.ImageUrl ?? "/images/placeholder-product.png")')"></div>
+									<h4 class="product-title">@p.Title</h4>
+								</a>
+								<p class="muted small">@p.Category</p>
+								<p class="product-price">@String.Format("{0:C}", p.Price)</p>
+							</article>
+						}
+					</div>
+				}
+				else
+				{
+					<div class="empty-state">
+						<p class="muted">There are no published products available right now. Please check back later.</p>
+					</div>
+				}
+			</div>
+		</div>
+	</section>
+</main>

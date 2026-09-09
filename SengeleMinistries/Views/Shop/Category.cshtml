@@ -1,0 +1,42 @@
+@model IEnumerable<SengeleMinistries.Models.Product>
+@{
+	var category = ViewData["Category"] as string ?? "";
+	ViewData["Title"] = category;
+}
+
+<section class="section section--soft shop-hero">
+	<div class="container-wide text-center">
+		<h1 class="hero-heading">@category</h1>
+		<p class="muted">Resources and items in the @category category.</p>
+	</div>
+</section>
+
+<main>
+	<section class="section section--white">
+		<div class="container-wide">
+			@if (Model != null && Model.Any())
+			{
+				<div class="grid">
+					@foreach (var p in Model)
+					{
+						<article class="product-card">
+							<a asp-controller="Shop" asp-action="Details" asp-route-id="@p.ProductId">
+								<div class="product-image" style="background-image:url('@(p.ImageUrl ?? "/images/placeholder-product.png")')"></div>
+								<h4 class="product-title">@p.Title</h4>
+							</a>
+							<p class="muted small">@p.Category</p>
+							<p class="product-price">@String.Format("{0:C}", p.Price)</p>
+						</article>
+					}
+				</div>
+			}
+			else
+			{
+				<div class="empty-state">
+					<p class="muted">There are no published items in this category yet. Please check back soon.</p>
+					<p><a class="btn btn-outline-cta" asp-controller="Shop" asp-action="Index">Browse all</a></p>
+				</div>
+			}
+		</div>
+	</section>
+</main>

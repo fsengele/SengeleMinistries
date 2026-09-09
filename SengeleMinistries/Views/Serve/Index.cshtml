@@ -1,0 +1,203 @@
+@model SengeleMinistries.Models.VolunteerApplication
+@{
+	ViewData["Title"] = "Serve With Us";
+}
+
+<section class="hero section--dark">
+	<div class="hero-inner">
+		<div class="hero-grid">
+			<div>
+				<div class="hero-kicker">SERVE WITH US</div>
+				<h1 class="hero-title">Your gifts can make a difference.</h1>
+				<p class="hero-sub">Sengele Ministries exists to carry a message of hope through prayer, the Word of God, and service. If you feel called to serve alongside us, we would love to know you.</p>
+			</div>
+			<div>
+				<!-- empty visual column -->
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="section section--white">
+	<div class="container container-wide">
+		<div class="who-label">Find your place to serve</div>
+		<h2 class="lead-heading">Apply to serve with Sengele Ministries</h2>
+		<p class="muted">Please complete the form below. Our team will review your application and contact you about next steps.</p>
+
+		<form asp-action="Index" method="post" class="mt-4">
+			<div class="row g-3">
+				<div class="col-md-6">
+					<label asp-for="FirstName" class="form-label"></label>
+					<input asp-for="FirstName" class="form-control" />
+					<span asp-validation-for="FirstName" class="text-danger small"></span>
+				</div>
+				<div class="col-md-6">
+					<label asp-for="LastName" class="form-label"></label>
+					<input asp-for="LastName" class="form-control" />
+					<span asp-validation-for="LastName" class="text-danger small"></span>
+				</div>
+
+				<div class="col-md-6">
+					<label asp-for="Email" class="form-label"></label>
+					<input asp-for="Email" class="form-control" />
+					<span asp-validation-for="Email" class="text-danger small"></span>
+				</div>
+				<div class="col-md-6">
+					<label asp-for="Phone" class="form-label"></label>
+					<input asp-for="Phone" class="form-control" />
+					<span asp-validation-for="Phone" class="text-danger small"></span>
+				</div>
+
+				<div class="col-md-4">
+					<label asp-for="DateOfBirth" class="form-label"></label>
+					<input asp-for="DateOfBirth" class="form-control" type="date" />
+					<span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+				</div>
+				<div class="col-12">
+					<h5 class="who-label">Your location</h5>
+				</div>
+
+				<div class="col-12">
+					<label asp-for="StreetAddress" class="form-label"></label>
+					<input asp-for="StreetAddress" class="form-control" />
+				</div>
+
+				<div class="col-12">
+					<label asp-for="ApartmentOrUnit" class="form-label"></label>
+					<input asp-for="ApartmentOrUnit" class="form-control" />
+				</div>
+
+				<div class="col-md-4">
+					<label asp-for="City" class="form-label"></label>
+					<input asp-for="City" class="form-control" />
+				</div>
+				<div class="col-md-6">
+					<label asp-for="Country" class="form-label">Country</label>
+					<select asp-for="Country" class="form-select" id="countrySelect">
+						<option value="">Select a country</option>
+						<option>United States</option>
+						<option>Canada</option>
+						<option>United Kingdom</option>
+						<option>France</option>
+						<option>Belgium</option>
+						<option>Democratic Republic of the Congo</option>
+						<option>Republic of the Congo</option>
+						<option>Other</option>
+					</select>
+					<span asp-validation-for="Country" class="text-danger small"></span>
+				</div>
+
+				<div class="col-md-6">
+					<label id="stateLabel" class="form-label">State / Province / Region</label>
+					<!-- US state select (enabled when United States selected) -->
+					<select asp-for="State" class="form-select d-none" id="stateSelect">
+						<option value="">Select a state</option>
+						<option>Alabama</option>
+						<option>Alaska</option>
+						<option>Arizona</option>
+						<option>Arkansas</option>
+						<option>California</option>
+						<option>Colorado</option>
+						<option>Connecticut</option>
+						<option>Delaware</option>
+						<option>District of Columbia</option>
+						<option>Florida</option>
+						<option>Georgia</option>
+						<option>Hawaii</option>
+						<option>Idaho</option>
+						<option>Illinois</option>
+						<option>Indiana</option>
+						<option>Iowa</option>
+						<option>Kansas</option>
+						<option>Kentucky</option>
+						<option>Louisiana</option>
+						<option>Maine</option>
+						<option>Maryland</option>
+						<option>Massachusetts</option>
+						<option>Michigan</option>
+						<option>Minnesota</option>
+						<option>Mississippi</option>
+						<option>Missouri</option>
+						<option>Montana</option>
+						<option>Nebraska</option>
+						<option>Nevada</option>
+						<option>New Hampshire</option>
+						<option>New Jersey</option>
+						<option>New Mexico</option>
+						<option>New York</option>
+						<option>North Carolina</option>
+						<option>North Dakota</option>
+						<option>Ohio</option>
+						<option>Oklahoma</option>
+						<option>Oregon</option>
+						<option>Pennsylvania</option>
+						<option>Rhode Island</option>
+						<option>South Carolina</option>
+						<option>South Dakota</option>
+						<option>Tennessee</option>
+						<option>Texas</option>
+						<option>Utah</option>
+						<option>Vermont</option>
+						<option>Virginia</option>
+						<option>Washington</option>
+						<option>West Virginia</option>
+						<option>Wisconsin</option>
+						<option>Wyoming</option>
+					</select>
+
+					<!-- International free-text state input (enabled for non-US) -->
+					<input asp-for="State" class="form-control d-none" id="stateInput" />
+					<span asp-validation-for="State" class="text-danger small"></span>
+				</div>
+
+				<div class="col-md-4">
+					<label id="zipLabel" asp-for="ZipCode" class="form-label">ZIP / Postal Code</label>
+					<input asp-for="ZipCode" class="form-control" />
+					<span asp-validation-for="ZipCode" class="text-danger small"></span>
+				</div>
+
+				<div class="col-md-8">
+					<label asp-for="ServiceArea" class="form-label"></label>
+					<select asp-for="ServiceArea" class="form-select">
+						<option value="">Select an area</option>
+						<option>Prayer &amp; Intercession</option>
+						<option>Outreach &amp; Evangelism</option>
+						<option>Media</option>
+						<option>Events</option>
+						<option>Hospitality</option>
+						<option>Worship / Music</option>
+						<option>Other</option>
+					</select>
+					<span asp-validation-for="ServiceArea" class="text-danger small"></span>
+				</div>
+
+				<div class="col-12">
+					<div class="form-check">
+						<input asp-for="IsCurrentMember" class="form-check-input" />
+						<label asp-for="IsCurrentMember" class="form-check-label"></label>
+					</div>
+				</div>
+
+				<div class="col-12">
+					<label asp-for="WhyServe" class="form-label"></label>
+					<textarea asp-for="WhyServe" class="form-control" rows="4"></textarea>
+				</div>
+
+				<div class="col-12">
+					<div class="form-check">
+						<input asp-for="MayContact" class="form-check-input" />
+						<label asp-for="MayContact" class="form-check-label"></label>
+					</div>
+				</div>
+
+				<div class="col-12 text-end">
+					<button type="submit" class="btn btn-cta">Submit application</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
+
+@section Scripts{
+	<partial name="_ValidationScriptsPartial" />
+}

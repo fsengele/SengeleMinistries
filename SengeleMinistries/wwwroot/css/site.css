@@ -38,6 +38,35 @@ img{max-width:100%;height:auto;display:block}
 #mainNavbar .nav-link{color:rgba(255,255,255,0.9);transition:color .15s ease}
 #mainNavbar.navbar-dark .nav-link:focus,#mainNavbar.navbar-dark .nav-link:hover{color:var(--color-accent)}
 
+/* Brand mark */
+.brand-mark{width:44px;height:44px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--sm-charcoal);color:var(--sm-white);font-weight:800;font-size:14px}
+.brand-text .brand-name{font-weight:800;letter-spacing:.12rem;font-size:.9rem}
+.brand-text .brand-sub{font-size:.72rem;letter-spacing:.14rem}
+.brand-name-small{font-weight:800;font-size:0.95rem}
+
+/* Light top navigation (default) */
+/* Keep light background but ensure clear contrast for links and dropdown toggles */
+#mainNavbar{background:rgba(248,246,241,0.96)}
+#mainNavbar .nav-link{color:var(--sm-text-dark);opacity:1;}
+#mainNavbar .nav-link{color:var(--sm-text-dark)}
+#mainNavbar .navbar-brand{color:var(--sm-text-dark)}
+#mainNavbar .nav-link .dropdown-toggle::after{color:var(--sm-text-dark);opacity:1}
+
+/* Ensure dropdown menu in light header appears with warm-white background and readable dark text */
+.navbar .dropdown-menu{background:var(--sm-cream);border:1px solid rgba(17,17,20,0.04);box-shadow:0 8px 30px rgba(16,16,16,0.08);}
+.navbar .dropdown-menu .dropdown-item{color:var(--sm-text-dark);}
+.navbar .dropdown-menu .dropdown-item.disabled{color:var(--sm-text-muted)}
+.navbar .dropdown-menu .dropdown-item:hover{color:var(--sm-gold);background:transparent}
+
+/* Scrolled / dark navigation */
+#mainNavbar.nav-scrolled, #mainNavbar.scrolled{background:var(--sm-black);box-shadow:0 6px 18px rgba(17,17,20,0.25)}
+#mainNavbar.nav-scrolled .nav-link, #mainNavbar.scrolled .nav-link{color:var(--sm-text-light)}
+#mainNavbar.nav-scrolled .navbar-brand, #mainNavbar.scrolled .navbar-brand{color:var(--sm-text-light)}
+
+#mainNavbar .nav-link{transition:color .25s ease,background-color .25s ease}
+#mainNavbar .nav-link:hover{color:var(--sm-gold)}
+
+
 /* Transparent by default - over hero */
 #mainNavbar{background:transparent}
 #mainNavbar.scrolled{background:var(--color-dark);box-shadow:0 6px 18px rgba(17,17,20,0.25)}
@@ -110,6 +139,31 @@ img{max-width:100%;height:auto;display:block}
 .prayer-cta h2{color:var(--sm-text-light);margin:0 0 1rem;font-size:clamp(1.4rem,3.6vw,2.4rem)}
 .prayer-cta p{color:rgba(244,240,232,0.92);max-width:62ch;margin:0 auto}
 .prayer-cta .btn-cta{background:var(--sm-gold);color:var(--sm-text-dark)}
+
+/* FOOTER */
+.site-footer{background:var(--sm-charcoal);color:var(--sm-text-light);padding-top:3.5rem}
+.site-footer a{color:var(--sm-white);text-decoration:none;transition:color .22s ease, border-color .22s ease}
+.site-footer a:hover{color:var(--sm-gold);text-decoration:none}
+.site-footer .footer-brand-link{color:var(--sm-white);text-decoration:none}
+.site-footer .small-uppercase{letter-spacing:.16rem;text-transform:uppercase;color:var(--sm-text-muted);font-weight:800}
+.site-footer .muted{color:var(--sm-text-muted)}
+.site-footer .muted-quiet{color:rgba(244,240,232,0.65);font-weight:700}
+.site-footer .footer-statement{max-width:320px;color:rgba(248,246,241,0.92)}
+.site-footer .footer-heading{font-size:0.98rem;margin-bottom:.6rem;font-weight:800}
+.site-footer .footer-list li{margin-bottom:.45rem}
+.site-footer .footer-list a{color:var(--sm-white);border-bottom:1px solid transparent;padding-bottom:2px}
+.site-footer .footer-list a:hover{border-bottom-color:var(--sm-gold);color:var(--sm-gold)}
+.site-footer .footer-social a{color:var(--sm-white);font-weight:700}
+.site-footer .footer-social a:hover{color:var(--sm-gold)}
+.site-footer .footer-bottom-divider{border-top:1px solid rgba(255,255,255,0.04)}
+.site-footer .footer-brand .brand-mark{width:40px;height:40px}
+.site-footer .brand-mark{background:var(--sm-black);color:var(--sm-white);display:flex;align-items:center;justify-content:center;border-radius:6px}
+.site-footer .brand-monogram{font-weight:900}
+
+@media (max-width:767px){
+  .site-footer .footer-list{margin-bottom:1rem}
+  .site-footer .footer-statement{max-width:100%}
+}
 
 /* Gallery preview */
 .gallery-composite{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:stretch}

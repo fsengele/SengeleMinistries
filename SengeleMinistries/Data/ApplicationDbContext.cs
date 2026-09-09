@@ -10,6 +10,8 @@ namespace SengeleMinistries.Data
         }
 
         public DbSet<ContactMessage> ContactMessages { get; set; } = null!;
+        public DbSet<SengeleMinistries.Models.VolunteerApplication> VolunteerApplications { get; set; } = null!;
         public DbSet<SengeleMinistries.Models.Member>? Members { get; set; }
+        public DbSet<SengeleMinistries.Models.Product> Products { get; set; } = null!;
     }
 }

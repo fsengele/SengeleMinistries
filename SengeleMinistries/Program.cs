@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using SengeleMinistries.Models;
+using SengeleMinistries.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,10 @@ builder.Services.AddDbContext<SengeleMinistries.Data.ApplicationDbContext>(optio
     options.UseSqlServer(connectionString)
 );
 
+// Bind EmailSettings from configuration (appsettings.json) and register MailKit sender
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailSender, MailKitEmailSender>();
+
 // Configure cookie authentication (simple, non-Identity)
 builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -20,6 +26,12 @@ builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.C
         options.Cookie.HttpOnly = true;
         options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
     });
+
+// Authorization policy for admin-only access
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("IsAdmin", "true"));
+});
 
 var app = builder.Build();
 

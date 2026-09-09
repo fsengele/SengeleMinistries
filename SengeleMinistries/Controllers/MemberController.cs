@@ -102,6 +102,12 @@ namespace SengeleMinistries.Controllers
                 new System.Security.Claims.Claim("MemberId", member.Id.ToString())
             };
 
+            // If the member has been marked as an administrator, add the IsAdmin claim
+            if (member.IsAdmin)
+            {
+                claims.Add(new System.Security.Claims.Claim("IsAdmin", "true"));
+            }
+
             var identity = new System.Security.Claims.ClaimsIdentity(claims, Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new System.Security.Claims.ClaimsPrincipal(identity);
 
