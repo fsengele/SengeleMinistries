@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using SengeleMinistries.Models;
 using SengeleMinistries.Services;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Mvc.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,14 +49,22 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+// Area route for Admin and other areas. Must be registered before the default route.
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+
+// Development-only endpoint diagnostics removed. Keep normal startup configuration.
 
 app.Run();
