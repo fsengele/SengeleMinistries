@@ -57,7 +57,14 @@
 					<ul class="dropdown-menu" aria-labelledby="accountDropdown">
 						@if (User?.Identity?.IsAuthenticated == true)
 						{
-							<li><a class="dropdown-item" asp-controller="Member" asp-action="Dashboard">Dashboard</a></li>
+						<li><a class="dropdown-item" asp-controller="Member" asp-action="Dashboard">Dashboard</a></li>
+						@* Big important for 
+                         Admin Dashboard link visible only to users with IsAdmin=true claim *@
+                        
+						@if (User.HasClaim(c => c.Type == "IsAdmin" && c.Value == "true"))
+						{
+							<li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
+						}
 							<li>
 								<form asp-controller="Member" asp-action="Logout" method="post" class="m-0 p-0">
 									<button type="submit" class="dropdown-item">Sign out</button>
