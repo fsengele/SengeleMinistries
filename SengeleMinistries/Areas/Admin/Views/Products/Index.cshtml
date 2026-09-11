@@ -1,0 +1,168 @@
+﻿@model IEnumerable<SengeleMinistries.Models.Product>
+
+@{
+    ViewData["Title"] = "Product Management";
+}
+
+<section class="admin-products-page">
+    <div class="admin-products-container">
+
+        <div class="admin-products-header">
+
+            <div>
+                <p class="admin-products-eyebrow">
+                    SENGELE MINISTRIES ADMIN
+                </p>
+
+                <h1>Product Management</h1>
+
+                <p class="admin-products-subtitle">
+                    Manage books, teachings, event collections and apparel.
+                </p>
+            </div>
+
+            <a asp-area="Admin"
+               asp-controller="Products"
+               asp-action="Create"
+               class="admin-add-product-btn">
+                + Add Product
+            </a>
+
+        </div>
+
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="admin-success-message">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+
+        <div class="admin-products-card">
+
+            @if (!Model.Any())
+            {
+                <div class="admin-empty-state">
+
+                    <h3>No products yet</h3>
+
+                    <p>
+                        Add your first product to start building
+                        the Sengele Ministries Shop.
+                    </p>
+
+                    <a asp-area="Admin"
+                       asp-controller="Products"
+                       asp-action="Create"
+                       class="admin-add-product-btn">
+                        Add Product
+                    </a>
+
+                </div>
+            }
+            else
+            {
+                <div class="admin-table-responsive">
+
+                    <table class="admin-products-table">
+
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th class="admin-actions-column">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <div class="admin-product-name">
+                                            @product.Title
+                                        </div>
+
+                                        @if (!string.IsNullOrWhiteSpace(product.ShortDescription))
+                                        {
+                                            <div class="admin-product-description">
+                                                @product.ShortDescription
+                                            </div>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <span class="admin-category-badge">
+                                            @product.Category
+                                        </span>
+                                    </td>
+
+                                    <td class="admin-price">
+                                        @product.Price.ToString("C")
+                                    </td>
+
+                                    <td>
+                                        @(product.StockQuantity?.ToString() ?? "—")
+                                    </td>
+
+                                    <td>
+
+                                        @if (product.IsPublished)
+                                        {
+                                            <span class="admin-status-published">
+                                                Published
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="admin-status-draft">
+                                                Draft
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        <div class="admin-product-actions">
+
+                                            <a asp-area="Admin"
+                                               asp-controller="Products"
+                                               asp-action="Edit"
+                                               asp-route-id="@product.ProductId"
+                                               class="admin-edit-btn">
+                                                Edit
+                                            </a>
+
+                                            <a asp-area="Admin"
+                                               asp-controller="Products"
+                                               asp-action="Delete"
+                                               asp-route-id="@product.ProductId"
+                                               class="admin-delete-btn">
+                                                Delete
+                                            </a>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+</section>

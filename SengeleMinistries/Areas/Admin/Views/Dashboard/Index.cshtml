@@ -3,10 +3,59 @@
 	ViewData["Title"] = "Admin Dashboard";
 }
 
+@model SengeleMinistries.Models.AdminDashboardViewModel
+
 <section class="section section--soft">
-	<div class="container-wide text-center">
-		<h1>SENGELE MINISTRIES</h1>
-		<h2>ADMIN DASHBOARD</h2>
-		<p class="muted">Administrator access confirmed.</p>
+	<div class="container-wide">
+		<div class="text-center mb-4">
+			<h1>SENGELE MINISTRIES</h1>
+			<h2>ADMIN DASHBOARD</h2>
+		</div>
+
+		<div class="row g-3 mb-4">
+			<div class="col-md-4">
+				<div class="card p-3">
+					<h6 class="mb-2">MEMBERS</h6>
+					<div class="display-6">@Model.TotalMembers</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card p-3">
+					<h6 class="mb-2">SERVE APPLICATIONS</h6>
+					<div class="display-6">@Model.TotalServeApplications</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card p-3">
+					<h6 class="mb-2">PRODUCTS</h6>
+					<div class="display-6">@Model.TotalProducts</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mb-3">
+			<h5>RECENT MEMBERS</h5>
+			@if (Model.RecentMembers != null && Model.RecentMembers.Any())
+			{
+				<div class="list-group">
+					@foreach (var m in Model.RecentMembers)
+					{
+						<div class="list-group-item">
+							<div class="d-flex justify-content-between">
+								<div>
+									<strong>@(m.FirstName) @(m.LastName)</strong>
+									<div class="muted">@m.Email</div>
+								</div>
+								<div class="text-end muted small">@m.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd")</div>
+							</div>
+						</div>
+					}
+				</div>
+			}
+			else
+			{
+				<div class="muted">No members found.</div>
+			}
+		</div>
 	</div>
 </section>
