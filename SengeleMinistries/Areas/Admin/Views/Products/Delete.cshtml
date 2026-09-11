@@ -1,0 +1,85 @@
+﻿@model SengeleMinistries.Models.Product
+
+@{
+    ViewData["Title"] = "Delete Product";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <p class="text-uppercase text-muted small mb-1">
+                Sengele Ministries Admin
+            </p>
+
+            <h1>Delete Product</h1>
+
+            <div class="alert alert-warning mt-4">
+                Are you sure you want to permanently delete this product?
+            </div>
+
+            <div class="border rounded p-4 mb-4">
+
+                <h3>@Model.Title</h3>
+
+                <p class="mb-1">
+                    <strong>Category:</strong>
+                    @Model.Category
+                </p>
+
+                <p class="mb-1">
+                    <strong>Price:</strong>
+                    @Model.Price.ToString("C")
+                </p>
+
+                <p class="mb-1">
+                    <strong>Stock:</strong>
+                    @(Model.StockQuantity?.ToString() ?? "—")
+                </p>
+
+                <p class="mb-0">
+                    <strong>Status:</strong>
+
+                    @if (Model.IsPublished)
+                    {
+                        <span class="badge bg-success">
+                            Published
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">
+                            Draft
+                        </span>
+                    }
+                </p>
+
+            </div>
+
+            <form asp-area="Admin"
+                  asp-controller="Products"
+                  asp-action="Delete"
+                  asp-route-id="@Model.ProductId"
+                  method="post">
+
+                <button type="submit"
+                        class="btn btn-danger">
+                    DELETE PRODUCT
+                </button>
+
+                <a asp-area="Admin"
+                   asp-controller="Products"
+                   asp-action="Index"
+                   class="btn btn-outline-secondary ms-2">
+                    CANCEL
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

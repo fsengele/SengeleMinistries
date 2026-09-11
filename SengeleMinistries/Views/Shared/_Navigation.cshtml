@@ -1,89 +1,514 @@
 @* Premium responsive navigation for Sengele Ministries *@
+
 <nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top">
-	<div class="container-fluid px-3 px-lg-4">
-		<a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
-			<div class="brand-mark" aria-hidden="true">
-				<span class="brand-monogram">SM</span>
-			</div>
-			<div class="brand-text ms-2 d-none d-lg-block">
-				<div class="brand-line brand-name">SENGELE</div>
-				<div class="brand-line brand-sub">MINISTRIES</div>
-			</div>
-			<div class="brand-text ms-2 d-lg-none">
-				<div class="brand-line brand-name-small">SENGELE MINISTRIES</div>
-			</div>
-		</a>
 
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+    <div class="container-fluid px-3 px-lg-4">
 
-		<div class="collapse navbar-collapse" id="mainNav">
-			<ul class="navbar-nav ms-auto align-items-lg-center">
-				<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
-				<li class="nav-item"><a class="nav-link" asp-controller="About" asp-action="Index">About</a></li>
-				<li class="nav-item"><a class="nav-link" asp-controller="Messages" asp-action="Index">Messages</a></li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="connectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Connect</a>
-					<ul class="dropdown-menu" aria-labelledby="connectDropdown">
-					<li><a class="dropdown-item" asp-area="" asp-controller="Member" asp-action="Login">My Account</a></li>
-						<li><a class="dropdown-item" asp-controller="Prayer" asp-action="Index">Prayer Request</a></li>
-						<li><a class="dropdown-item" asp-controller="Programs" asp-action="Index">Programs &amp; Training</a></li>
-						<li><a class="dropdown-item" asp-controller="Serve" asp-action="Index">Serve With Us</a></li>
-						<li><a class="dropdown-item" asp-controller="Contact" asp-action="Index">Contact</a></li>
-					</ul>
-				</li>
-				<li class="nav-item"><a class="nav-link" asp-controller="Events" asp-action="Index">Events</a></li>
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="@Url.Action("Index", "Shop")" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-				<ul class="dropdown-menu" aria-labelledby="shopDropdown">
-					<li>
-						<a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-category="Books">Books &amp; Bibles</a>
-					</li>
-					<li>
-						<a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-category="Teachings">Teachings &amp; Resources</a>
-					</li>
-					<li>
-						<a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-category="EventCollections">Event Collections</a>
-					</li>
-					<li>
-						<a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-category="Apparel">Apparel</a>
-					</li>
-				</ul>
-			</li>
+        @* =====================================================
+           LOGO / BRAND
+           ===================================================== *@
 
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Account</a>
-					<ul class="dropdown-menu" aria-labelledby="accountDropdown">
-						@if (User?.Identity?.IsAuthenticated == true)
-						{
-						<li><a class="dropdown-item" asp-controller="Member" asp-action="Dashboard">Dashboard</a></li>
-						@* Big important for 
-                         Admin Dashboard link visible only to users with IsAdmin=true claim *@
-                        
-						@if (User.HasClaim(c => c.Type == "IsAdmin" && c.Value == "true"))
-						{
-							<li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
-						}
-						<li>
-							<form asp-area="" asp-controller="Member" asp-action="Logout" method="post" class="m-0 p-0">
-								<button type="submit" class="dropdown-item">Sign out</button>
-							</form>
-						</li>
-						}
-						else
-						{
-						<li><a class="dropdown-item" asp-area="" asp-controller="Member" asp-action="Login">Sign in</a></li>
-							<li><a class="dropdown-item" asp-controller="Member" asp-action="Register">Create account</a></li>
-						}
-					</ul>
-				</li>
+        <a class="navbar-brand d-flex align-items-center"
+           asp-area=""
+           asp-controller="Home"
+           asp-action="Index">
 
-				<li class="nav-item ms-2"><a class="btn btn-outline-cta btn-sm" asp-controller="Home" asp-action="Donate">Donate</a></li>
-				<li class="nav-item ms-3">
-					<a class="btn btn-cta btn-sm" href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN" target="_blank" rel="noopener">Watch Now</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+            <div class="brand-mark" aria-hidden="true">
+                <span class="brand-monogram">SM</span>
+            </div>
+
+            <div class="brand-text ms-2 d-none d-lg-block">
+                <div class="brand-line brand-name">
+                    SENGELE
+                </div>
+
+                <div class="brand-line brand-sub">
+                    MINISTRIES
+                </div>
+            </div>
+
+            <div class="brand-text ms-2 d-lg-none">
+                <div class="brand-line brand-name-small">
+                    SENGELE MINISTRIES
+                </div>
+            </div>
+
+        </a>
+
+
+        @* =====================================================
+           MOBILE BUTTON
+           ===================================================== *@
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNav"
+                aria-controls="mainNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <div class="collapse navbar-collapse" id="mainNav">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                @* =================================================
+                   HOME
+                   ================================================= *@
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       asp-area=""
+                       asp-controller="Home"
+                       asp-action="Index">
+
+                        Home
+
+                    </a>
+
+                </li>
+
+
+                @* =================================================
+                   ABOUT
+                   ================================================= *@
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       asp-area=""
+                       asp-controller="About"
+                       asp-action="Index">
+
+                        About
+
+                    </a>
+
+                </li>
+
+
+                @* =================================================
+                   MESSAGES
+                   ================================================= *@
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       asp-area=""
+                       asp-controller="Messages"
+                       asp-action="Index">
+
+                        Messages
+
+                    </a>
+
+                </li>
+
+
+                @* =================================================
+                   CONNECT DROPDOWN
+                   ================================================= *@
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       id="connectDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+
+                        Connect
+
+                    </a>
+
+
+                    <ul class="dropdown-menu"
+                        aria-labelledby="connectDropdown">
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Member"
+                               asp-action="Login">
+
+                                My Account
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Prayer"
+                               asp-action="Index">
+
+                                Prayer Request
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Programs"
+                               asp-action="Index">
+
+                                Programs &amp; Training
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Serve"
+                               asp-action="Index">
+
+                                Serve With Us
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Contact"
+                               asp-action="Index">
+
+                                Contact
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </li>
+
+
+                @* =================================================
+                   EVENTS
+                   ================================================= *@
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       asp-area=""
+                       asp-controller="Events"
+                       asp-action="Index">
+
+                        Events
+
+                    </a>
+
+                </li>
+
+
+                @* =================================================
+                   PUBLIC SHOP
+                   Visible to visitors and members
+                   ================================================= *@
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle"
+                       asp-area=""
+                       asp-controller="Shop"
+                       asp-action="Index"
+                       id="shopDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+
+                        Shop
+
+                    </a>
+
+
+                    <ul class="dropdown-menu"
+                        aria-labelledby="shopDropdown">
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Shop"
+                               asp-action="Category"
+                               asp-route-category="Books">
+
+                                Books &amp; Bibles
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Shop"
+                               asp-action="Category"
+                               asp-route-category="Teachings">
+
+                                Teachings &amp; Resources
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Shop"
+                               asp-action="Category"
+                               asp-route-category="EventCollections">
+
+                                Event Collections
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Shop"
+                               asp-action="Category"
+                               asp-route-category="Apparel">
+
+                                Apparel
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </li>
+
+
+                @* =================================================
+                   MY ACCOUNT
+                   ================================================= *@
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       id="accountDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+
+                        My Account
+
+                    </a>
+
+
+                    <ul class="dropdown-menu"
+                        aria-labelledby="accountDropdown">
+
+
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+
+                            @* =========================================
+                               NORMAL MEMBER DASHBOARD
+
+                               Every authenticated member can see this.
+                               ========================================= *@
+
+                            <li>
+
+                                <a class="dropdown-item"
+                                   asp-area=""
+                                   asp-controller="Member"
+                                   asp-action="Dashboard">
+
+                                    Dashboard
+
+                                </a>
+
+                            </li>
+
+
+                            @* =========================================
+                               ADMIN ONLY
+
+                               Only IsAdmin=true can see:
+                               - Admin Dashboard
+                               - Products
+                               ========================================= *@
+
+                            @if (User.HasClaim(c =>
+                                c.Type == "IsAdmin" &&
+                                c.Value == "true"))
+                            {
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-area="Admin"
+                                       asp-controller="Dashboard"
+                                       asp-action="Index">
+
+                                        Admin Dashboard
+
+                                    </a>
+
+                                </li>
+
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-area="Admin"
+                                       asp-controller="Products"
+                                       asp-action="Index">
+
+                                        Products
+
+                                    </a>
+
+                                </li>
+
+                            }
+
+
+                            @* =========================================
+                               SIGN OUT
+                               ========================================= *@
+
+                            <li>
+
+                                <form asp-area=""
+                                      asp-controller="Member"
+                                      asp-action="Logout"
+                                      method="post"
+                                      class="m-0 p-0">
+
+                                    <button type="submit"
+                                            class="dropdown-item">
+
+                                        Sign out
+
+                                    </button>
+
+                                </form>
+
+                            </li>
+
+                        }
+
+                        else
+                        {
+
+                            @* =========================================
+                               USER NOT LOGGED IN
+                               ========================================= *@
+
+                            <li>
+
+                                <a class="dropdown-item"
+                                   asp-area=""
+                                   asp-controller="Member"
+                                   asp-action="Login">
+
+                                    Sign in
+
+                                </a>
+
+                            </li>
+
+
+                            <li>
+
+                                <a class="dropdown-item"
+                                   asp-area=""
+                                   asp-controller="Member"
+                                   asp-action="Register">
+
+                                    Create account
+
+                                </a>
+
+                            </li>
+
+                        }
+
+
+                    </ul>
+
+                </li>
+
+
+                @* =================================================
+                   DONATE
+                   ================================================= *@
+
+                <li class="nav-item ms-2">
+
+                    <a class="btn btn-outline-cta btn-sm"
+                       asp-area=""
+                       asp-controller="Home"
+                       asp-action="Donate">
+
+                        Donate
+
+                    </a>
+
+                </li>
+
+
+                @* =================================================
+                   WATCH NOW
+                   ================================================= *@
+
+                <li class="nav-item ms-3">
+
+                    <a class="btn btn-cta btn-sm"
+                       href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN"
+                       target="_blank"
+                       rel="noopener noreferrer">
+
+                        Watch Now
+
+                    </a>
+
+                </li>
+
+
+            </ul>
+
+        </div>
+
+    </div>
+
 </nav>

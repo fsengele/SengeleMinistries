@@ -4,81 +4,170 @@
     ViewData["Title"] = "Product Management";
 }
 
-<section class="admin-products-page">
-    <div class="admin-products-container">
+<!-- =========================================================
+     SENGELE MINISTRIES ADMIN - PRODUCT MANAGEMENT
+     ========================================================= -->
 
-        <div class="admin-products-header">
+<section class="products-admin-hero">
 
-            <div>
-                <p class="admin-products-eyebrow">
-                    SENGELE MINISTRIES ADMIN
-                </p>
+    <div class="products-admin-hero-inner">
 
-                <h1>Product Management</h1>
+        <div class="products-admin-hero-content">
 
-                <p class="admin-products-subtitle">
-                    Manage books, teachings, event collections and apparel.
-                </p>
-            </div>
+            <p class="products-admin-kicker">
+                SENGELE MINISTRIES ADMIN
+            </p>
+
+            <h1>
+                Product <span>Management.</span>
+            </h1>
+
+            <p class="products-admin-intro">
+                Manage books, teachings, event collections and apparel
+                available through the Sengele Ministries Shop.
+            </p>
+
+        </div>
+
+        <div class="products-admin-hero-action">
 
             <a asp-area="Admin"
                asp-controller="Products"
                asp-action="Create"
-               class="admin-add-product-btn">
+               class="products-admin-add-btn">
                 + Add Product
             </a>
 
         </div>
 
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PRODUCT LISTING
+     ========================================================= -->
+
+<section class="products-admin-section">
+
+    <div class="products-admin-container">
+
 
         @if (TempData["SuccessMessage"] != null)
         {
-            <div class="admin-success-message">
+            <div class="products-admin-success">
                 @TempData["SuccessMessage"]
             </div>
         }
 
+        @if (TempData["Success"] != null)
+        {
+            <div class="products-admin-success">
+                @TempData["Success"]
+            </div>
+        }
 
-        <div class="admin-products-card">
 
-            @if (!Model.Any())
-            {
-                <div class="admin-empty-state">
+        <div class="products-admin-listing-header">
 
-                    <h3>No products yet</h3>
+            <div>
+                <p class="products-admin-small-title">
+                    PRODUCT LISTING
+                </p>
 
-                    <p>
-                        Add your first product to start building
-                        the Sengele Ministries Shop.
-                    </p>
+                <h2>
+                    Your Products
+                </h2>
 
-                    <a asp-area="Admin"
-                       asp-controller="Products"
-                       asp-action="Create"
-                       class="admin-add-product-btn">
-                        Add Product
-                    </a>
+                <p>
+                    Review and manage the products currently available
+                    in your ministry store.
+                </p>
+            </div>
 
+            <div class="products-admin-count">
+                @Model.Count() Products
+            </div>
+
+        </div>
+
+
+        @if (Model == null || !Model.Any())
+        {
+            <!-- =================================================
+                 EMPTY PRODUCT STATE
+                 ================================================= -->
+
+            <div class="products-admin-empty">
+
+                <div class="products-admin-empty-symbol">
+                    +
                 </div>
-            }
-            else
-            {
-                <div class="admin-table-responsive">
 
-                    <table class="admin-products-table">
+                <h3>
+                    No products yet
+                </h3>
+
+                <p>
+                    Your product catalog is currently empty.
+                    Add your first product to begin building the
+                    Sengele Ministries Shop.
+                </p>
+
+                <a asp-area="Admin"
+                   asp-controller="Products"
+                   asp-action="Create"
+                   class="products-admin-add-btn">
+                    Add First Product
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <!-- =================================================
+                 PRODUCT TABLE
+                 ================================================= -->
+
+            <div class="products-admin-table-card">
+
+                <div class="products-admin-table-scroll">
+
+                    <table class="products-admin-table">
 
                         <thead>
+
                             <tr>
-                                <th>Product</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Stock</th>
-                                <th>Status</th>
-                                <th class="admin-actions-column">
+
+                                <th>
+                                    Product
+                                </th>
+
+                                <th>
+                                    Category
+                                </th>
+
+                                <th>
+                                    Price
+                                </th>
+
+                                <th>
+                                    Stock
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th class="products-admin-action-heading">
                                     Actions
                                 </th>
+
                             </tr>
+
                         </thead>
+
 
                         <tbody>
 
@@ -86,58 +175,107 @@
                             {
                                 <tr>
 
+                                    <!-- PRODUCT -->
+
                                     <td>
-                                        <div class="admin-product-name">
-                                            @product.Title
+
+                                        <div class="products-admin-product-info">
+
+                                            <div class="products-admin-product-title">
+                                                @product.Title
+                                            </div>
+
+                                            @if (!string.IsNullOrWhiteSpace(product.ShortDescription))
+                                            {
+                                                <div class="products-admin-product-description">
+                                                    @product.ShortDescription
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="products-admin-product-description">
+                                                    No description
+                                                </div>
+                                            }
+
                                         </div>
 
-                                        @if (!string.IsNullOrWhiteSpace(product.ShortDescription))
-                                        {
-                                            <div class="admin-product-description">
-                                                @product.ShortDescription
-                                            </div>
-                                        }
                                     </td>
 
+
+                                    <!-- CATEGORY -->
+
                                     <td>
-                                        <span class="admin-category-badge">
+
+                                        <span class="products-admin-category">
                                             @product.Category
                                         </span>
+
                                     </td>
 
-                                    <td class="admin-price">
-                                        @product.Price.ToString("C")
-                                    </td>
+
+                                    <!-- PRICE -->
 
                                     <td>
-                                        @(product.StockQuantity?.ToString() ?? "—")
+
+                                        <span class="products-admin-price">
+                                            @product.Price.ToString("C")
+                                        </span>
+
                                     </td>
+
+
+                                    <!-- STOCK -->
+
+                                    <td>
+
+                                        @if (product.StockQuantity.HasValue)
+                                        {
+                                            <span>
+                                                @product.StockQuantity
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="products-admin-muted">
+                                                —
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
 
                                     <td>
 
                                         @if (product.IsPublished)
                                         {
-                                            <span class="admin-status-published">
+                                            <span class="products-admin-status products-admin-published">
                                                 Published
                                             </span>
                                         }
                                         else
                                         {
-                                            <span class="admin-status-draft">
+                                            <span class="products-admin-status products-admin-draft">
                                                 Draft
                                             </span>
                                         }
 
                                     </td>
 
+
+                                    <!-- ACTIONS -->
+
                                     <td>
-                                        <div class="admin-product-actions">
+
+                                        <div class="products-admin-actions">
 
                                             <a asp-area="Admin"
                                                asp-controller="Products"
                                                asp-action="Edit"
                                                asp-route-id="@product.ProductId"
-                                               class="admin-edit-btn">
+                                               class="products-admin-edit-btn">
                                                 Edit
                                             </a>
 
@@ -145,11 +283,12 @@
                                                asp-controller="Products"
                                                asp-action="Delete"
                                                asp-route-id="@product.ProductId"
-                                               class="admin-delete-btn">
+                                               class="products-admin-delete-btn">
                                                 Delete
                                             </a>
 
                                         </div>
+
                                     </td>
 
                                 </tr>
@@ -160,9 +299,39 @@
                     </table>
 
                 </div>
-            }
+
+            </div>
+        }
+
+
+        <!-- =====================================================
+             BOTTOM ACTION
+             ===================================================== -->
+
+        <div class="products-admin-bottom">
+
+            <div>
+
+                <p class="products-admin-small-title">
+                    SENGELE MINISTRIES SHOP
+                </p>
+
+                <h3>
+                    Continue building your collection.
+                </h3>
+
+            </div>
+
+            <a asp-area="Admin"
+               asp-controller="Products"
+               asp-action="Create"
+               class="products-admin-secondary-btn">
+                + Add Another Product
+            </a>
 
         </div>
 
+
     </div>
+
 </section>
