@@ -17,10 +17,7 @@ namespace SengeleMinistries.Controllers
             _context = context;
         }
 
-        // ==========================================
-        // CART
-        // GET: /Cart
-        // ==========================================
+        // SHOW CART
         [HttpGet]
         public IActionResult Index()
         {
@@ -34,10 +31,7 @@ namespace SengeleMinistries.Controllers
             return View(viewModel);
         }
 
-        // ==========================================
-        // ADD TO CART
-        // POST: /Cart/AddToCart
-        // ==========================================
+        // ADD PRODUCT TO CART
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(
@@ -62,8 +56,8 @@ namespace SengeleMinistries.Controllers
             var cart = GetCart();
 
             var existingItem = cart
-                .FirstOrDefault(item =>
-                    item.ProductId == product.ProductId);
+                .FirstOrDefault(x =>
+                    x.ProductId == product.ProductId);
 
             if (existingItem != null)
             {
@@ -89,10 +83,7 @@ namespace SengeleMinistries.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ==========================================
-        // REMOVE FROM CART
-        // POST: /Cart/Remove
-        // ==========================================
+        // REMOVE PRODUCT FROM CART
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Remove(int productId)
@@ -100,7 +91,7 @@ namespace SengeleMinistries.Controllers
             var cart = GetCart();
 
             var item = cart.FirstOrDefault(
-                p => p.ProductId == productId);
+                x => x.ProductId == productId);
 
             if (item != null)
             {
@@ -111,9 +102,7 @@ namespace SengeleMinistries.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ==========================================
-        // SESSION HELPERS
-        // ==========================================
+        // GET CART FROM SESSION
         private List<CartItem> GetCart()
         {
             var cartJson =
@@ -124,11 +113,12 @@ namespace SengeleMinistries.Controllers
                 return new List<CartItem>();
             }
 
-            return JsonSerializer.Deserialize<List<CartItem>>(
-                       cartJson)
+            return JsonSerializer
+                       .Deserialize<List<CartItem>>(cartJson)
                    ?? new List<CartItem>();
         }
 
+        // SAVE CART TO SESSION
         private void SaveCart(List<CartItem> cart)
         {
             var cartJson =
