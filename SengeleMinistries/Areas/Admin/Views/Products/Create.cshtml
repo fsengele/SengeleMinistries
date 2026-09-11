@@ -1,143 +1,230 @@
 ﻿@model SengeleMinistries.Models.Product
 
 @{
-    ViewData["Title"] = "Add Product";
+    ViewData["Title"] = "Create New Product";
 }
 
 <section class="admin-product-form-page">
     <div class="admin-product-form-container">
 
         <div class="admin-product-form-header">
-            <p class="admin-eyebrow">SENGELE MINISTRIES ADMIN</p>
+            <p class="admin-eyebrow">
+                SENGELE MINISTRIES ADMIN
+            </p>
 
-            <h1>Add Product</h1>
+            <h1>Create New Product</h1>
 
             <p class="admin-form-subtitle">
                 Add a new product to the Sengele Ministries Shop.
             </p>
         </div>
 
+
         <div class="admin-product-card">
 
-            <form asp-area="Admin"
-                  asp-controller="Products"
-                  asp-action="Create"
-                  method="post">
+            @* Same simple MVC form approach used by the professor *@
+            <form method="post">
 
                 <div asp-validation-summary="ModelOnly"
-                     class="text-danger"></div>
-
-                <div class="admin-form-group">
-                    <label asp-for="Title"></label>
-
-                    <input asp-for="Title"
-                           class="admin-form-control" />
-
-                    <span asp-validation-for="Title"
-                          class="text-danger"></span>
+                     class="text-danger mb-3">
                 </div>
 
+
+                @* =========================
+                   TITLE
+                   ========================= *@
                 <div class="admin-form-group">
-                    <label asp-for="Category"></label>
+
+                    <label asp-for="Title"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Title"
+                           class="form-control" />
+
+                    <span asp-validation-for="Title"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                @* =========================
+                   CATEGORY
+                   ========================= *@
+                <div class="admin-form-group">
+
+                    <label asp-for="Category"
+                           class="form-label">
+                    </label>
 
                     <select asp-for="Category"
-                            class="admin-form-control">
+                            class="form-control">
 
-                        <option value="">Select a category</option>
-                        <option value="Books">Books</option>
-                        <option value="Teachings">Teachings</option>
-                        <option value="EventCollections">Event Collections</option>
-                        <option value="Apparel">Apparel</option>
+                        <option value="">
+                            Select a category
+                        </option>
+
+                        <option value="Books">
+                            Books &amp; Bibles
+                        </option>
+
+                        <option value="Teachings">
+                            Teachings &amp; Resources
+                        </option>
+
+                        <option value="EventCollections">
+                            Event Collections
+                        </option>
+
+                        <option value="Apparel">
+                            Apparel
+                        </option>
 
                     </select>
 
                     <span asp-validation-for="Category"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
+
                 </div>
 
+
+                @* =========================
+                   SHORT DESCRIPTION
+                   ========================= *@
                 <div class="admin-form-group">
-                    <label asp-for="ShortDescription">
+
+                    <label asp-for="ShortDescription"
+                           class="form-label">
                         Short Description
                     </label>
 
                     <input asp-for="ShortDescription"
-                           class="admin-form-control" />
+                           class="form-control" />
 
                     <span asp-validation-for="ShortDescription"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
+
                 </div>
 
+
+                @* =========================
+                   FULL DESCRIPTION
+                   ========================= *@
                 <div class="admin-form-group">
-                    <label asp-for="Description">
+
+                    <label asp-for="Description"
+                           class="form-label">
                         Full Description
                     </label>
 
                     <textarea asp-for="Description"
-                              class="admin-form-control admin-textarea"></textarea>
+                              class="form-control"
+                              rows="6">
+                    </textarea>
 
                     <span asp-validation-for="Description"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
+
                 </div>
 
+
+                @* =========================
+                   PRICE + STOCK
+                   ========================= *@
                 <div class="admin-form-row">
 
                     <div class="admin-form-group">
-                        <label asp-for="Price"></label>
+
+                        <label asp-for="Price"
+                               class="form-label">
+                        </label>
 
                         <input asp-for="Price"
-                               class="admin-form-control" />
+                               class="form-control" />
 
                         <span asp-validation-for="Price"
-                              class="text-danger"></span>
+                              class="text-danger">
+                        </span>
+
                     </div>
 
+
                     <div class="admin-form-group">
-                        <label asp-for="StockQuantity">
+
+                        <label asp-for="StockQuantity"
+                               class="form-label">
                             Stock Quantity
                         </label>
 
                         <input asp-for="StockQuantity"
-                               class="admin-form-control" />
+                               class="form-control"
+                               type="number"
+                               min="0" />
 
                         <span asp-validation-for="StockQuantity"
-                              class="text-danger"></span>
+                              class="text-danger">
+                        </span>
+
                     </div>
 
                 </div>
 
+
+                @* =========================
+                   IMAGE
+                   ========================= *@
                 <div class="admin-form-group">
-                    <label asp-for="ImageUrl">
+
+                    <label asp-for="ImageUrl"
+                           class="form-label">
                         Image URL
                     </label>
 
                     <input asp-for="ImageUrl"
-                           class="admin-form-control"
+                           class="form-control"
                            placeholder="https://..." />
 
                     <span asp-validation-for="ImageUrl"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
+
                 </div>
 
+
+                @* =========================
+                   PUBLISH
+                   ========================= *@
                 <div class="admin-publish-box">
 
-                    <input asp-for="IsPublished" />
+                    <input asp-for="IsPublished"
+                           class="form-check-input" />
 
-                    <label asp-for="IsPublished">
+                    <label asp-for="IsPublished"
+                           class="form-check-label">
                         Publish this product
                     </label>
 
                 </div>
 
+
                 <p class="admin-form-note">
-                    Published products can appear in the public Shop.
+                    Published products will appear in the public Shop
+                    and can be added to the shopping cart.
                 </p>
 
+
+                @* =========================
+                   BUTTONS
+                   ========================= *@
                 <div class="admin-form-actions">
 
-                    <button type="submit"
-                            class="admin-save-btn">
-                        Save Product
-                    </button>
+                    <input type="submit"
+                           value="Create Product"
+                           class="admin-save-btn" />
 
                     <a asp-area="Admin"
                        asp-controller="Products"
@@ -155,6 +242,9 @@
     </div>
 </section>
 
+
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

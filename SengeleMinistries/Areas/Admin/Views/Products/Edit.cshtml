@@ -1,71 +1,103 @@
 ﻿@model SengeleMinistries.Models.Product
 
 @{
-    ViewData["Title"] = "Edit Product";
+    ViewData["Title"] = "Update Product";
 }
 
-<div class="container py-5">
+<section class="admin-product-form-page">
+    <div class="admin-product-form-container">
 
-    <div class="mb-4">
-        <p class="text-uppercase text-muted small mb-1">
-            Sengele Ministries Admin
-        </p>
+        <div class="admin-product-form-header">
 
-        <h1>Edit Product</h1>
+            <p class="admin-eyebrow">
+                SENGELE MINISTRIES ADMIN
+            </p>
 
-        <p class="text-muted">
-            Update product information, inventory, or publication status.
-        </p>
-    </div>
+            <h1>Update Product</h1>
 
-    <div class="row">
-        <div class="col-lg-8">
+            <p class="admin-form-subtitle">
+                Update the product information below.
+            </p>
 
-            <form asp-area="Admin"
-                  asp-controller="Products"
-                  asp-action="Edit"
-                  asp-route-id="@Model.ProductId"
-                  method="post">
+        </div>
 
-                <input type="hidden"
-                       asp-for="ProductId" />
+
+        <div class="admin-product-card">
+
+            <form method="post">
+
+                @* Product ID must be sent back to the controller *@
+                <input asp-for="ProductId" type="hidden" />
 
                 <div asp-validation-summary="ModelOnly"
-                     class="text-danger mb-3"></div>
+                     class="text-danger mb-3">
+                </div>
 
-                <div class="mb-3">
+
+                @* =========================
+                   TITLE
+                   ========================= *@
+                <div class="admin-form-group">
+
                     <label asp-for="Title"
-                           class="form-label"></label>
+                           class="form-label">
+                    </label>
 
                     <input asp-for="Title"
                            class="form-control" />
 
                     <span asp-validation-for="Title"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
+
                 </div>
 
-                <div class="mb-3">
+
+                @* =========================
+                   CATEGORY
+                   ========================= *@
+                <div class="admin-form-group">
 
                     <label asp-for="Category"
-                           class="form-label"></label>
+                           class="form-label">
+                    </label>
 
                     <select asp-for="Category"
-                            class="form-select">
+                            class="form-control">
 
-                        <option value="">Select a category</option>
-                        <option value="Books">Books &amp; Bibles</option>
-                        <option value="Teachings">Teachings &amp; Resources</option>
-                        <option value="EventCollections">Event Collections</option>
-                        <option value="Apparel">Apparel</option>
+                        <option value="">
+                            Select a category
+                        </option>
+
+                        <option value="Books">
+                            Books &amp; Bibles
+                        </option>
+
+                        <option value="Teachings">
+                            Teachings &amp; Resources
+                        </option>
+
+                        <option value="EventCollections">
+                            Event Collections
+                        </option>
+
+                        <option value="Apparel">
+                            Apparel
+                        </option>
 
                     </select>
 
                     <span asp-validation-for="Category"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
 
                 </div>
 
-                <div class="mb-3">
+
+                @* =========================
+                   SHORT DESCRIPTION
+                   ========================= *@
+                <div class="admin-form-group">
 
                     <label asp-for="ShortDescription"
                            class="form-label">
@@ -76,37 +108,56 @@
                            class="form-control" />
 
                     <span asp-validation-for="ShortDescription"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
 
                 </div>
 
-                <div class="mb-3">
+
+                @* =========================
+                   FULL DESCRIPTION
+                   ========================= *@
+                <div class="admin-form-group">
 
                     <label asp-for="Description"
-                           class="form-label"></label>
+                           class="form-label">
+                        Full Description
+                    </label>
 
                     <textarea asp-for="Description"
                               class="form-control"
-                              rows="5"></textarea>
+                              rows="6">
+                    </textarea>
+
+                    <span asp-validation-for="Description"
+                          class="text-danger">
+                    </span>
 
                 </div>
 
-                <div class="row">
 
-                    <div class="col-md-6 mb-3">
+                @* =========================
+                   PRICE + STOCK
+                   ========================= *@
+                <div class="admin-form-row">
+
+                    <div class="admin-form-group">
 
                         <label asp-for="Price"
-                               class="form-label"></label>
+                               class="form-label">
+                        </label>
 
                         <input asp-for="Price"
                                class="form-control" />
 
                         <span asp-validation-for="Price"
-                              class="text-danger"></span>
+                              class="text-danger">
+                        </span>
 
                     </div>
 
-                    <div class="col-md-6 mb-3">
+
+                    <div class="admin-form-group">
 
                         <label asp-for="StockQuantity"
                                class="form-label">
@@ -114,13 +165,23 @@
                         </label>
 
                         <input asp-for="StockQuantity"
-                               class="form-control" />
+                               class="form-control"
+                               type="number"
+                               min="0" />
+
+                        <span asp-validation-for="StockQuantity"
+                              class="text-danger">
+                        </span>
 
                     </div>
 
                 </div>
 
-                <div class="mb-3">
+
+                @* =========================
+                   IMAGE
+                   ========================= *@
+                <div class="admin-form-group">
 
                     <label asp-for="ImageUrl"
                            class="form-label">
@@ -128,47 +189,63 @@
                     </label>
 
                     <input asp-for="ImageUrl"
-                           class="form-control" />
+                           class="form-control"
+                           placeholder="https://..." />
 
                     <span asp-validation-for="ImageUrl"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
 
                 </div>
 
-                <div class="form-check mb-4">
+
+                @* =========================
+                   PUBLISH
+                   ========================= *@
+                <div class="admin-publish-box">
 
                     <input asp-for="IsPublished"
                            class="form-check-input" />
 
                     <label asp-for="IsPublished"
                            class="form-check-label">
-                        Published
+                        Publish this product
                     </label>
-
-                    <div class="form-text">
-                        Uncheck this box to remove the product from the public Shop without deleting it.
-                    </div>
 
                 </div>
 
-                <button type="submit"
-                        class="btn btn-dark">
-                    SAVE CHANGES
-                </button>
 
-                <a asp-area="Admin"
-                   asp-controller="Products"
-                   asp-action="Index"
-                   class="btn btn-outline-secondary ms-2">
-                    CANCEL
-                </a>
+                <p class="admin-form-note">
+                    Published products appear in the public Shop
+                    and can be added to the shopping cart.
+                </p>
+
+
+                @* =========================
+                   BUTTONS
+                   ========================= *@
+                <div class="admin-form-actions">
+
+                    <input type="submit"
+                           value="Update Product"
+                           class="admin-save-btn" />
+
+                    <a asp-area="Admin"
+                       asp-controller="Products"
+                       asp-action="Index"
+                       class="admin-cancel-btn">
+                        Cancel
+                    </a>
+
+                </div>
 
             </form>
 
         </div>
-    </div>
 
-</div>
+    </div>
+</section>
+
 
 @section Scripts {
     @{

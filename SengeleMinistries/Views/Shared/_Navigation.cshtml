@@ -340,9 +340,7 @@
                         {
 
                             @* =========================================
-                               NORMAL MEMBER DASHBOARD
-
-                               Every authenticated member can see this.
+                               MEMBER DASHBOARD
                                ========================================= *@
 
                             <li>
@@ -358,13 +356,8 @@
 
                             </li>
 
-
                             @* =========================================
                                ADMIN ONLY
-
-                               Only IsAdmin=true can see:
-                               - Admin Dashboard
-                               - Products
                                ========================================= *@
 
                             @if (User.HasClaim(c =>

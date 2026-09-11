@@ -4,82 +4,90 @@
     ViewData["Title"] = "Delete Product";
 }
 
-<div class="container py-5">
+<section class="admin-product-form-page">
+    <div class="admin-product-form-container">
 
-    <div class="row justify-content-center">
+        <div class="admin-product-form-header">
 
-        <div class="col-lg-7">
-
-            <p class="text-uppercase text-muted small mb-1">
-                Sengele Ministries Admin
+            <p class="admin-eyebrow">
+                SENGELE MINISTRIES ADMIN
             </p>
 
             <h1>Delete Product</h1>
 
-            <div class="alert alert-warning mt-4">
-                Are you sure you want to permanently delete this product?
+            <p class="admin-form-subtitle">
+                Please confirm that you want to delete this product.
+            </p>
+
+        </div>
+
+        <div class="admin-product-card">
+
+            <div class="admin-form-group">
+                <label>Product</label>
+                <p>
+                    <strong>@Model.Title</strong>
+                </p>
             </div>
 
-            <div class="border rounded p-4 mb-4">
-
-                <h3>@Model.Title</h3>
-
-                <p class="mb-1">
-                    <strong>Category:</strong>
-                    @Model.Category
-                </p>
-
-                <p class="mb-1">
-                    <strong>Price:</strong>
-                    @Model.Price.ToString("C")
-                </p>
-
-                <p class="mb-1">
-                    <strong>Stock:</strong>
-                    @(Model.StockQuantity?.ToString() ?? "—")
-                </p>
-
-                <p class="mb-0">
-                    <strong>Status:</strong>
-
-                    @if (Model.IsPublished)
-                    {
-                        <span class="badge bg-success">
-                            Published
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">
-                            Draft
-                        </span>
-                    }
-                </p>
-
+            <div class="admin-form-group">
+                <label>Category</label>
+                <p>@Model.Category</p>
             </div>
 
-            <form asp-area="Admin"
-                  asp-controller="Products"
-                  asp-action="Delete"
-                  asp-route-id="@Model.ProductId"
-                  method="post">
+            <div class="admin-form-group">
+                <label>Price</label>
+                <p>@Model.Price.ToString("C")</p>
+            </div>
 
-                <button type="submit"
-                        class="btn btn-danger">
-                    DELETE PRODUCT
-                </button>
+            <div class="admin-form-group">
+                <label>Stock Quantity</label>
+                <p>
+                    @(Model.StockQuantity?.ToString() ?? "Not specified")
+                </p>
+            </div>
 
-                <a asp-area="Admin"
-                   asp-controller="Products"
-                   asp-action="Index"
-                   class="btn btn-outline-secondary ms-2">
-                    CANCEL
-                </a>
+            <div class="admin-form-group">
+                <label>Status</label>
+
+                @if (Model.IsPublished)
+                {
+                    <p>Published</p>
+                }
+                else
+                {
+                    <p>Draft</p>
+                }
+            </div>
+
+            <div class="alert alert-danger mt-4">
+                <strong>Warning:</strong>
+                This action cannot be undone.
+            </div>
+
+            <form method="post">
+
+                <input asp-for="ProductId"
+                       type="hidden" />
+
+                <div class="admin-form-actions">
+
+                    <input type="submit"
+                           value="Delete Product"
+                           class="btn btn-danger" />
+
+                    <a asp-area="Admin"
+                       asp-controller="Products"
+                       asp-action="Index"
+                       class="admin-cancel-btn">
+                        Cancel
+                    </a>
+
+                </div>
 
             </form>
 
         </div>
 
     </div>
-
-</div>
+</section>
