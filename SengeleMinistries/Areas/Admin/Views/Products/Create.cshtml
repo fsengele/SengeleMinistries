@@ -1,0 +1,160 @@
+﻿@model SengeleMinistries.Models.Product
+
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<section class="admin-product-form-page">
+    <div class="admin-product-form-container">
+
+        <div class="admin-product-form-header">
+            <p class="admin-eyebrow">SENGELE MINISTRIES ADMIN</p>
+
+            <h1>Add Product</h1>
+
+            <p class="admin-form-subtitle">
+                Add a new product to the Sengele Ministries Shop.
+            </p>
+        </div>
+
+        <div class="admin-product-card">
+
+            <form asp-area="Admin"
+                  asp-controller="Products"
+                  asp-action="Create"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger"></div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Title"></label>
+
+                    <input asp-for="Title"
+                           class="admin-form-control" />
+
+                    <span asp-validation-for="Title"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Category"></label>
+
+                    <select asp-for="Category"
+                            class="admin-form-control">
+
+                        <option value="">Select a category</option>
+                        <option value="Books">Books</option>
+                        <option value="Teachings">Teachings</option>
+                        <option value="EventCollections">Event Collections</option>
+                        <option value="Apparel">Apparel</option>
+
+                    </select>
+
+                    <span asp-validation-for="Category"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="ShortDescription">
+                        Short Description
+                    </label>
+
+                    <input asp-for="ShortDescription"
+                           class="admin-form-control" />
+
+                    <span asp-validation-for="ShortDescription"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Description">
+                        Full Description
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="admin-form-control admin-textarea"></textarea>
+
+                    <span asp-validation-for="Description"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-row">
+
+                    <div class="admin-form-group">
+                        <label asp-for="Price"></label>
+
+                        <input asp-for="Price"
+                               class="admin-form-control" />
+
+                        <span asp-validation-for="Price"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label asp-for="StockQuantity">
+                            Stock Quantity
+                        </label>
+
+                        <input asp-for="StockQuantity"
+                               class="admin-form-control" />
+
+                        <span asp-validation-for="StockQuantity"
+                              class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="ImageUrl">
+                        Image URL
+                    </label>
+
+                    <input asp-for="ImageUrl"
+                           class="admin-form-control"
+                           placeholder="https://..." />
+
+                    <span asp-validation-for="ImageUrl"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="admin-publish-box">
+
+                    <input asp-for="IsPublished" />
+
+                    <label asp-for="IsPublished">
+                        Publish this product
+                    </label>
+
+                </div>
+
+                <p class="admin-form-note">
+                    Published products can appear in the public Shop.
+                </p>
+
+                <div class="admin-form-actions">
+
+                    <button type="submit"
+                            class="admin-save-btn">
+                        Save Product
+                    </button>
+
+                    <a asp-area="Admin"
+                       asp-controller="Products"
+                       asp-action="Index"
+                       class="admin-cancel-btn">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
