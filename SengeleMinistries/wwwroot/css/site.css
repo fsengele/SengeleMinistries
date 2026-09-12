@@ -1091,3 +1091,971 @@ img{max-width:100%;height:auto;display:block}
         padding: 25px 22px;
     }
 }
+/* =========================================================
+   SENGELE MINISTRIES - PREMIUM CONTACT PAGE
+   ========================================================= */
+
+
+/* HERO */
+
+.sm-contact-hero {
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle at 85% 15%, rgba(201, 162, 77, 0.13), transparent 30%), linear-gradient(135deg, #101010 0%, #181818 60%, #0b0b0b 100%);
+    padding: 110px 24px 100px;
+    color: var(--sm-text-light);
+}
+
+    .sm-contact-hero::before {
+        content: "";
+        position: absolute;
+        width: 430px;
+        height: 430px;
+        border: 1px solid rgba(201, 162, 77, 0.14);
+        border-radius: 50%;
+        right: -170px;
+        top: -220px;
+    }
+
+    .sm-contact-hero::after {
+        content: "";
+        position: absolute;
+        width: 110px;
+        height: 3px;
+        background: var(--sm-gold);
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+.sm-contact-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+}
+
+.sm-contact-eyebrow {
+    margin: 0 0 20px;
+    color: var(--sm-gold);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .28em;
+}
+
+.sm-contact-hero h1 {
+    margin: 0;
+    max-width: 850px;
+    color: var(--sm-white);
+    font-size: clamp(3.2rem, 8vw, 6.7rem);
+    line-height: .91;
+    letter-spacing: -.045em;
+    font-weight: 800;
+}
+
+    .sm-contact-hero h1 span {
+        display: block;
+        color: var(--sm-gold);
+    }
+
+.sm-contact-intro {
+    max-width: 680px;
+    margin: 30px 0 0;
+    color: rgba(248, 246, 241, .70);
+    font-size: 1.05rem;
+    line-height: 1.85;
+}
+
+
+/* CONTACT AREA */
+
+.sm-contact-section {
+    background: var(--sm-cream);
+    padding: 85px 24px 105px;
+}
+
+.sm-contact-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 50px;
+    margin-bottom: 42px;
+}
+
+.sm-contact-small-title {
+    margin: 0 0 10px;
+    color: var(--sm-gold-dark);
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .20em;
+}
+
+.sm-contact-heading h2 {
+    margin: 0;
+    color: var(--sm-text-dark);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+}
+
+.sm-contact-heading > p {
+    max-width: 420px;
+    margin: 0;
+    color: #777169;
+    line-height: 1.7;
+}
+
+
+/* CARDS */
+
+.sm-contact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.sm-contact-box {
+    position: relative;
+    overflow: hidden;
+    min-height: 430px;
+    padding: 38px 32px 34px;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid #e4ded3;
+    border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.045);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+    .sm-contact-box:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 30px 65px rgba(0,0,0,.09);
+    }
+
+    .sm-contact-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+    }
+
+
+/* DIFFERENT ACCENT COLORS */
+
+.sm-contact-address::before {
+    background: var(--sm-gold);
+}
+
+.sm-contact-phone::before {
+    background: #52695a;
+}
+
+.sm-contact-email::before {
+    background: #8a6c47;
+}
+
+
+/* CARD NUMBER */
+
+.sm-contact-number {
+    position: absolute;
+    right: 25px;
+    top: 17px;
+    color: rgba(20,20,20,.055);
+    font-family: Georgia, serif;
+    font-size: 4.3rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+
+/* ICON */
+
+.sm-contact-icon {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.3rem;
+}
+
+.sm-contact-address .sm-contact-icon {
+    background: rgba(201,162,77,.13);
+    color: var(--sm-gold-dark);
+}
+
+.sm-contact-phone .sm-contact-icon {
+    background: rgba(82,105,90,.12);
+    color: #52695a;
+}
+
+.sm-contact-email .sm-contact-icon {
+    background: rgba(138,108,71,.12);
+    color: #8a6c47;
+}
+
+
+/* CARD CONTENT */
+
+.sm-contact-label {
+    margin: 0 0 9px;
+    color: #999188;
+    font-size: .69rem;
+    font-weight: 800;
+    letter-spacing: .17em;
+}
+
+.sm-contact-box h3 {
+    margin: 0 0 15px;
+    color: #20201e;
+    font-size: 1.65rem;
+    font-weight: 700;
+}
+
+.sm-contact-description {
+    min-height: 55px;
+    margin: 0 0 25px;
+    color: #858078;
+    font-size: .91rem;
+    line-height: 1.65;
+}
+
+
+/* IMPORTANT CONTACT VALUE */
+
+.sm-contact-value {
+    display: block;
+    margin-bottom: 25px;
+    color: #252521;
+    text-decoration: none;
+    font-size: 1.03rem;
+    font-weight: 700;
+    line-height: 1.7;
+}
+
+
+/* ADDRESS COLOR */
+
+.sm-contact-address .sm-contact-value {
+    color: #96732e;
+}
+
+
+/* PHONE COLOR */
+
+.sm-contact-phone .sm-contact-value {
+    color: #52695a;
+    font-size: 1.25rem;
+}
+
+
+/* EMAIL COLOR */
+
+.sm-contact-email .sm-contact-value {
+    color: #8a6c47;
+}
+
+.sm-contact-email-value {
+    overflow-wrap: anywhere;
+}
+
+
+/* BOTTOM ACTION */
+
+.sm-contact-action {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #eee9e0;
+    color: #34332f;
+    text-decoration: none;
+    font-size: .69rem;
+    font-weight: 800;
+    letter-spacing: .09em;
+    transition: color .2s ease;
+}
+
+.sm-contact-address .sm-contact-action:hover {
+    color: var(--sm-gold-dark);
+}
+
+.sm-contact-phone .sm-contact-action:hover {
+    color: #52695a;
+}
+
+.sm-contact-email .sm-contact-action:hover {
+    color: #8a6c47;
+}
+
+
+/* PRAYER CTA */
+
+.sm-contact-prayer {
+    position: relative;
+    background: var(--sm-charcoal);
+    padding: 75px 24px;
+    color: var(--sm-text-light);
+}
+
+.sm-contact-prayer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 60px;
+}
+
+.sm-contact-prayer h2 {
+    margin: 0 0 14px;
+    color: var(--sm-white);
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 500;
+}
+
+.sm-contact-prayer p:not(.sm-contact-small-title) {
+    max-width: 650px;
+    margin: 0;
+    color: rgba(248,246,241,.68);
+    line-height: 1.8;
+}
+
+.sm-contact-prayer .sm-contact-small-title {
+    color: var(--sm-gold);
+}
+
+.sm-contact-prayer-btn {
+    flex-shrink: 0;
+    min-height: 52px;
+    padding: 0 27px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sm-gold);
+    color: #171717;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: .73rem;
+    font-weight: 800;
+    letter-spacing: .10em;
+    transition: transform .2s ease, background .2s ease;
+}
+
+    .sm-contact-prayer-btn:hover {
+        background: var(--sm-gold-light);
+        color: #171717;
+        transform: translateY(-2px);
+    }
+
+
+/* RESPONSIVE */
+
+@media (max-width: 950px) {
+
+    .sm-contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sm-contact-box {
+        min-height: auto;
+    }
+
+    .sm-contact-heading,
+    .sm-contact-prayer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sm-contact-prayer-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .sm-contact-hero {
+        padding: 75px 20px 70px;
+    }
+
+        .sm-contact-hero h1 {
+            font-size: 3.3rem;
+        }
+
+    .sm-contact-section {
+        padding: 60px 16px 75px;
+    }
+
+    .sm-contact-box {
+        padding: 32px 24px;
+    }
+
+    .sm-contact-prayer {
+        padding: 60px 20px;
+    }
+}
+/* =========================================================
+   SENGELE MINISTRIES
+   PREMIUM PRAYER REQUEST PAGE
+   ========================================================= */
+
+
+/* =========================
+   HERO
+   ========================= */
+
+.sm-prayer-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    background: radial-gradient( circle at 82% 25%, rgba(201, 162, 77, 0.13), transparent 28% ), linear-gradient( 120deg, #080808 0%, #141414 52%, #1a1814 100% );
+    color: var(--sm-text-light);
+}
+
+    .sm-prayer-hero::before {
+        content: "";
+        position: absolute;
+        width: 540px;
+        height: 540px;
+        right: -160px;
+        top: -220px;
+        border-radius: 50%;
+        border: 1px solid rgba(201, 162, 77, 0.16);
+    }
+
+    .sm-prayer-hero::after {
+        content: "";
+        position: absolute;
+        width: 340px;
+        height: 340px;
+        right: -60px;
+        top: -120px;
+        border-radius: 50%;
+        border: 1px solid rgba(201, 162, 77, 0.07);
+    }
+
+.sm-prayer-hero-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 100px 24px;
+}
+
+.sm-prayer-hero-content {
+    max-width: 900px;
+}
+
+.sm-prayer-eyebrow {
+    margin: 0 0 22px;
+    color: var(--sm-gold);
+    font-size: .73rem;
+    font-weight: 800;
+    letter-spacing: .27em;
+}
+
+.sm-prayer-hero h1 {
+    max-width: 900px;
+    margin: 0;
+    color: var(--sm-white);
+    font-size: clamp(3.3rem, 7.4vw, 6.8rem);
+    font-weight: 800;
+    line-height: .92;
+    letter-spacing: -.05em;
+}
+
+    .sm-prayer-hero h1 span {
+        display: block;
+        color: var(--sm-gold);
+    }
+
+.sm-prayer-hero-text {
+    max-width: 650px;
+    margin: 30px 0 0;
+    color: rgba(248, 246, 241, .76);
+    font-size: 1.08rem;
+    line-height: 1.85;
+}
+
+.sm-prayer-hero-line {
+    width: 75px;
+    height: 2px;
+    margin: 32px 0 22px;
+    background: var(--sm-gold);
+}
+
+.sm-prayer-confidential {
+    margin: 0;
+    color: rgba(248, 246, 241, .52);
+    font-size: .83rem;
+    letter-spacing: .04em;
+}
+
+
+/* =========================
+   MAIN SECTION
+   ========================= */
+
+.sm-prayer-section {
+    background: var(--sm-cream);
+    padding: 90px 24px 110px;
+}
+
+.sm-prayer-section-heading {
+    margin-bottom: 50px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.sm-prayer-small-title {
+    margin: 0 0 12px;
+    color: var(--sm-gold-dark);
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .20em;
+}
+
+.sm-prayer-section-heading h2 {
+    margin: 0;
+    color: var(--sm-text-dark);
+    font-size: clamp(2.2rem, 4.6vw, 3.7rem);
+    line-height: 1.05;
+    letter-spacing: -.025em;
+}
+
+.sm-prayer-heading-text {
+    max-width: 440px;
+    margin: 0;
+    color: #777169;
+    line-height: 1.8;
+}
+
+
+/* =========================
+   LAYOUT
+   ========================= */
+
+.sm-prayer-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(300px, .75fr);
+    gap: 28px;
+    align-items: start;
+}
+
+
+/* =========================
+   FORM CARD
+   ========================= */
+
+.sm-prayer-form-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e2ddd3;
+    border-radius: 14px;
+    box-shadow: 0 24px 65px rgba(0, 0, 0, .055);
+}
+
+.sm-prayer-form-header {
+    position: relative;
+    padding: 38px 42px 32px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    background: #f8f6f1;
+    border-bottom: 1px solid #e8e3d9;
+}
+
+.sm-prayer-form-number {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sm-charcoal);
+    border-radius: 50%;
+    color: var(--sm-gold);
+    font-family: Georgia, serif;
+    font-size: 1rem;
+}
+
+.sm-prayer-form-label {
+    margin: 0 0 5px;
+    color: var(--sm-gold-dark);
+    font-size: .67rem;
+    font-weight: 800;
+    letter-spacing: .17em;
+}
+
+.sm-prayer-form-header h3 {
+    margin: 0;
+    color: #22221f;
+    font-size: 1.5rem;
+    font-weight: 650;
+}
+
+
+/* FORM */
+
+.sm-prayer-form {
+    padding: 42px;
+}
+
+.sm-prayer-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+.sm-prayer-field {
+    margin-bottom: 25px;
+}
+
+    .sm-prayer-field label {
+        display: block;
+        margin-bottom: 9px;
+        color: #4b4842;
+        font-size: .7rem;
+        font-weight: 800;
+        letter-spacing: .11em;
+    }
+
+        .sm-prayer-field label span {
+            margin-left: 6px;
+            color: #aaa39a;
+            font-size: .58rem;
+            font-weight: 600;
+        }
+
+    .sm-prayer-field input,
+    .sm-prayer-field textarea {
+        width: 100%;
+        border: 1px solid #dcd6cc;
+        border-radius: 7px;
+        background: #fbfaf7;
+        color: #222;
+        padding: 14px 15px;
+        font-family: inherit;
+        font-size: .94rem;
+        transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .sm-prayer-field input {
+        min-height: 53px;
+    }
+
+    .sm-prayer-field textarea {
+        min-height: 190px;
+        resize: vertical;
+        line-height: 1.7;
+    }
+
+        .sm-prayer-field input::placeholder,
+        .sm-prayer-field textarea::placeholder {
+            color: #aaa49b;
+        }
+
+        .sm-prayer-field input:focus,
+        .sm-prayer-field textarea:focus {
+            outline: none;
+            background: #ffffff;
+            border-color: var(--sm-gold);
+            box-shadow: 0 0 0 4px rgba(201, 162, 77, .10);
+        }
+
+
+/* PRIVACY */
+
+.sm-prayer-privacy {
+    margin: 3px 0 28px;
+    padding: 17px 19px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #f4f1ea;
+    border-left: 3px solid var(--sm-gold);
+    border-radius: 4px;
+}
+
+.sm-prayer-lock {
+    color: var(--sm-gold-dark);
+    font-size: 1rem;
+}
+
+.sm-prayer-privacy p {
+    margin: 0;
+    color: #777168;
+    font-size: .81rem;
+    line-height: 1.55;
+}
+
+
+/* SUBMIT */
+
+.sm-prayer-form-actions {
+    display: flex;
+}
+
+.sm-prayer-submit {
+    min-height: 55px;
+    padding: 0 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 35px;
+    border: 0;
+    border-radius: 5px;
+    background: var(--sm-charcoal);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .11em;
+    transition: background .2s ease, transform .2s ease;
+}
+
+    .sm-prayer-submit span {
+        color: var(--sm-gold);
+        font-size: 1.15rem;
+    }
+
+    .sm-prayer-submit:hover {
+        background: #292925;
+        transform: translateY(-2px);
+    }
+
+
+/* =========================
+   RIGHT SIDE
+   ========================= */
+
+.sm-prayer-side {
+    display: grid;
+    gap: 22px;
+}
+
+
+/* VERSE */
+
+.sm-prayer-verse-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 315px;
+    padding: 38px 32px;
+    background: var(--sm-charcoal);
+    border-radius: 12px;
+    color: var(--sm-white);
+}
+
+    .sm-prayer-verse-card::after {
+        content: "";
+        position: absolute;
+        width: 170px;
+        height: 170px;
+        right: -70px;
+        bottom: -80px;
+        border: 1px solid rgba(201, 162, 77, .18);
+        border-radius: 50%;
+    }
+
+.sm-prayer-side-label {
+    margin: 0 0 20px;
+    color: var(--sm-gold);
+    font-size: .66rem;
+    font-weight: 800;
+    letter-spacing: .18em;
+}
+
+.sm-prayer-quote {
+    height: 48px;
+    color: var(--sm-gold);
+    font-family: Georgia, serif;
+    font-size: 4.5rem;
+    line-height: 1;
+}
+
+.sm-prayer-verse-card blockquote {
+    position: relative;
+    z-index: 2;
+    margin: 12px 0 25px;
+    color: var(--sm-white);
+    font-family: Georgia, serif;
+    font-size: 1.55rem;
+    line-height: 1.5;
+}
+
+.sm-prayer-reference {
+    margin: 0;
+    color: rgba(248, 246, 241, .55);
+    font-size: .69rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+}
+
+
+/* BELIEF */
+
+.sm-prayer-belief-card {
+    padding: 37px 32px;
+    background: #e8e1d6;
+    border-radius: 12px;
+}
+
+    .sm-prayer-belief-card .sm-prayer-side-label {
+        color: var(--sm-gold-dark);
+    }
+
+    .sm-prayer-belief-card h3 {
+        margin: 0;
+        color: #24231f;
+        font-family: Georgia, serif;
+        font-size: 1.9rem;
+        line-height: 1.2;
+        font-weight: 500;
+    }
+
+.sm-prayer-belief-line {
+    width: 48px;
+    height: 2px;
+    margin: 22px 0;
+    background: var(--sm-gold);
+}
+
+.sm-prayer-belief-card p:not(.sm-prayer-side-label) {
+    color: #777066;
+    font-size: .87rem;
+    line-height: 1.7;
+}
+
+
+/* =========================
+   BOTTOM
+   ========================= */
+
+.sm-prayer-bottom {
+    position: relative;
+    overflow: hidden;
+    background: #0b0b0b;
+    padding: 95px 24px;
+    color: var(--sm-white);
+    text-align: center;
+}
+
+.sm-prayer-bottom-inner {
+    max-width: 820px;
+}
+
+.sm-prayer-bottom .sm-prayer-small-title {
+    color: var(--sm-gold);
+}
+
+.sm-prayer-bottom h2 {
+    margin: 0 0 20px;
+    color: var(--sm-white);
+    font-family: Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 500;
+}
+
+.sm-prayer-bottom > div > p:not(.sm-prayer-small-title):not(.sm-prayer-bottom-scripture) {
+    max-width: 680px;
+    margin: 0 auto;
+    color: rgba(248, 246, 241, .65);
+    line-height: 1.8;
+}
+
+.sm-prayer-bottom-line {
+    width: 55px;
+    height: 2px;
+    margin: 32px auto;
+    background: var(--sm-gold);
+}
+
+.sm-prayer-bottom-scripture {
+    margin: 0;
+    color: var(--sm-cream);
+    font-family: Georgia, serif;
+    font-size: 1.18rem;
+    font-style: italic;
+}
+
+    .sm-prayer-bottom-scripture span {
+        display: block;
+        margin-top: 8px;
+        color: var(--sm-gold);
+        font-family: Inter, sans-serif;
+        font-size: .68rem;
+        font-style: normal;
+        font-weight: 700;
+        letter-spacing: .13em;
+    }
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 950px) {
+
+    .sm-prayer-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sm-prayer-section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sm-prayer-side {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .sm-prayer-hero {
+        min-height: auto;
+    }
+
+    .sm-prayer-hero-inner {
+        padding: 80px 20px;
+    }
+
+    .sm-prayer-hero h1 {
+        font-size: 3.2rem;
+    }
+
+    .sm-prayer-section {
+        padding: 65px 16px 80px;
+    }
+
+    .sm-prayer-form-header {
+        padding: 30px 24px;
+    }
+
+    .sm-prayer-form {
+        padding: 30px 24px;
+    }
+
+    .sm-prayer-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .sm-prayer-side {
+        grid-template-columns: 1fr;
+    }
+
+    .sm-prayer-submit {
+        width: 100%;
+    }
+
+    .sm-prayer-bottom {
+        padding: 70px 20px;
+    }
+}
