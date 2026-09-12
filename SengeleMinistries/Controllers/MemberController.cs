@@ -5,6 +5,7 @@ using SengeleMinistries.Data;
 using SengeleMinistries.Models;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace SengeleMinistries.Controllers
 {
@@ -130,6 +131,53 @@ namespace SengeleMinistries.Controllers
         public IActionResult Dashboard()
         {
             return View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Orders()
+        {
+            var memberIdClaim = User.FindFirst("MemberId");
+
+            if (memberIdClaim == null ||
+                !int.TryParse(memberIdClaim.Value, out int memberId))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var orders = await _db.Orders
+                .Where(o => o.MemberId == memberId)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
+
+            return View(orders);
+        }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            var memberIdClaim = User.FindFirst("MemberId");
+
+            if (memberIdClaim == null ||
+                !int.TryParse(memberIdClaim.Value, out int memberId))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var order = await _db.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o =>
+                    o.OrderId == id &&
+                    o.MemberId == memberId);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
         }
 
         private static string HashPassword(string password)
