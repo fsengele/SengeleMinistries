@@ -148,7 +148,6 @@
 
         </div>
 
-
         <div class="row mt-5">
 
             <div class="col-md-6">
@@ -175,7 +174,6 @@
 
             </div>
 
-
             <div class="col-md-6 text-md-end">
 
                 <p class="text-muted mb-1">
@@ -187,14 +185,14 @@
                     @Model.Subtotal.ToString("C")
                 </h3>
 
-                <button type="button"
-                        class="btn btn-dark btn-lg mt-3"
-                        disabled>
+                <a asp-controller="Checkout"
+                   asp-action="Index"
+                   class="btn btn-dark btn-lg mt-3">
                     CHECKOUT
-                </button>
+                </a>
 
                 <p class="small text-muted mt-2">
-                    Checkout will be connected next.
+                    Continue to shipping and order confirmation.
                 </p>
 
             </div>
