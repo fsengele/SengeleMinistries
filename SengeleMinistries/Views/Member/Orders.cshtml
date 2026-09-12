@@ -1,0 +1,151 @@
+﻿@model IEnumerable<SengeleMinistries.Models.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="section">
+
+    <div class="container-wide"
+         style="max-width:950px;margin:0 auto">
+
+        <div class="mb-4">
+
+            <p class="text-uppercase small mb-1">
+                My Account
+            </p>
+
+            <h1 class="lead-heading">
+                My Orders
+            </h1>
+
+            <p class="muted">
+                View your purchases and order history.
+            </p>
+
+        </div>
+
+
+        @if (Model == null || !Model.Any())
+        {
+            <section class="section--soft"
+                     style="padding:2.5rem;border-radius:8px;text-align:center">
+
+                <h3>No Orders Yet</h3>
+
+                <p class="muted">
+                    You have not placed an order yet.
+                </p>
+
+                <a asp-controller="Shop"
+                   asp-action="Index"
+                   class="btn btn-dark mt-2">
+
+                    VISIT SHOP
+
+                </a>
+
+            </section>
+        }
+        else
+        {
+            @foreach (var order in Model)
+            {
+                <section class="section--white mb-3"
+                         style="padding:1.5rem;border-radius:8px">
+
+                    <div class="row align-items-center">
+
+                        <div class="col-md-3">
+
+                            <p class="muted small mb-1">
+                                ORDER
+                            </p>
+
+                            <h4>
+                                #@order.OrderId
+                            </h4>
+
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <p class="muted small mb-1">
+                                DATE
+                            </p>
+
+                            <strong>
+                                @order.CreatedAt
+                                .ToLocalTime()
+                                .ToString("MMM dd, yyyy")
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-md-2">
+
+                            <p class="muted small mb-1">
+                                TOTAL
+                            </p>
+
+                            <strong>
+                                @order.Total.ToString("C")
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-md-2">
+
+                            <p class="muted small mb-1">
+                                STATUS
+                            </p>
+
+                            <strong>
+                                @order.OrderStatus
+                            </strong>
+
+                            <div class="small muted">
+                                Payment: @order.PaymentStatus
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-2 text-md-end mt-3 mt-md-0">
+
+                            <a asp-controller="Member"
+                               asp-action="OrderDetails"
+                               asp-route-id="@order.OrderId"
+                               class="btn btn-outline-dark">
+
+                                VIEW ORDER
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </section>
+            }
+        }
+
+
+        <div class="mt-4">
+
+            <a asp-controller="Member"
+               asp-action="Dashboard"
+               class="btn btn-outline-dark">
+
+                BACK TO MY ACCOUNT
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
