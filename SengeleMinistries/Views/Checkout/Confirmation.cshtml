@@ -1,0 +1,221 @@
+﻿@model SengeleMinistries.Models.Order
+
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="container py-5 mt-5">
+
+    <div class="text-center mb-5">
+
+        <p class="text-uppercase small mb-2">
+            Sengele Ministries Shop
+        </p>
+
+        <h1 class="fw-bold">
+            THANK YOU FOR YOUR ORDER
+        </h1>
+
+        <p class="text-muted">
+            Your order has been received successfully.
+        </p>
+
+    </div>
+
+
+    @if (TempData["OrderSuccess"] != null)
+    {
+        <div class="alert alert-success text-center mb-4">
+            @TempData["OrderSuccess"]
+        </div>
+    }
+
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="border rounded p-4 bg-white mb-4">
+
+                <div class="d-flex justify-content-between
+                    align-items-center flex-wrap mb-4">
+
+                    <div>
+                        <p class="text-muted mb-1">
+                            Order Number
+                        </p>
+
+                        <h3 class="mb-0">
+                            #@Model.OrderId
+                        </h3>
+                    </div>
+
+                    <div class="text-md-end mt-3 mt-md-0">
+
+                        <p class="text-muted mb-1">
+                            Order Date
+                        </p>
+
+                        <strong>
+                            @Model.CreatedAt.ToLocalTime().ToString("MMMM dd, yyyy")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <hr />
+
+
+                <h4 class="mt-4 mb-3">
+                    Order Summary
+                </h4>
+
+
+                @if (Model.OrderItems != null &&
+                     Model.OrderItems.Count > 0)
+                {
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <div class="d-flex justify-content-between
+                            align-items-start py-3 border-bottom">
+
+                            <div>
+
+                                <strong>
+                                    @item.ProductTitle
+                                </strong>
+
+                                <p class="text-muted small mb-0">
+                                    Quantity: @item.Quantity
+                                </p>
+
+                                <p class="text-muted small mb-0">
+                                    @item.Price.ToString("C") each
+                                </p>
+
+                            </div>
+
+                            <strong>
+                                @((item.Price * item.Quantity).ToString("C"))
+                            </strong>
+
+                        </div>
+                    }
+                }
+
+
+                <div class="d-flex justify-content-between mt-4">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <strong>
+                        @Model.Subtotal.ToString("C")
+                    </strong>
+
+                </div>
+
+
+                <div class="d-flex justify-content-between mt-3">
+
+                    <span class="fs-5 fw-bold">
+                        Total
+                    </span>
+
+                    <span class="fs-5 fw-bold">
+                        @Model.Total.ToString("C")
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="border rounded p-4 bg-light mb-4">
+
+                <h4 class="mb-3">
+                    Shipping Information
+                </h4>
+
+                <p class="mb-1">
+                    <strong>
+                        @Model.FirstName @Model.LastName
+                    </strong>
+                </p>
+
+                <p class="mb-1">
+                    @Model.Address
+                </p>
+
+                <p class="mb-1">
+                    @Model.City, @Model.State @Model.ZipCode
+                </p>
+
+                <p class="mb-1">
+                    @Model.Phone
+                </p>
+
+                <p class="mb-0">
+                    @Model.Email
+                </p>
+
+            </div>
+
+
+            <div class="border rounded p-4 mb-4">
+
+                <h4 class="mb-3">
+                    Order Status
+                </h4>
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span>
+                        Order Status
+                    </span>
+
+                    <strong>
+                        @Model.OrderStatus
+                    </strong>
+
+                </div>
+
+                <div class="d-flex justify-content-between">
+
+                    <span>
+                        Payment Status
+                    </span>
+
+                    <strong>
+                        @Model.PaymentStatus
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="text-center">
+
+                <a asp-controller="Shop"
+                   asp-action="Index"
+                   class="btn btn-dark btn-lg">
+                    CONTINUE SHOPPING
+                </a>
+
+                <a asp-controller="Member"
+                   asp-action="Dashboard"
+                   class="btn btn-outline-dark btn-lg ms-2">
+                    MY ACCOUNT
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
