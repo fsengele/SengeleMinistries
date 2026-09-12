@@ -40,9 +40,7 @@
                 <a asp-controller="Shop"
                    asp-action="Index"
                    class="btn btn-dark mt-2">
-
                     VISIT SHOP
-
                 </a>
 
             </section>
@@ -56,6 +54,7 @@
 
                     <div class="row align-items-center">
 
+                        <!-- ORDER NUMBER -->
                         <div class="col-md-3">
 
                             <p class="muted small mb-1">
@@ -69,6 +68,7 @@
                         </div>
 
 
+                        <!-- DATE -->
                         <div class="col-md-3">
 
                             <p class="muted small mb-1">
@@ -76,14 +76,13 @@
                             </p>
 
                             <strong>
-                                @order.CreatedAt
-                                .ToLocalTime()
-                                .ToString("MMM dd, yyyy")
+                                @(order.CreatedAt.ToLocalTime().ToString("MMM dd, yyyy"))
                             </strong>
 
                         </div>
 
 
+                        <!-- TOTAL -->
                         <div class="col-md-2">
 
                             <p class="muted small mb-1">
@@ -97,6 +96,7 @@
                         </div>
 
 
+                        <!-- STATUS -->
                         <div class="col-md-2">
 
                             <p class="muted small mb-1">
@@ -114,15 +114,14 @@
                         </div>
 
 
+                        <!-- VIEW ORDER -->
                         <div class="col-md-2 text-md-end mt-3 mt-md-0">
 
                             <a asp-controller="Member"
                                asp-action="OrderDetails"
                                asp-route-id="@order.OrderId"
                                class="btn btn-outline-dark">
-
                                 VIEW ORDER
-
                             </a>
 
                         </div>
@@ -139,9 +138,7 @@
             <a asp-controller="Member"
                asp-action="Dashboard"
                class="btn btn-outline-dark">
-
                 BACK TO MY ACCOUNT
-
             </a>
 
         </div>
