@@ -2,15 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using SengeleMinistries.Data;
 using SengeleMinistries.Models;
-using System.Text.Json;
+using System.Security.Claims;
 
 namespace SengeleMinistries.Controllers
 {
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        private const string CartSessionKey = "ShoppingCart";
 
         public CartController(ApplicationDbContext context)
         {
@@ -20,12 +18,18 @@ namespace SengeleMinistries.Controllers
 
         // =========================================================
         // SHOW SHOPPING CART
-        // GET: /Cart
         // =========================================================
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = GetCart();
+            var memberId = GetMemberId();
+
+            if (memberId == null)
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
+            var cart = await GetCartAsync(memberId.Value);
 
             var viewModel = new ShoppingCartViewModel
             {
@@ -38,7 +42,6 @@ namespace SengeleMinistries.Controllers
 
         // =========================================================
         // ADD PRODUCT TO CART
-        // POST: /Cart/AddToCart
         // =========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -46,6 +49,13 @@ namespace SengeleMinistries.Controllers
             int productId,
             int quantity = 1)
         {
+            var memberId = GetMemberId();
+
+            if (memberId == null)
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
             var product = await _context.Products
                 .FirstOrDefaultAsync(p =>
                     p.ProductId == productId &&
@@ -56,7 +66,7 @@ namespace SengeleMinistries.Controllers
                 return NotFound();
             }
 
-            // Product is out of stock
+            // Product out of stock
             if (product.StockQuantity.HasValue &&
                 product.StockQuantity.Value <= 0)
             {
@@ -82,12 +92,12 @@ namespace SengeleMinistries.Controllers
                 quantity = product.StockQuantity.Value;
             }
 
-            var cart = GetCart();
+            var existingItem =
+                await _context.ShoppingCartItems
+                    .FirstOrDefaultAsync(c =>
+                        c.MemberId == memberId.Value &&
+                        c.ProductId == productId);
 
-            var existingItem = cart.FirstOrDefault(
-                item => item.ProductId == product.ProductId);
-
-            // Product already exists in cart
             if (existingItem != null)
             {
                 int newQuantity =
@@ -99,12 +109,19 @@ namespace SengeleMinistries.Controllers
                     existingItem.Quantity =
                         product.StockQuantity.Value;
 
+                    existingItem.UpdatedAt =
+                        DateTime.UtcNow;
+
                     TempData["CartError"] =
                         $"Only {product.StockQuantity.Value} item(s) of {product.Title} are available.";
                 }
                 else
                 {
-                    existingItem.Quantity = newQuantity;
+                    existingItem.Quantity =
+                        newQuantity;
+
+                    existingItem.UpdatedAt =
+                        DateTime.UtcNow;
 
                     TempData["CartMessage"] =
                         $"{product.Title} was added to your cart.";
@@ -112,20 +129,22 @@ namespace SengeleMinistries.Controllers
             }
             else
             {
-                cart.Add(new CartItem
-                {
-                    ProductId = product.ProductId,
-                    Title = product.Title,
-                    Price = product.Price,
-                    Quantity = quantity,
-                    ImageUrl = product.ImageUrl
-                });
+                var cartItem =
+                    new ShoppingCartItem
+                    {
+                        MemberId = memberId.Value,
+                        ProductId = product.ProductId,
+                        Quantity = quantity,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                _context.ShoppingCartItems.Add(cartItem);
 
                 TempData["CartMessage"] =
                     $"{product.Title} was added to your cart.";
             }
 
-            SaveCart(cart);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
@@ -133,7 +152,6 @@ namespace SengeleMinistries.Controllers
 
         // =========================================================
         // UPDATE PRODUCT QUANTITY
-        // POST: /Cart/UpdateQuantity
         // =========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -141,27 +159,36 @@ namespace SengeleMinistries.Controllers
             int productId,
             int quantity)
         {
-            var cart = GetCart();
+            var memberId = GetMemberId();
 
-            var item = cart.FirstOrDefault(
-                item => item.ProductId == productId);
+            if (memberId == null)
+            {
+                return RedirectToAction("Login", "Member");
+            }
 
-            if (item == null)
+            var cartItem =
+                await _context.ShoppingCartItems
+                    .FirstOrDefaultAsync(c =>
+                        c.MemberId == memberId.Value &&
+                        c.ProductId == productId);
+
+            if (cartItem == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(p =>
-                    p.ProductId == productId &&
-                    p.IsPublished);
+            var product =
+                await _context.Products
+                    .FirstOrDefaultAsync(p =>
+                        p.ProductId == productId &&
+                        p.IsPublished);
 
-            // Product no longer exists
+            // Product no longer available
             if (product == null)
             {
-                cart.Remove(item);
+                _context.ShoppingCartItems.Remove(cartItem);
 
-                SaveCart(cart);
+                await _context.SaveChangesAsync();
 
                 TempData["CartError"] =
                     "This product is no longer available.";
@@ -172,9 +199,9 @@ namespace SengeleMinistries.Controllers
             // Quantity 0 = remove product
             if (quantity <= 0)
             {
-                cart.Remove(item);
+                _context.ShoppingCartItems.Remove(cartItem);
 
-                SaveCart(cart);
+                await _context.SaveChangesAsync();
 
                 TempData["CartMessage"] =
                     $"{product.Title} was removed from your cart.";
@@ -186,9 +213,9 @@ namespace SengeleMinistries.Controllers
             if (product.StockQuantity.HasValue &&
                 product.StockQuantity.Value <= 0)
             {
-                cart.Remove(item);
+                _context.ShoppingCartItems.Remove(cartItem);
 
-                SaveCart(cart);
+                await _context.SaveChangesAsync();
 
                 TempData["CartError"] =
                     $"{product.Title} is currently out of stock.";
@@ -196,19 +223,17 @@ namespace SengeleMinistries.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Quantity exceeds stock
+            // Requested quantity exceeds stock
             if (product.StockQuantity.HasValue &&
                 quantity > product.StockQuantity.Value)
             {
-                quantity = product.StockQuantity.Value;
+                quantity =
+                    product.StockQuantity.Value;
 
-                // Only save if quantity actually changed
-                if (item.Quantity != quantity)
-                {
-                    item.Quantity = quantity;
+                cartItem.Quantity = quantity;
+                cartItem.UpdatedAt = DateTime.UtcNow;
 
-                    SaveCart(cart);
-                }
+                await _context.SaveChangesAsync();
 
                 TempData["CartError"] =
                     $"Only {product.StockQuantity.Value} item(s) of {product.Title} are available.";
@@ -216,19 +241,16 @@ namespace SengeleMinistries.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // =====================================================
-            // IMPORTANT:
-            // If customer did not change quantity, do nothing
-            // =====================================================
-            if (item.Quantity == quantity)
+            // Quantity did not change
+            if (cartItem.Quantity == quantity)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            // Quantity really changed
-            item.Quantity = quantity;
+            cartItem.Quantity = quantity;
+            cartItem.UpdatedAt = DateTime.UtcNow;
 
-            SaveCart(cart);
+            await _context.SaveChangesAsync();
 
             TempData["CartMessage"] =
                 $"{product.Title} quantity was updated.";
@@ -239,25 +261,39 @@ namespace SengeleMinistries.Controllers
 
         // =========================================================
         // REMOVE PRODUCT FROM CART
-        // POST: /Cart/Remove
         // =========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Remove(int productId)
+        public async Task<IActionResult> Remove(int productId)
         {
-            var cart = GetCart();
+            var memberId = GetMemberId();
 
-            var item = cart.FirstOrDefault(
-                item => item.ProductId == productId);
-
-            if (item != null)
+            if (memberId == null)
             {
-                cart.Remove(item);
+                return RedirectToAction("Login", "Member");
+            }
 
-                SaveCart(cart);
+            var cartItem =
+                await _context.ShoppingCartItems
+                    .FirstOrDefaultAsync(c =>
+                        c.MemberId == memberId.Value &&
+                        c.ProductId == productId);
+
+            if (cartItem != null)
+            {
+                var product =
+                    await _context.Products
+                        .FirstOrDefaultAsync(p =>
+                            p.ProductId == productId);
+
+                _context.ShoppingCartItems.Remove(cartItem);
+
+                await _context.SaveChangesAsync();
 
                 TempData["CartMessage"] =
-                    $"{item.Title} was removed from your cart.";
+                    product != null
+                        ? $"{product.Title} was removed from your cart."
+                        : "The product was removed from your cart.";
             }
 
             return RedirectToAction(nameof(Index));
@@ -266,13 +302,31 @@ namespace SengeleMinistries.Controllers
 
         // =========================================================
         // CLEAR SHOPPING CART
-        // POST: /Cart/Clear
         // =========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Clear()
+        public async Task<IActionResult> Clear()
         {
-            HttpContext.Session.Remove(CartSessionKey);
+            var memberId = GetMemberId();
+
+            if (memberId == null)
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
+            var cartItems =
+                await _context.ShoppingCartItems
+                    .Where(c =>
+                        c.MemberId == memberId.Value)
+                    .ToListAsync();
+
+            if (cartItems.Count > 0)
+            {
+                _context.ShoppingCartItems
+                    .RemoveRange(cartItems);
+
+                await _context.SaveChangesAsync();
+            }
 
             TempData["CartMessage"] =
                 "Your shopping cart is now empty.";
@@ -282,42 +336,93 @@ namespace SengeleMinistries.Controllers
 
 
         // =========================================================
-        // GET CART FROM SESSION
+        // GET MEMBER ID FROM LOGIN CLAIM
         // =========================================================
-        private List<CartItem> GetCart()
+        private int? GetMemberId()
         {
-            var cartJson =
-                HttpContext.Session.GetString(CartSessionKey);
+            var claim =
+                User.FindFirst("MemberId")
+                ?? User.FindFirst(
+                    ClaimTypes.NameIdentifier);
 
-            if (string.IsNullOrWhiteSpace(cartJson))
+            if (claim != null &&
+                int.TryParse(
+                    claim.Value,
+                    out int memberId))
             {
-                return new List<CartItem>();
+                return memberId;
             }
 
-            return JsonSerializer
-                       .Deserialize<List<CartItem>>(cartJson)
-                   ?? new List<CartItem>();
+            return null;
         }
 
 
         // =========================================================
-        // SAVE CART TO SESSION
+        // GET MEMBER CART FROM SQL SERVER
         // =========================================================
-        private void SaveCart(List<CartItem> cart)
+        private async Task<List<CartItem>>
+            GetCartAsync(int memberId)
         {
-            // If cart is empty, remove session
-            if (cart.Count == 0)
+            var databaseItems =
+                await _context.ShoppingCartItems
+                    .Where(c =>
+                        c.MemberId == memberId)
+                    .ToListAsync();
+
+            if (databaseItems.Count == 0)
             {
-                HttpContext.Session.Remove(CartSessionKey);
-                return;
+                return new List<CartItem>();
             }
 
-            var cartJson =
-                JsonSerializer.Serialize(cart);
+            var productIds =
+                databaseItems
+                    .Select(c => c.ProductId)
+                    .ToList();
 
-            HttpContext.Session.SetString(
-                CartSessionKey,
-                cartJson);
+            var products =
+                await _context.Products
+                    .Where(p =>
+                        productIds.Contains(
+                            p.ProductId))
+                    .ToListAsync();
+
+            var cart =
+                new List<CartItem>();
+
+            foreach (var databaseItem
+                     in databaseItems)
+            {
+                var product =
+                    products.FirstOrDefault(p =>
+                        p.ProductId ==
+                        databaseItem.ProductId);
+
+                if (product == null)
+                {
+                    continue;
+                }
+
+                cart.Add(
+                    new CartItem
+                    {
+                        ProductId =
+                            product.ProductId,
+
+                        Title =
+                            product.Title,
+
+                        Price =
+                            product.Price,
+
+                        Quantity =
+                            databaseItem.Quantity,
+
+                        ImageUrl =
+                            product.ImageUrl
+                    });
+            }
+
+            return cart;
         }
     }
 }
