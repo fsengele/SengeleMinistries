@@ -1,16 +1,24 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 using SengeleMinistries.Models;
 using SengeleMinistries.Services;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // =========================================================
-// MVC
+// MVC + LOCALIZATION
 // =========================================================
-builder.Services.AddControllersWithViews();
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
+
+builder.Services
+    .AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 
 
 // =========================================================
@@ -20,7 +28,6 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    // Keep the shopping cart for 30 minutes of inactivity
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 
     options.Cookie.HttpOnly = true;
@@ -101,8 +108,40 @@ app.UseRouting();
 
 
 // =========================================================
+// LANGUAGE / LOCALIZATION
+// English = default
+// French = second language
+// =========================================================
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("fr")
+};
+
+var localizationOptions =
+    new RequestLocalizationOptions
+    {
+        DefaultRequestCulture =
+            new RequestCulture("en"),
+
+        SupportedCultures =
+            supportedCultures,
+
+        SupportedUICultures =
+            supportedCultures
+    };
+
+localizationOptions.RequestCultureProviders =
+    new[]
+    {
+        new CookieRequestCultureProvider()
+    };
+
+app.UseRequestLocalization(localizationOptions);
+
+
+// =========================================================
 // SHOPPING CART SESSION
-// Must be before controllers/routes
 // =========================================================
 app.UseSession();
 
