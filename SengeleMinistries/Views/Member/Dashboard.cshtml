@@ -63,7 +63,6 @@
 
         @* =========================================
            MY ORDERS
-           Will be connected to SQL Server next
            ========================================= *@
 
         <section class="section--white mt-3"
@@ -72,8 +71,17 @@
             <h4>MY ORDERS</h4>
 
             <p class="muted">
-                Your purchases and order history — coming next
+                View your purchases, order status and order history.
             </p>
+
+            <a asp-area=""
+               asp-controller="Member"
+               asp-action="Orders"
+               class="btn btn-dark mt-2">
+
+                View My Orders
+
+            </a>
 
         </section>
 
@@ -167,6 +175,8 @@
               asp-action="Logout"
               method="post"
               class="mt-4">
+
+            @Html.AntiForgeryToken()
 
             <button type="submit"
                     class="btn btn-outline-cta">
