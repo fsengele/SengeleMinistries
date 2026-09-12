@@ -1,3 +1,5 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
 @* Premium responsive navigation for Sengele Ministries *@
 
 <nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top">
@@ -461,7 +463,131 @@
 
                 </li>
 
+                @* =================================================
+   LANGUAGE SELECTOR
+   ================================================= *@
 
+                @{
+                    var currentCulture =
+                        System.Globalization.CultureInfo
+                            .CurrentUICulture
+                            .TwoLetterISOLanguageName;
+
+                    var currentLanguage =
+                        currentCulture == "fr" ? "FR" : "EN";
+
+                    var returnUrl =
+                        Context.Request.Path +
+                        Context.Request.QueryString;
+                }
+
+                <li class="nav-item dropdown ms-lg-2">
+
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       id="languageDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+
+                        <span style="color:#c9a24d;">
+                            ◉
+                        </span>
+
+                        @currentLanguage
+
+                    </a>
+
+
+                    <ul class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="languageDropdown">
+
+                        <li>
+
+                            <form asp-area=""
+                                  asp-controller="Language"
+                                  asp-action="SetLanguage"
+                                  method="post"
+                                  class="m-0">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="culture"
+                                       value="en" />
+
+                                <input type="hidden"
+                                       name="returnUrl"
+                                       value="@returnUrl" />
+
+                                <button type="submit"
+                                        class="dropdown-item">
+
+                                    <span class="me-2">
+                                        🇺🇸
+                                    </span>
+
+                                    English
+
+                                    @if (currentCulture == "en")
+                                    {
+                                        <span class="float-end"
+                                              style="color:#c9a24d;">
+                                            ✓
+                                        </span>
+                                    }
+
+                                </button>
+
+                            </form>
+
+                        </li>
+
+
+                        <li>
+
+                            <form asp-area=""
+                                  asp-controller="Language"
+                                  asp-action="SetLanguage"
+                                  method="post"
+                                  class="m-0">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="culture"
+                                       value="fr" />
+
+                                <input type="hidden"
+                                       name="returnUrl"
+                                       value="@returnUrl" />
+
+                                <button type="submit"
+                                        class="dropdown-item">
+
+                                    <span class="me-2">
+                                        🇫🇷
+                                    </span>
+
+                                    Français
+
+                                    @if (currentCulture == "fr")
+                                    {
+                                        <span class="float-end"
+                                              style="color:#c9a24d;">
+                                            ✓
+                                        </span>
+                                    }
+
+                                </button>
+
+                            </form>
+
+                        </li>
+
+                    </ul>
+
+                </li>
                 @* =================================================
                    DONATE
                    ================================================= *@
@@ -496,6 +622,16 @@
                     </a>
 
                 </li>
+
+                <li class="nav-item ms-3">
+                    <a class="btn btn-cta btn-sm"
+                       href="https://www.facebook.com/profile.php?id=100024839084763"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        Facebook
+                    </a>
+                </li>
+
 
 
             </ul>
