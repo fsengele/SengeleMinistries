@@ -1,42 +1,304 @@
 @model IEnumerable<SengeleMinistries.Models.Product>
+
 @{
-	var category = ViewData["Category"] as string ?? "";
-	ViewData["Title"] = category;
+    var category = ViewData["Category"] as string ?? "";
+    ViewData["Title"] = category;
+
+    var categoryTitle = category;
+
+    if (category.Equals("Books", StringComparison.OrdinalIgnoreCase))
+    {
+        categoryTitle = "Books & Bibles";
+    }
+    else if (category.Equals("Teachings", StringComparison.OrdinalIgnoreCase))
+    {
+        categoryTitle = "Teachings & Resources";
+    }
+    else if (category.Equals("EventCollections", StringComparison.OrdinalIgnoreCase))
+    {
+        categoryTitle = "Event Collections";
+    }
+    else if (category.Equals("Apparel", StringComparison.OrdinalIgnoreCase))
+    {
+        categoryTitle = "Apparel";
+    }
+
+    var productNumber = 0;
 }
 
-<section class="section section--soft shop-hero">
-	<div class="container-wide text-center">
-		<h1 class="hero-heading">@category</h1>
-		<p class="muted">Resources and items in the @category category.</p>
-	</div>
-</section>
+<div class="sm-category-page">
 
-<main>
-	<section class="section section--white">
-		<div class="container-wide">
-			@if (Model != null && Model.Any())
-			{
-				<div class="grid">
-					@foreach (var p in Model)
-					{
-						<article class="product-card">
-							<a asp-controller="Shop" asp-action="Details" asp-route-id="@p.ProductId">
-								<div class="product-image" style="background-image:url('@(p.ImageUrl ?? "/images/placeholder-product.png")')"></div>
-								<h4 class="product-title">@p.Title</h4>
-							</a>
-							<p class="muted small">@p.Category</p>
-							<p class="product-price">@String.Format("{0:C}", p.Price)</p>
-						</article>
-					}
-				</div>
-			}
-			else
-			{
-				<div class="empty-state">
-					<p class="muted">There are no published items in this category yet. Please check back soon.</p>
-					<p><a class="btn btn-outline-cta" asp-controller="Shop" asp-action="Index">Browse all</a></p>
-				</div>
-			}
-		</div>
-	</section>
-</main>
+    <!-- =====================================================
+         PREMIUM HERO
+         ===================================================== -->
+    <section class="sm-category-hero">
+
+        <div class="container-wide">
+
+            <div class="sm-category-hero-content">
+
+                <p class="sm-category-eyebrow">
+                    SENGELE MINISTRIES SHOP
+                </p>
+
+                <h1>
+                    @categoryTitle
+                </h1>
+
+                <p class="sm-category-hero-description">
+                    Faith-centered resources carefully selected
+                    to strengthen your spiritual journey,
+                    deepen your understanding, and equip you
+                    for a life of purpose.
+                </p>
+
+                <div class="sm-category-gold-line"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INTRODUCTION
+         ===================================================== -->
+    <section class="sm-category-intro">
+
+        <div class="container-wide">
+
+            <div class="sm-category-intro-grid">
+
+                <div>
+
+                    <span class="sm-category-small-label">
+                        CURATED RESOURCES
+                    </span>
+
+                    <h2>
+                        Resources with<br />
+                        purpose.
+                    </h2>
+
+                </div>
+
+                <div class="sm-category-intro-text">
+
+                    <p>
+                        Every resource in our collection is presented
+                        with a simple purpose: to encourage growth,
+                        strengthen faith, and provide practical tools
+                        for your journey with God.
+                    </p>
+
+                    <a asp-controller="Shop"
+                       asp-action="Index"
+                       class="sm-category-back-link">
+                        ← EXPLORE THE FULL SHOP
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PRODUCTS
+         ===================================================== -->
+    <section class="sm-category-products">
+
+        <div class="container-wide">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="sm-product-grid">
+
+                    @foreach (var p in Model)
+                    {
+                        productNumber++;
+
+                        var cardStyle =
+                            productNumber % 4 == 1 ? "sm-product-card--gold" :
+                            productNumber % 4 == 2 ? "sm-product-card--sage" :
+                            productNumber % 4 == 3 ? "sm-product-card--stone" :
+                                                   "sm-product-card--charcoal";
+
+                        <article class="sm-product-card @cardStyle">
+
+                            <!-- IMAGE -->
+                            <a asp-controller="Shop"
+                               asp-action="Details"
+                               asp-route-id="@p.ProductId"
+                               class="sm-product-image-link">
+
+                                <div class="sm-product-image-area">
+
+                                    <span class="sm-product-number">
+                                        @productNumber.ToString("00")
+                                    </span>
+
+                                    @if (!string.IsNullOrWhiteSpace(p.ImageUrl))
+                                    {
+                                        <img src="@p.ImageUrl"
+                                             alt="@p.Title"
+                                             class="sm-product-image" />
+                                    }
+                                    else
+                                    {
+                                        <div class="sm-product-placeholder">
+
+                                            <span>
+                                                SENGELE
+                                            </span>
+
+                                            <strong>
+                                                MINISTRIES
+                                            </strong>
+
+                                            <small>
+                                                @categoryTitle
+                                            </small>
+
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </a>
+
+
+                            <!-- PRODUCT INFORMATION -->
+                            <div class="sm-product-info">
+
+                                <span class="sm-product-category">
+                                    @categoryTitle
+                                </span>
+
+                                <h3 class="sm-product-title">
+
+                                    <a asp-controller="Shop"
+                                       asp-action="Details"
+                                       asp-route-id="@p.ProductId">
+
+                                        @p.Title
+
+                                    </a>
+
+                                </h3>
+
+
+                                @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
+                                {
+                                    <p class="sm-product-description">
+                                        @p.ShortDescription
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="sm-product-description">
+                                        A selected resource from Sengele Ministries
+                                        created to encourage faith, growth and purpose.
+                                    </p>
+                                }
+
+
+                                <div class="sm-product-bottom">
+
+                                    <div class="sm-product-price">
+                                        @p.Price.ToString("C")
+                                    </div>
+
+                                    <a asp-controller="Shop"
+                                       asp-action="Details"
+                                       asp-route-id="@p.ProductId"
+                                       class="sm-product-view">
+
+                                        VIEW ITEM
+                                        <span>→</span>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <!-- EMPTY CATEGORY -->
+
+                <div class="sm-category-empty">
+
+                    <span class="sm-category-small-label">
+                        SENGELE MINISTRIES SHOP
+                    </span>
+
+                    <h2>
+                        New resources are coming.
+                    </h2>
+
+                    <p>
+                        There are currently no published items
+                        in this collection. Please check back soon.
+                    </p>
+
+                    <a asp-controller="Shop"
+                       asp-action="Index"
+                       class="sm-category-empty-button">
+
+                        EXPLORE THE SHOP
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BOTTOM MESSAGE
+         ===================================================== -->
+    <section class="sm-category-footer-message">
+
+        <div class="container-wide">
+
+            <p class="sm-category-small-label">
+                MORE THAN A PURCHASE
+            </p>
+
+            <h2>
+                Resources that help<br />
+                carry the mission forward.
+            </h2>
+
+            <p class="sm-category-footer-text">
+                Your support helps Sengele Ministries continue
+                sharing hope, prayer and the Word with people
+                and communities.
+            </p>
+
+            <a asp-controller="Shop"
+               asp-action="Index"
+               class="sm-category-footer-button">
+
+                CONTINUE SHOPPING
+
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
