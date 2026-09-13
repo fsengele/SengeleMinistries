@@ -24,5 +24,7 @@ namespace SengeleMinistries.Data
         public DbSet<OrderItem> OrderItems { get; set; } = null!;
 
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; } = null!;
+
+        public DbSet<PrayerRequest> PrayerRequests { get; set; } = null!;
     }
 }
