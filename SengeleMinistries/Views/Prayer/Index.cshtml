@@ -1,3 +1,5 @@
+@model SengeleMinistries.Models.PrayerRequest
+
 @{
     ViewData["Title"] = "Requête de prière";
 }
@@ -71,6 +73,15 @@
             </div>
 
 
+            <!-- SUCCESS MESSAGE -->
+            @if (TempData["PrayerSuccess"] != null)
+            {
+                <div class="alert alert-success mb-4">
+                    @TempData["PrayerSuccess"]
+                </div>
+            }
+
+
             <div class="sm-prayer-layout">
 
                 <!-- ==========================================
@@ -97,36 +108,56 @@
                     </div>
 
 
-                    <form action="https://formspree.io/f/xgaezoaz"
-                          method="POST"
+                    <form asp-controller="Prayer"
+                          asp-action="Index"
+                          method="post"
                           class="sm-prayer-form">
+
+                        @Html.AntiForgeryToken()
+
+
+                        <!-- VALIDATION SUMMARY -->
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
 
                         <!-- NAME -->
                         <div class="sm-prayer-form-row">
 
                             <div class="sm-prayer-field">
-                                <label for="firstName">
+
+                                <label asp-for="FirstName">
                                     PRÉNOM
                                 </label>
 
-                                <input id="firstName"
-                                       name="FirstName"
+                                <input asp-for="FirstName"
+                                       id="firstName"
                                        type="text"
-                                       placeholder="Votre prénom"
-                                       required />
+                                       placeholder="Votre prénom" />
+
+                                <span asp-validation-for="FirstName"
+                                      class="text-danger">
+                                </span>
+
                             </div>
 
 
                             <div class="sm-prayer-field">
-                                <label for="lastName">
+
+                                <label asp-for="LastName">
                                     NOM
                                 </label>
 
-                                <input id="lastName"
-                                       name="LastName"
+                                <input asp-for="LastName"
+                                       id="lastName"
                                        type="text"
-                                       placeholder="Votre nom"
-                                       required />
+                                       placeholder="Votre nom" />
+
+                                <span asp-validation-for="LastName"
+                                      class="text-danger">
+                                </span>
+
                             </div>
 
                         </div>
@@ -136,45 +167,59 @@
                         <div class="sm-prayer-form-row">
 
                             <div class="sm-prayer-field">
-                                <label for="phone">
+
+                                <label asp-for="Phone">
                                     TÉLÉPHONE
                                     <span>OPTIONNEL</span>
                                 </label>
 
-                                <input id="phone"
-                                       name="Phone"
+                                <input asp-for="Phone"
+                                       id="phone"
                                        type="tel"
                                        placeholder="+1 (425) 524-9990" />
+
+                                <span asp-validation-for="Phone"
+                                      class="text-danger">
+                                </span>
+
                             </div>
 
 
                             <div class="sm-prayer-field">
-                                <label for="email">
+
+                                <label asp-for="Email">
                                     ADRESSE EMAIL
                                 </label>
 
-                                <input id="email"
-                                       name="Email"
+                                <input asp-for="Email"
+                                       id="email"
                                        type="email"
-                                       placeholder="votre@email.com"
-                                       required />
+                                       placeholder="votre@email.com" />
+
+                                <span asp-validation-for="Email"
+                                      class="text-danger">
+                                </span>
+
                             </div>
 
                         </div>
 
 
-                        <!-- PRAYER -->
+                        <!-- PRAYER REQUEST -->
                         <div class="sm-prayer-field sm-prayer-message-field">
 
-                            <label for="prayer">
+                            <label asp-for="Request">
                                 VOTRE REQUÊTE
                             </label>
 
-                            <textarea id="prayer"
-                                      name="PrayerRequest"
+                            <textarea asp-for="Request"
+                                      id="prayer"
                                       rows="8"
-                                      placeholder="Écrivez votre requête de prière ici..."
-                                      required></textarea>
+                                      placeholder="Écrivez votre requête de prière ici..."></textarea>
+
+                            <span asp-validation-for="Request"
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
@@ -312,3 +357,8 @@
     </section>
 
 </main>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
