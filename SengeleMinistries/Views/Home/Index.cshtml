@@ -1,113 +1,1326 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    var currentCulture =
+        System.Globalization.CultureInfo
+            .CurrentUICulture
+            .TwoLetterISOLanguageName;
+
+    var isFrench = currentCulture == "fr";
+
+    ViewData["Title"] = isFrench ? "Accueil" : "Home";
 }
 
-<header class="hero hero--cinematic" role="banner" aria-label="Sengele Ministries hero">
-    <div class="hero-inner container-wide">
-        <div class="hero-grid">
-            <div>
-                <div class="hero-kicker">SENGELE MINISTRIES</div>
-                <h1 class="hero-title">LA PRIERE ET L'ESPERANCE</h1>
-                <p class="hero-sub">Bienvenue à Sengele Ministries un lieu de prière, d'enseignement d'espérance.</p>
+<!-- =========================================================
+     HERO
+     ========================================================= -->
 
-                <p>
-                    <a class="btn btn-cta me-2" asp-controller="Messages" asp-action="Index">Watch Message</a>
-                    <a class="btn btn-outline-cta" asp-controller="Events" asp-action="Index">Join Us</a>
+<header class="home-hero" role="banner">
+
+    <div class="home-hero-overlay"></div>
+
+    <div class="container-wide home-hero-content">
+
+        <div class="home-hero-grid">
+
+            <div class="home-hero-copy">
+
+                <p class="home-kicker">
+                    SENGELE MINISTRIES
                 </p>
+
+                <h1>
+                    @if (isFrench)
+                    {
+                        <text>LA PRIÈRE<br />ET L'ESPÉRANCE</text>
+                    }
+                    else
+                    {
+                        <text>PRAYER<br />AND HOPE</text>
+                    }
+                </h1>
+
+                <p class="home-hero-description">
+                    @if (isFrench)
+                    {
+                        <text>
+                            Bienvenue à Sengele Ministries,
+                            un lieu de prière, d'enseignement
+                            et d'espérance.
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            Welcome to Sengele Ministries,
+                            a place of prayer, biblical teaching
+                            and hope.
+                        </text>
+                    }
+                </p>
+
+                <div class="home-hero-buttons">
+
+                    <a asp-controller="Messages"
+                       asp-action="Index"
+                       class="home-btn home-btn-gold">
+
+                        @(isFrench ? "REGARDER LE MESSAGE" : "WATCH MESSAGE")
+
+                    </a>
+
+                    <a asp-controller="Events"
+                       asp-action="Index"
+                       class="home-btn home-btn-outline">
+
+                        @(isFrench ? "NOUS REJOINDRE" : "JOIN US")
+
+                    </a>
+
+                </div>
+
             </div>
-            
-                <div class="message-visual">
+
+
+            <div class="home-hero-image">
+
+                <div class="home-image-frame">
+
                     <img src="~/images/Francis5.jpeg"
-                         alt="Sengele Ministries"
-                         class="message-media" />
-                
+                         alt="Sengele Ministries" />
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
+
 </header>
 
+
 <main>
-    <section class="section section--soft">
-        <div class="container-wide who-section">
-            <div class="who-meta">
-                <div class="who-label">QUI SOMMES-NOUS</div>
-                <div class="who-accent"></div>
+
+
+    <!-- =========================================================
+         WHO WE ARE
+         ========================================================= -->
+
+    <section class="home-about">
+
+        <div class="container-wide">
+
+            <div class="home-about-grid">
+
+                <div class="home-section-marker">
+
+                    <span class="home-small-number">
+                        00
+                    </span>
+
+                    <div class="home-green-line"></div>
+
+                    <span class="home-section-label">
+                        @(isFrench ? "QUI SOMMES-NOUS" : "WHO WE ARE")
+                    </span>
+
+                </div>
+
+
+                <div class="home-about-content">
+
+                    <h2>
+                        @if (isFrench)
+                        {
+                            <text>
+                                Un ministère de la prière<br />
+                                et de l'espérance.
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                A ministry of prayer<br />
+                                and hope.
+                            </text>
+                        }
+                    </h2>
+
+                    <p>
+                        @if (isFrench)
+                        {
+                            <text>
+                                À Sengele Ministries, nous appelons les personnes
+                                à une vie de prière persistante, à l'enseignement
+                                biblique et à la guérison spirituelle. Notre désir
+                                est de voir l'espérance renaître et les vies restaurées.
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                At Sengele Ministries, we call people to persistent
+                                prayer, biblical teaching and spiritual restoration.
+                                Our desire is to see hope renewed and lives restored.
+                            </text>
+                        }
+                    </p>
+
+                    <a asp-controller="About"
+                       asp-action="Index"
+                       class="home-editorial-link">
+
+                        @(isFrench
+                            ? "DÉCOUVRIR NOTRE HISTOIRE"
+                            : "DISCOVER OUR STORY")
+
+                        <span>→</span>
+
+                    </a>
+
+                </div>
+
             </div>
-            <h2 class="lead-heading">Un ministère de la priere et de l'esperance.</h2>
-            <p class="muted who-text">À Sengele Ministries, nous appelons les personnes à la prière persistante, à l'enseignement biblique et à la guérison spirituelle. Nos programmes et messages visent à amener espoir et restauration.</p>
-            <p><a asp-controller="About" asp-action="Index" class="link-accent">DÉCOUVRIR NOTRE HISTOIRE →</a></p>
+
         </div>
+
     </section>
 
-    <section class="section section--white">
-        <div class="container-wide core-values">
-            <article class="value-article">
-                <div class="value-num">01</div>
-                <div class="value-title">ESPOIR</div>
-                <div class="value-desc">
-                    Romains 12:12 
-                    Soyez joyeux dans l'espérance, patients dans la tribulation, persévérants dans la prière.
-                    Nous croyons qu'on peut avoir un comportement même dans la persécution, Paul parle de la joie et de la patience dans la tribulation.
+
+
+    <!-- =========================================================
+         HOPE + PRAYER
+         ========================================================= -->
+
+    <section class="home-beliefs">
+
+        <div class="container-wide">
+
+            <div class="home-beliefs-heading">
+
+                <div>
+                    <p class="home-eyebrow">
+                        @(isFrench ? "NOTRE FONDATION" : "OUR FOUNDATION")
+                    </p>
+
+                    <h2>
+                        @(isFrench
+                            ? "Ce qui nous porte."
+                            : "What carries us.")
+                    </h2>
                 </div>
-            </article>
-            <article class="value-article">
-                <div class="value-num">02</div>
-                <div class="value-title">PRIÈRE</div>
-                <div class="value-desc">
-                    Hébreux 11:3b Bible Amiot & Tamisier :
-                     le visible tire son origine de l'invisible.
-                     Nous croyons que la plupart des choses visibles tirent leur origine dans l'invisible.
-                    Et seule la prière permet à un humain de pénétrer le monde spirituel pour vaincre dans le monde physique.
-                </div>
-            </article>
-        </div>
-    </section>
-    <section class="section section--soft">
-        <div class="container-wide message-card message-card--feature">
-            <div class="message-info">
-                <div class="label-small muted">DERNIER MESSAGE</div>
-                <h3 class="message-title">Message d'espérance</h3>
-                <p class="muted message-excerpt">Un court extrait du dernier sermon mettant en avant l'espoir après la tempête.</p>
-                <p><a class="btn btn-cta" asp-controller="Messages" asp-action="Index">Watch Message</a></p>
+
+                <p>
+                    @(isFrench
+                        ? "Deux convictions au cœur de Sengele Ministries."
+                        : "Two convictions at the heart of Sengele Ministries.")
+                </p>
+
             </div>
-            <div class="message-visual">
-                <div class="message-visual">
+
+
+            <div class="home-beliefs-grid">
+
+
+                <!-- ESPOIR -->
+
+                <article class="belief-card belief-card-green">
+
+                    <div class="belief-number">
+                        01
+                    </div>
+
+                    <div class="belief-content">
+
+                        <p class="belief-small">
+                            @(isFrench ? "NOTRE ESPÉRANCE" : "OUR HOPE")
+                        </p>
+
+                        <h3>
+                            @(isFrench ? "ESPOIR" : "HOPE")
+                        </h3>
+
+                        <blockquote>
+                            @if (isFrench)
+                            {
+                                <text>
+                                    « Soyez joyeux dans l'espérance,
+                                    patients dans la tribulation,
+                                    persévérants dans la prière. »
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    “Be joyful in hope, patient in affliction,
+                                    faithful in prayer.”
+                                </text>
+                            }
+                        </blockquote>
+
+                        <p class="belief-reference">
+                            ROMAINS 12:12
+                        </p>
+
+                        <p class="belief-description">
+                            @if (isFrench)
+                            {
+                                <text>
+                                    Même dans la tribulation, nous croyons
+                                    qu'il existe encore une place pour la joie,
+                                    la patience et l'espérance.
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    Even in tribulation, we believe there is
+                                    still room for joy, patience and hope.
+                                </text>
+                            }
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- PRIERE -->
+
+                <article class="belief-card belief-card-dark">
+
+                    <div class="belief-number">
+                        02
+                    </div>
+
+                    <div class="belief-content">
+
+                        <p class="belief-small">
+                            @(isFrench ? "NOTRE FORCE" : "OUR STRENGTH")
+                        </p>
+
+                        <h3>
+                            @(isFrench ? "PRIÈRE" : "PRAYER")
+                        </h3>
+
+                        <blockquote>
+                            @if (isFrench)
+                            {
+                                <text>
+                                    « Le visible tire son origine
+                                    de l'invisible. »
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    “What is seen has its origin
+                                    in what is unseen.”
+                                </text>
+                            }
+                        </blockquote>
+
+                        <p class="belief-reference">
+                            HÉBREUX 11:3
+                        </p>
+
+                        <p class="belief-description">
+                            @if (isFrench)
+                            {
+                                <text>
+                                    Nous croyons que la prière nous permet
+                                    d'entrer dans la dimension spirituelle
+                                    et d'affronter avec foi les réalités visibles.
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    We believe prayer brings us into the
+                                    spiritual dimension and equips us to face
+                                    visible realities with faith.
+                                </text>
+                            }
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         FEATURED MESSAGE
+         ========================================================= -->
+
+    <section class="home-feature-message">
+
+        <div class="container-wide">
+
+            <div class="feature-message-grid">
+
+
+                <div class="feature-message-content">
+
+                    <p class="home-eyebrow home-eyebrow-light">
+                        @(isFrench ? "DERNIER MESSAGE" : "LATEST MESSAGE")
+                    </p>
+
+                    <h2>
+                        @(isFrench
+                            ? "Un message d'espérance."
+                            : "A message of hope.")
+                    </h2>
+
+                    <p class="feature-message-lead">
+                        @if (isFrench)
+                        {
+                            <text>
+                                Même après la tempête, Dieu est capable
+                                de faire renaître l'espérance.
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                Even after the storm, God is able
+                                to restore hope.
+                            </text>
+                        }
+                    </p>
+
+                    <div class="feature-message-line"></div>
+
+                    <p class="feature-message-text">
+                        @if (isFrench)
+                        {
+                            <text>
+                                Découvrez nos messages bibliques conçus
+                                pour fortifier votre foi, encourager votre
+                                vie de prière et vous rappeler que votre
+                                histoire n'est pas terminée.
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                Discover biblical messages created to
+                                strengthen your faith, encourage your prayer
+                                life and remind you that your story is not over.
+                            </text>
+                        }
+                    </p>
+
+                    <a asp-controller="Messages"
+                       asp-action="Index"
+                       class="home-btn home-btn-light">
+
+                        @(isFrench
+                            ? "REGARDER LE MESSAGE"
+                            : "WATCH MESSAGE")
+
+                        <span>→</span>
+
+                    </a>
+
+                </div>
+
+
+                <div class="feature-message-image">
+
                     <img src="~/images/Francis12.jpeg"
-                         alt="Sengele Ministries"
-                         class="message-media" />
+                         alt="Message Sengele Ministries" />
+
+                    <div class="feature-image-label">
+
+                        <span>
+                            SENGELE
+                        </span>
+
+                        <strong>
+                            MINISTRIES
+                        </strong>
+
+                    </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </section>
 
-    <section class="section section--white">
-        <div class="container-wide text-center">
-            <h3 class="section-heading">REJOIGNEZ-NOUS</h3>
-            <div class="programs programs--feature">
-                <div class="program">
-                    <h4>Prière quotidienne</h4>
-                    <p class="muted">Rejoignez-nous pour la prière et l'enseignement.</p>
-                </div>
-                <div class="program">
-                    <h4>Services en ligne</h4>
-                    <p class="muted">Messages en direct et en replay disponibles en ligne.</p>
-                </div>
+
+
+    <!-- =========================================================
+         JOIN US
+         ========================================================= -->
+
+    <section class="home-join">
+
+        <div class="container-wide">
+
+            <div class="home-join-header">
+
+                <p class="home-eyebrow">
+                    @(isFrench ? "FAITES LE PROCHAIN PAS" : "TAKE THE NEXT STEP")
+                </p>
+
+                <h2>
+                    @(isFrench ? "Rejoignez-nous." : "Join us.")
+                </h2>
+
             </div>
-            <p class="mt-3"><a class="text-decoration-none link-accent" asp-controller="Events" asp-action="Index">VIEW ALL EVENTS →</a></p>
+
+
+            <div class="home-join-grid">
+
+                <article class="join-card">
+
+                    <span class="join-number">
+                        01
+                    </span>
+
+                    <h3>
+                        @(isFrench ? "Prière" : "Prayer")
+                    </h3>
+
+                    <p>
+                        @(isFrench
+                            ? "Rejoignez-nous dans la prière et l'intercession."
+                            : "Join us in prayer and intercession.")
+                    </p>
+
+                    <a asp-controller="Prayer"
+                       asp-action="Index">
+
+                        @(isFrench ? "DEMANDE DE PRIÈRE" : "PRAYER REQUEST")
+                        →
+
+                    </a>
+
+                </article>
+
+
+                <article class="join-card">
+
+                    <span class="join-number">
+                        02
+                    </span>
+
+                    <h3>
+                        @(isFrench ? "Événements" : "Events")
+                    </h3>
+
+                    <p>
+                        @(isFrench
+                            ? "Participez à nos rencontres, programmes et temps de ministère."
+                            : "Join our gatherings, programs and ministry events.")
+                    </p>
+
+                    <a asp-controller="Events"
+                       asp-action="Index">
+
+                        @(isFrench ? "VOIR LES ÉVÉNEMENTS" : "VIEW EVENTS")
+                        →
+
+                    </a>
+
+                </article>
+
+
+                <article class="join-card">
+
+                    <span class="join-number">
+                        03
+                    </span>
+
+                    <h3>
+                        @(isFrench ? "Messages" : "Messages")
+                    </h3>
+
+                    <p>
+                        @(isFrench
+                            ? "Écoutez des enseignements qui fortifient la foi."
+                            : "Watch teachings created to strengthen faith.")
+                    </p>
+
+                    <a asp-controller="Messages"
+                       asp-action="Index">
+
+                        @(isFrench ? "DÉCOUVRIR" : "DISCOVER")
+                        →
+
+                    </a>
+
+                </article>
+
+            </div>
+
         </div>
+
     </section>
 
-    <section class="section section--dark prayer-section">
-        <div class="container-wide prayer-cta">
-            <h4 class="muted">NOUS CROYONS EN LA PRIÈRE</h4>
-            <h2>Comment pouvons-nous prier pour vous ?</h2>
-            <p class="muted">Soumettez une requête, et notre équipe priera pour vous.</p>
-            <p><a class="btn btn-cta" asp-controller="Prayer" asp-action="Index">Envoyer une requête de prière</a></p>
-        </div>
-    </section>
 
-    <!-- I am thinking about my Gallery photo here , but i am not decide yet. -->
+
+    <!-- =========================================================
+         PRAYER CTA
+         ========================================================= -->
+
+    <section class="home-prayer-cta">
+
+        <div class="container-wide">
+
+            <div class="home-prayer-inner">
+
+                <p class="home-eyebrow home-eyebrow-light">
+                    SENGELE MINISTRIES
+                </p>
+
+                <h2>
+                    @if (isFrench)
+                    {
+                        <text>
+                            Comment pouvons-nous<br />
+                            prier pour vous ?
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            How can we<br />
+                            pray for you?
+                        </text>
+                    }
+                </h2>
+
+                <p>
+                    @(isFrench
+                        ? "Vous n'avez pas besoin de porter votre fardeau seul."
+                        : "You do not have to carry your burden alone.")
+                </p>
+
+                <a asp-controller="Prayer"
+                   asp-action="Index"
+                   class="home-btn home-btn-gold">
+
+                    @(isFrench
+                        ? "ENVOYER UNE REQUÊTE"
+                        : "SEND A PRAYER REQUEST")
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </main>
 
-@* Shared interactions (hero rotation + navbar behavior) are in wwwroot/js/site.js *@
+
+
+<style>
+
+    /* =========================================================
+           GLOBAL HOME
+           ========================================================= */
+
+    .home-hero,
+    .home-about,
+    .home-beliefs,
+    .home-feature-message,
+    .home-join,
+    .home-prayer-cta {
+        font-family: inherit;
+    }
+
+
+    .home-eyebrow {
+        color: #7f896f;
+        font-size: .72rem;
+        font-weight: 800;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+        margin-bottom: .8rem;
+    }
+
+
+    .home-eyebrow-light {
+        color: #cdb16b;
+    }
+
+
+
+    /* =========================================================
+           HERO
+           ========================================================= */
+
+    .home-hero {
+        position: relative;
+        min-height: 720px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        background: linear-gradient( 90deg, rgba(18, 20, 18, .96) 0%, rgba(18, 20, 18, .90) 43%, rgba(18, 20, 18, .45) 100% );
+        color: #fff;
+    }
+
+
+        .home-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient( circle at 70% 40%, rgba(111, 125, 96, .28), transparent 40% );
+            pointer-events: none;
+        }
+
+
+    .home-hero-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        padding-top: 7rem;
+        padding-bottom: 5rem;
+    }
+
+
+    .home-hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr .95fr;
+        align-items: center;
+        gap: 4rem;
+    }
+
+
+    .home-kicker {
+        color: #cdb16b;
+        font-size: .75rem;
+        font-weight: 800;
+        letter-spacing: .22em;
+        margin-bottom: 1.4rem;
+    }
+
+
+    .home-hero h1 {
+        font-size: clamp(3.5rem, 7vw, 6.7rem);
+        line-height: .92;
+        letter-spacing: -.045em;
+        font-weight: 850;
+        margin: 0 0 1.8rem;
+        max-width: 780px;
+    }
+
+
+    .home-hero-description {
+        color: rgba(255, 255, 255, .76);
+        max-width: 600px;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+    }
+
+
+    .home-hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .8rem;
+    }
+
+
+    .home-btn {
+        min-height: 50px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .7rem;
+        padding: .9rem 1.35rem;
+        text-decoration: none;
+        font-size: .72rem;
+        font-weight: 800;
+        letter-spacing: .08em;
+        transition: .2s ease;
+    }
+
+
+    .home-btn-gold {
+        background: #cba94f;
+        border: 1px solid #cba94f;
+        color: #171817;
+    }
+
+
+        .home-btn-gold:hover {
+            background: #e0c474;
+            color: #171817;
+        }
+
+
+    .home-btn-outline {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,.55);
+        color: #fff;
+    }
+
+
+        .home-btn-outline:hover {
+            background: #fff;
+            color: #171817;
+        }
+
+
+    .home-hero-image {
+        position: relative;
+    }
+
+
+    .home-image-frame {
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, .17);
+        padding: .8rem;
+    }
+
+
+        .home-image-frame::before {
+            content: "";
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            top: -25px;
+            right: -25px;
+            background: #68755f;
+            z-index: -1;
+        }
+
+
+        .home-image-frame img {
+            display: block;
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+
+
+    /* =========================================================
+           ABOUT
+           ========================================================= */
+
+    .home-about {
+        background: #f5f1e8;
+        padding: 7rem 1.5rem;
+    }
+
+
+    .home-about-grid {
+        display: grid;
+        grid-template-columns: .35fr 1fr;
+        gap: 4rem;
+        align-items: start;
+    }
+
+
+    .home-section-marker {
+        padding-top: .4rem;
+    }
+
+
+    .home-small-number {
+        display: block;
+        font-family: Georgia, serif;
+        font-size: 2.4rem;
+        color: #74806b;
+        margin-bottom: 1rem;
+    }
+
+
+    .home-green-line {
+        width: 55px;
+        height: 3px;
+        background: #74806b;
+        margin-bottom: 1rem;
+    }
+
+
+    .home-section-label {
+        color: #6e7568;
+        font-size: .72rem;
+        font-weight: 800;
+        letter-spacing: .18em;
+    }
+
+
+    .home-about-content h2 {
+        color: #1d201d;
+        font-family: Georgia, serif;
+        font-size: clamp(2.5rem, 5vw, 4.6rem);
+        line-height: 1.05;
+        letter-spacing: -.025em;
+        margin-bottom: 1.7rem;
+    }
+
+
+    .home-about-content p {
+        color: #6f706a;
+        max-width: 750px;
+        line-height: 1.9;
+        font-size: 1rem;
+    }
+
+
+    .home-editorial-link {
+        display: inline-flex;
+        align-items: center;
+        gap: .8rem;
+        color: #4f5c49;
+        font-weight: 800;
+        font-size: .72rem;
+        letter-spacing: .11em;
+        text-decoration: none;
+        margin-top: 1rem;
+        padding-bottom: .35rem;
+        border-bottom: 1px solid #4f5c49;
+    }
+
+
+
+    /* =========================================================
+           BELIEFS
+           ========================================================= */
+
+    .home-beliefs {
+        padding: 7rem 1.5rem;
+        background: #ebe7dd;
+    }
+
+
+    .home-beliefs-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 3rem;
+        margin-bottom: 3rem;
+    }
+
+
+        .home-beliefs-heading h2 {
+            font-family: Georgia, serif;
+            color: #1d211d;
+            font-size: clamp(2.4rem, 4vw, 4rem);
+            margin: 0;
+        }
+
+
+        .home-beliefs-heading > p {
+            color: #77786f;
+            max-width: 360px;
+            line-height: 1.7;
+        }
+
+
+    .home-beliefs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+    }
+
+
+    .belief-card {
+        min-height: 500px;
+        padding: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+
+    .belief-card-green {
+        background: #65715d;
+        color: #fff;
+    }
+
+
+    .belief-card-dark {
+        background: #20231f;
+        color: #fff;
+    }
+
+
+    .belief-number {
+        position: absolute;
+        right: 1.4rem;
+        top: -.7rem;
+        font-family: Georgia, serif;
+        font-size: 9rem;
+        line-height: 1;
+        color: rgba(255,255,255,.07);
+    }
+
+
+    .belief-content {
+        position: relative;
+        z-index: 2;
+        max-width: 520px;
+    }
+
+
+    .belief-small {
+        color: #d2bb7a;
+        letter-spacing: .18em;
+        font-size: .7rem;
+        font-weight: 800;
+        margin-bottom: 2.5rem;
+    }
+
+
+    .belief-card h3 {
+        font-size: 2.7rem;
+        font-weight: 800;
+        letter-spacing: -.03em;
+        margin-bottom: 2rem;
+    }
+
+
+    .belief-card blockquote {
+        font-family: Georgia, serif;
+        font-size: 1.45rem;
+        line-height: 1.55;
+        margin: 0 0 1.2rem;
+        max-width: 500px;
+    }
+
+
+    .belief-reference {
+        color: #d2bb7a;
+        font-size: .7rem;
+        font-weight: 800;
+        letter-spacing: .13em;
+        margin-bottom: 2.3rem;
+    }
+
+
+    .belief-description {
+        color: rgba(255,255,255,.72);
+        line-height: 1.8;
+        max-width: 480px;
+    }
+
+
+
+    /* =========================================================
+           FEATURE MESSAGE
+           ========================================================= */
+
+    .home-feature-message {
+        background: #3f4b3c;
+        padding: 0;
+        color: #fff;
+    }
+
+
+    .feature-message-grid {
+        display: grid;
+        grid-template-columns: .9fr 1.1fr;
+        min-height: 650px;
+    }
+
+
+    .feature-message-content {
+        padding: 6rem 4rem 6rem 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+
+        .feature-message-content h2 {
+            font-family: Georgia, serif;
+            font-size: clamp(3rem, 5vw, 5rem);
+            line-height: 1;
+            margin-bottom: 1.6rem;
+        }
+
+
+    .feature-message-lead {
+        color: #e4e0d5;
+        font-family: Georgia, serif;
+        font-size: 1.35rem;
+        line-height: 1.6;
+    }
+
+
+    .feature-message-line {
+        width: 75px;
+        height: 2px;
+        background: #c9a852;
+        margin: 2rem 0;
+    }
+
+
+    .feature-message-text {
+        color: rgba(255,255,255,.7);
+        line-height: 1.8;
+        max-width: 550px;
+        margin-bottom: 2rem;
+    }
+
+
+    .home-btn-light {
+        align-self: flex-start;
+        background: #f4f0e7;
+        color: #222620;
+        border: 1px solid #f4f0e7;
+    }
+
+
+        .home-btn-light:hover {
+            background: #c9aa57;
+            border-color: #c9aa57;
+            color: #171817;
+        }
+
+
+    .feature-message-image {
+        position: relative;
+        min-height: 650px;
+        overflow: hidden;
+    }
+
+
+        .feature-message-image img {
+            width: 100%;
+            height: 100%;
+            min-height: 650px;
+            object-fit: cover;
+            display: block;
+        }
+
+
+    .feature-image-label {
+        position: absolute;
+        bottom: 2rem;
+        left: 2rem;
+        background: rgba(24, 27, 23, .9);
+        padding: 1rem 1.2rem;
+    }
+
+
+        .feature-image-label span,
+        .feature-image-label strong {
+            display: block;
+            font-size: .65rem;
+            letter-spacing: .16em;
+        }
+
+
+        .feature-image-label span {
+            color: #c9aa57;
+        }
+
+
+
+    /* =========================================================
+           JOIN
+           ========================================================= */
+
+    .home-join {
+        background: #f7f4ed;
+        padding: 7rem 1.5rem;
+    }
+
+
+    .home-join-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+
+        .home-join-header h2 {
+            font-family: Georgia, serif;
+            color: #20231f;
+            font-size: clamp(2.7rem, 5vw, 4.5rem);
+        }
+
+
+    .home-join-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-top: 1px solid #d8d2c7;
+        border-bottom: 1px solid #d8d2c7;
+    }
+
+
+    .join-card {
+        padding: 3rem 2.5rem;
+        border-right: 1px solid #d8d2c7;
+    }
+
+
+        .join-card:last-child {
+            border-right: 0;
+        }
+
+
+    .join-number {
+        display: block;
+        color: #75806c;
+        font-family: Georgia, serif;
+        font-size: 2rem;
+        margin-bottom: 2.2rem;
+    }
+
+
+    .join-card h3 {
+        color: #20231f;
+        font-size: 1.65rem;
+        margin-bottom: 1rem;
+    }
+
+
+    .join-card p {
+        color: #77786f;
+        line-height: 1.7;
+        min-height: 85px;
+    }
+
+
+    .join-card a {
+        color: #4d5b47;
+        text-decoration: none;
+        font-size: .7rem;
+        font-weight: 800;
+        letter-spacing: .09em;
+    }
+
+
+
+    /* =========================================================
+           PRAYER CTA
+           ========================================================= */
+
+    .home-prayer-cta {
+        background: #1d211d;
+        padding: 7rem 1.5rem;
+        color: #fff;
+        text-align: center;
+    }
+
+
+    .home-prayer-inner {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+
+        .home-prayer-inner h2 {
+            font-family: Georgia, serif;
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+        }
+
+
+        .home-prayer-inner > p:not(.home-eyebrow) {
+            color: rgba(255,255,255,.65);
+            margin-bottom: 2rem;
+        }
+
+
+
+    /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+    @@media (max-width: 1000px) {
+
+        .home-hero-grid,
+        .home-about-grid,
+        .feature-message-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .home-hero {
+            min-height: auto;
+        }
+
+
+        .home-hero-image {
+            margin-top: 2rem;
+        }
+
+
+        .home-about-grid {
+            gap: 2rem;
+        }
+
+
+        .feature-message-content {
+            padding: 5rem 1rem;
+        }
+
+
+        .feature-message-image {
+            min-height: 500px;
+        }
+
+
+            .feature-message-image img {
+                min-height: 500px;
+            }
+    }
+
+
+    @@media (max-width: 760px) {
+
+        .home-hero-content {
+            padding-top: 8rem;
+        }
+
+
+        .home-image-frame img {
+            height: 400px;
+        }
+
+
+        .home-beliefs-heading {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+
+        .home-beliefs-grid,
+        .home-join-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .belief-card {
+            min-height: auto;
+            padding: 2.2rem;
+        }
+
+
+        .join-card {
+            border-right: 0;
+            border-bottom: 1px solid #d8d2c7;
+        }
+
+
+            .join-card:last-child {
+                border-bottom: 0;
+            }
+
+
+        .feature-message-content {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+</style>

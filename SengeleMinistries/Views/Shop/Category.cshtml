@@ -1,27 +1,31 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+
 @model IEnumerable<SengeleMinistries.Models.Product>
 
 @{
     var category = ViewData["Category"] as string ?? "";
-    ViewData["Title"] = category;
 
-    var categoryTitle = category;
+    string categoryTitle = category;
 
     if (category.Equals("Books", StringComparison.OrdinalIgnoreCase))
     {
-        categoryTitle = "Books & Bibles";
+        categoryTitle = Localizer["BooksAndBibles"].Value;
     }
     else if (category.Equals("Teachings", StringComparison.OrdinalIgnoreCase))
     {
-        categoryTitle = "Teachings & Resources";
+        categoryTitle = Localizer["TeachingsAndResources"].Value;
     }
     else if (category.Equals("EventCollections", StringComparison.OrdinalIgnoreCase))
     {
-        categoryTitle = "Event Collections";
+        categoryTitle = Localizer["EventCollections"].Value;
     }
     else if (category.Equals("Apparel", StringComparison.OrdinalIgnoreCase))
     {
-        categoryTitle = "Apparel";
+        categoryTitle = Localizer["Apparel"].Value;
     }
+
+    ViewData["Title"] = categoryTitle;
 
     var productNumber = 0;
 }
@@ -38,7 +42,7 @@
             <div class="sm-category-hero-content">
 
                 <p class="sm-category-eyebrow">
-                    SENGELE MINISTRIES SHOP
+                    SENGELE MINISTRIES @Localizer["Shop"]
                 </p>
 
                 <h1>
@@ -46,10 +50,7 @@
                 </h1>
 
                 <p class="sm-category-hero-description">
-                    Faith-centered resources carefully selected
-                    to strengthen your spiritual journey,
-                    deepen your understanding, and equip you
-                    for a life of purpose.
+                    @Localizer["CategoryHeroDescription"]
                 </p>
 
                 <div class="sm-category-gold-line"></div>
@@ -73,12 +74,11 @@
                 <div>
 
                     <span class="sm-category-small-label">
-                        CURATED RESOURCES
+                        @Localizer["CuratedResources"]
                     </span>
 
                     <h2>
-                        Resources with<br />
-                        purpose.
+                        @Localizer["ResourcesWithPurpose"]
                     </h2>
 
                 </div>
@@ -86,16 +86,13 @@
                 <div class="sm-category-intro-text">
 
                     <p>
-                        Every resource in our collection is presented
-                        with a simple purpose: to encourage growth,
-                        strengthen faith, and provide practical tools
-                        for your journey with God.
+                        @Localizer["CategoryIntroText"]
                     </p>
 
                     <a asp-controller="Shop"
                        asp-action="Index"
                        class="sm-category-back-link">
-                        ← EXPLORE THE FULL SHOP
+                        @Localizer["ExploreFullShop"]
                     </a>
 
                 </div>
@@ -201,8 +198,7 @@
                                 else
                                 {
                                     <p class="sm-product-description">
-                                        A selected resource from Sengele Ministries
-                                        created to encourage faith, growth and purpose.
+                                        @Localizer["SelectedResourceDescription"]
                                     </p>
                                 }
 
@@ -210,7 +206,7 @@
                                 <div class="sm-product-bottom">
 
                                     <div class="sm-product-price">
-                                        @p.Price.ToString("C")
+                                        $@p.Price.ToString("0.00")
                                     </div>
 
                                     <a asp-controller="Shop"
@@ -218,7 +214,8 @@
                                        asp-route-id="@p.ProductId"
                                        class="sm-product-view">
 
-                                        VIEW ITEM
+                                        @Localizer["ViewItem"]
+
                                         <span>→</span>
 
                                     </a>
@@ -239,23 +236,22 @@
                 <div class="sm-category-empty">
 
                     <span class="sm-category-small-label">
-                        SENGELE MINISTRIES SHOP
+                        SENGELE MINISTRIES @Localizer["Shop"]
                     </span>
 
                     <h2>
-                        New resources are coming.
+                        @Localizer["NewResourcesComing"]
                     </h2>
 
                     <p>
-                        There are currently no published items
-                        in this collection. Please check back soon.
+                        @Localizer["NoItemsInCollection"]
                     </p>
 
                     <a asp-controller="Shop"
                        asp-action="Index"
                        class="sm-category-empty-button">
 
-                        EXPLORE THE SHOP
+                        @Localizer["ExploreShop"]
 
                     </a>
 
@@ -275,25 +271,22 @@
         <div class="container-wide">
 
             <p class="sm-category-small-label">
-                MORE THAN A PURCHASE
+                @Localizer["MoreThanPurchase"]
             </p>
 
             <h2>
-                Resources that help<br />
-                carry the mission forward.
+                @Localizer["CarryMissionForward"]
             </h2>
 
             <p class="sm-category-footer-text">
-                Your support helps Sengele Ministries continue
-                sharing hope, prayer and the Word with people
-                and communities.
+                @Localizer["SupportMissionText"]
             </p>
 
             <a asp-controller="Shop"
                asp-action="Index"
                class="sm-category-footer-button">
 
-                CONTINUE SHOPPING
+                @Localizer["ContinueShopping"]
 
             </a>
 

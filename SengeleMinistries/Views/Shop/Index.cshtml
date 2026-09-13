@@ -1,7 +1,10 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+
 @model IEnumerable<SengeleMinistries.Models.Product>
 
 @{
-    ViewData["Title"] = "Shop";
+    ViewData["Title"] = Localizer["Shop"];
 }
 
 @* =========================================================
@@ -17,12 +20,11 @@
         </p>
 
         <h1>
-            SHOP
+            @Localizer["Shop"]
         </h1>
 
         <p class="shop-hero-text">
-            Discover books, teachings, apparel and resources
-            created to encourage your faith and support the mission.
+            @Localizer["ShopHeroText"]
         </p>
 
     </div>
@@ -47,16 +49,16 @@
 
             <div>
                 <p class="shop-small-title">
-                    EXPLORE THE COLLECTION
+                    @Localizer["ExploreCollection"]
                 </p>
 
                 <h2>
-                    Shop Our Resources
+                    @Localizer["ShopOurResources"]
                 </h2>
             </div>
 
             <p class="shop-product-count">
-                @(Model?.Count() ?? 0) product(s)
+                @(Model?.Count() ?? 0) @Localizer["Products"]
             </p>
 
         </div>
@@ -68,7 +70,7 @@
                asp-action="Index"
                class="shop-category-btn active">
 
-                All Products
+                @Localizer["AllProducts"]
 
             </a>
 
@@ -77,7 +79,7 @@
                asp-route-category="Books"
                class="shop-category-btn">
 
-                Books &amp; Bibles
+                @Localizer["BooksAndBibles"]
 
             </a>
 
@@ -86,7 +88,7 @@
                asp-route-category="Teachings"
                class="shop-category-btn">
 
-                Teachings &amp; Resources
+                @Localizer["TeachingsAndResources"]
 
             </a>
 
@@ -95,7 +97,7 @@
                asp-route-category="EventCollections"
                class="shop-category-btn">
 
-                Event Collections
+                @Localizer["EventCollections"]
 
             </a>
 
@@ -104,7 +106,7 @@
                asp-route-category="Apparel"
                class="shop-category-btn">
 
-                Apparel
+                @Localizer["Apparel"]
 
             </a>
 
@@ -163,14 +165,14 @@
                                      p.StockQuantity.Value <= 0)
                                 {
                                     <span class="shop-stock-badge sold-out">
-                                        SOLD OUT
+                                        @Localizer["SoldOut"]
                                     </span>
                                 }
                                 else if (p.StockQuantity.HasValue &&
                                          p.StockQuantity.Value <= 5)
                                 {
                                     <span class="shop-stock-badge low-stock">
-                                        ONLY @p.StockQuantity LEFT
+                                        @Localizer["OnlyLeft", p.StockQuantity.Value]
                                     </span>
                                 }
 
@@ -203,8 +205,7 @@
                             </h3>
 
 
-                            @if (!string.IsNullOrWhiteSpace(
-                                p.ShortDescription))
+                            @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
                             {
                                 <p class="shop-product-description">
                                     @p.ShortDescription
@@ -213,8 +214,7 @@
                             else
                             {
                                 <p class="shop-product-description">
-                                    Discover this resource from
-                                    Sengele Ministries.
+                                    @Localizer["DiscoverResource"]
                                 </p>
                             }
 
@@ -229,19 +229,19 @@
                                 @if (!p.StockQuantity.HasValue)
                                 {
                                     <span class="shop-product-availability">
-                                        Available
+                                        @Localizer["Available"]
                                     </span>
                                 }
                                 else if (p.StockQuantity.Value > 0)
                                 {
                                     <span class="shop-product-availability">
-                                        In Stock
+                                        @Localizer["InStock"]
                                     </span>
                                 }
                                 else
                                 {
                                     <span class="shop-product-unavailable">
-                                        Out of Stock
+                                        @Localizer["OutOfStock"]
                                     </span>
                                 }
 
@@ -259,7 +259,7 @@
                                    asp-route-id="@p.ProductId"
                                    class="shop-view-btn">
 
-                                    VIEW PRODUCT
+                                    @Localizer["ViewProduct"]
 
                                 </a>
 
@@ -285,7 +285,7 @@
                                         <button type="submit"
                                                 class="shop-add-btn">
 
-                                            ADD TO CART
+                                            @Localizer["AddToCart"]
 
                                         </button>
 
@@ -297,7 +297,7 @@
                                             class="shop-add-btn disabled"
                                             disabled>
 
-                                        SOLD OUT
+                                        @Localizer["SoldOut"]
 
                                     </button>
                                 }
@@ -320,12 +320,11 @@
                 </div>
 
                 <h2>
-                    Our Shop Is Being Prepared
+                    @Localizer["ShopBeingPrepared"]
                 </h2>
 
                 <p>
-                    There are no published products available
-                    right now. Please check back soon.
+                    @Localizer["NoProductsAvailable"]
                 </p>
 
             </div>
@@ -342,16 +341,17 @@
     {
         return category switch
         {
-            "Books" => "Books & Bibles",
+            "Books" =>
+                Localizer["BooksAndBibles"].Value,
 
             "Teachings" =>
-                "Teachings & Resources",
+                Localizer["TeachingsAndResources"].Value,
 
             "EventCollections" =>
-                "Event Collections",
+                Localizer["EventCollections"].Value,
 
             "Apparel" =>
-                "Apparel",
+                Localizer["Apparel"].Value,
 
             _ => category
         };
@@ -525,8 +525,7 @@
         transition: transform .35s ease;
     }
 
-    .shop-product-card:hover
-    .shop-product-image {
+    .shop-product-card:hover .shop-product-image {
         transform: scale(1.035);
     }
 
@@ -544,7 +543,7 @@
         justify-content: center;
         gap: .7rem;
         color: #777167;
-        background: linear-gradient( 145deg, #f5f3ed, #ebe7dd );
+        background: linear-gradient(145deg, #f5f3ed, #ebe7dd);
         text-transform: uppercase;
         letter-spacing: .12em;
         font-size: .7rem;

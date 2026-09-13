@@ -117,23 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
   <data name="About" xml:space="preserve">
     <value>About</value>
+  </data>
+  <data name="Messages" xml:space="preserve">
+    <value>Messages</value>
   </data>
   <data name="Connect" xml:space="preserve">
     <value>Connect</value>
   </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Contact</value>
-  </data>
   <data name="Event" xml:space="preserve">
     <value>Events</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="Messages" xml:space="preserve">
-    <value>Messages</value>
+  <data name="Shop" xml:space="preserve">
+    <value>Shop</value>
   </data>
   <data name="MyAccount" xml:space="preserve">
     <value>My Account</value>
@@ -147,10 +147,106 @@
   <data name="Serve With Us" xml:space="preserve">
     <value>Serve With Us</value>
   </data>
-  <data name="Shop" xml:space="preserve">
-    <value>Shop</value>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
   </data>
   <data name="Watch Now" xml:space="preserve">
     <value>Watch Now</value>
+  </data>
+  <data name="ExploreCollection" xml:space="preserve">
+    <value>EXPLORE THE COLLECTION</value>
+  </data>
+  <data name="ShopOurResources" xml:space="preserve">
+    <value>Shop Our Resources</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="AllProducts" xml:space="preserve">
+    <value>All Products</value>
+  </data>
+  <data name="BooksAndBibles" xml:space="preserve">
+    <value>Books &amp; Bibles</value>
+  </data>
+  <data name="TeachingsAndResources" xml:space="preserve">
+    <value>Teachings &amp; Resources</value>
+  </data>
+  <data name="Apparel" xml:space="preserve">
+    <value>Apparel</value>
+  </data>
+  <data name="ShopHeroText" xml:space="preserve">
+    <value>Discover books, teachings, apparel and resources created to encourage your faith and support the mission .</value>
+  </data>
+  <data name="SoldOut" xml:space="preserve">
+    <value>SOLD OUT</value>
+  </data>
+  <data name="OnlyLeft" xml:space="preserve">
+    <value>ONLY {0} LEFT</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="InStock" xml:space="preserve">
+    <value>In Stock</value>
+  </data>
+  <data name="OutOfStock" xml:space="preserve">
+    <value>Out of Stock</value>
+  </data>
+  <data name="ViewProduct" xml:space="preserve">
+    <value>VIEW PRODUCT</value>
+  </data>
+  <data name="AddToCart" xml:space="preserve">
+    <value>ADD TO CART</value>
+  </data>
+  <data name="DiscoverResource" xml:space="preserve">
+    <value>Discover this resource from Sengele ministries.</value>
+  </data>
+  <data name="NoProductsAvailable" xml:space="preserve">
+    <value>There are no published products available right now.  Please check back soon.</value>
+  </data>
+  <data name="ShopBeingPrepared" xml:space="preserve">
+    <value>Our Shop Is Being Prepared</value>
+  </data>
+  <data name="CategoryHeroDescription" xml:space="preserve">
+    <value> Faith-centered resources carefully selected to strengthen your spiritual journey, deepen your understanding, and equip you for a life of purpose.</value>
+  </data>
+  <data name="CuratedResources" xml:space="preserve">
+    <value>CURATED RESOURCES</value>
+  </data>
+  <data name="ResourcesWithPurpose" xml:space="preserve">
+    <value>Resources with purpose.</value>
+  </data>
+  <data name="CategoryIntroText" xml:space="preserve">
+    <value> Every resource in our collection is presented with a simple purpose: to encourage growth, strengthen faith, and provide practical tools for your journey with God.</value>
+  </data>
+  <data name="ExploreFullShop" xml:space="preserve">
+    <value> EXPLORE THE FULL SHOP</value>
+  </data>
+  <data name="SelectedResourceDescription" xml:space="preserve">
+    <value>A selected resource from Sengele Ministries created to encourage faith, growth and purpose.</value>
+  </data>
+  <data name="ViewItem" xml:space="preserve">
+    <value>VIEW ITEM</value>
+  </data>
+  <data name="NewResourcesComing" xml:space="preserve">
+    <value> New resources are coming.</value>
+  </data>
+  <data name="NoItemsInCollection" xml:space="preserve">
+    <value>There are currently no published items in this collection. Please check back soon.</value>
+  </data>
+  <data name="ExploreShop" xml:space="preserve">
+    <value> EXPLORE THE SHOP</value>
+  </data>
+  <data name="MoreThanPurchase" xml:space="preserve">
+    <value>MORE THAN A PURCHASE</value>
+  </data>
+  <data name="CarryMissionForward" xml:space="preserve">
+    <value> Resources that help carry the mission forward.</value>
+  </data>
+  <data name="SupportMissionText" xml:space="preserve">
+    <value> Your support helps Sengele Ministries continue sharing hope, prayer and the Word with people and communities.</value>
+  </data>
+  <data name="ContinueShopping" xml:space="preserve">
+    <value> CONTINUE SHOPPING</value>
   </data>
 </root>
