@@ -47,24 +47,37 @@
                 gap:1.5rem;
                 margin-bottom:2rem">
 
-                <!-- TEMPORARY PROFILE CIRCLE -->
-                <div style="
+                <!-- MEMBER PHOTO PROFIL-->
+                @if (!string.IsNullOrWhiteSpace(Model.ProfileImageUrl))
+                {
+                    <img src="@Model.ProfileImageUrl"
+                         alt="@Model.FirstName @Model.LastName"
+                         style="
                     width:90px;
                     height:90px;
                     border-radius:50%;
-                    background:#66725f;
-                    color:white;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    font-size:2rem;
-                    font-weight:700">
+                    object-fit:cover;
+                    border:3px solid #66725f;" />
+                }
+                else
+                {
+                    <div style="
+                        width:90px;
+                        height:90px;
+                        border-radius:50%;
+                        background:#66725f;
+                        color:white;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-size:2rem;
+                        font-weight:700">
 
-                    @Model.FirstName.Substring(0, 1).ToUpper()
-                    @Model.LastName.Substring(0, 1).ToUpper()
+                        @Model.FirstName.Substring(0, 1).ToUpper()
+                        @Model.LastName.Substring(0, 1).ToUpper()
 
-                </div>
-
+                    </div>
+                }
 
                 <div>
 
@@ -189,14 +202,21 @@
             <div style="
                 margin-top:2.5rem;
                 padding-top:1.5rem;
-                border-top:1px solid #ddd">
+                border-top:1px solid #ddd;
+                display:flex;
+                gap:1rem;
+                flex-wrap:wrap;">
+
+                <a asp-controller="Member"
+                   asp-action="EditProfile"
+                   class="btn btn-dark">
+                    Edit My Profile
+                </a>
 
                 <a asp-controller="Member"
                    asp-action="Dashboard"
                    class="btn btn-outline-dark">
-
                     ← Back to My Account
-
                 </a>
 
             </div>

@@ -1,0 +1,344 @@
+﻿@model SengeleMinistries.Models.Member
+
+@{
+    ViewData["Title"] = "Edit My Profile";
+}
+
+<div class="section">
+
+    <div class="container-wide"
+         style="max-width:900px;margin:0 auto">
+
+        <!-- PAGE HEADER -->
+
+        <div style="margin-bottom:2rem">
+
+            <p class="muted"
+               style="font-size:.75rem;
+                letter-spacing:.14em;
+                font-weight:700">
+                SENGELE MINISTRIES
+            </p>
+
+            <h1 class="lead-heading">
+                Edit My Profile
+            </h1>
+
+            <p class="muted">
+                Update your personal information and profile picture.
+            </p>
+
+        </div>
+
+
+        <!-- EDIT PROFILE FORM -->
+
+        <section class="section--white"
+                 style="padding:2rem;
+            border-radius:8px">
+
+            <form asp-controller="Member"
+                  asp-action="EditProfile"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="Id" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+
+                <!-- PROFILE PICTURE -->
+
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    gap:1.5rem;
+                    margin-bottom:2.5rem;
+                    padding-bottom:2rem;
+                    border-bottom:1px solid #ddd;">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ProfileImageUrl))
+                    {
+                        <img src="@Model.ProfileImageUrl"
+                             alt="Profile picture"
+                             style="
+                        width:100px;
+                        height:100px;
+                        border-radius:50%;
+                        object-fit:cover;
+                        border:3px solid #66725f;" />
+                    }
+                    else
+                    {
+                        <div style="
+                            width:100px;
+                            height:100px;
+                            border-radius:50%;
+                            background:#66725f;
+                            color:white;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            font-size:2rem;
+                            font-weight:700;">
+
+                            @Model.FirstName.Substring(0, 1).ToUpper()
+                            @Model.LastName.Substring(0, 1).ToUpper()
+
+                        </div>
+                    }
+
+
+                    <div style="flex:1">
+
+                        <label for="profileImage"
+                               style="
+                            display:block;
+                            font-weight:700;
+                            margin-bottom:.5rem;">
+                            PROFILE PICTURE
+                        </label>
+
+                        <input type="file"
+                               id="profileImage"
+                               name="profileImage"
+                               accept="image/jpeg,image/png,image/webp"
+                               class="form-control" />
+
+                        <p class="muted"
+                           style="
+                            font-size:.85rem;
+                            margin-top:.5rem;
+                            margin-bottom:0;">
+                            Choose a JPG, PNG or WebP image.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PERSONAL INFORMATION -->
+
+                <div style="margin-bottom:2rem">
+
+                    <h4>PERSONAL INFORMATION</h4>
+
+                    <p class="muted">
+                        Update your account information below.
+                    </p>
+
+                </div>
+
+
+                <div style="
+                    display:grid;
+                    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+                    gap:1.5rem;">
+
+
+                    <!-- FIRST NAME -->
+
+                    <div>
+                        <label asp-for="FirstName"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="FirstName"
+                               class="form-control" />
+
+                        <span asp-validation-for="FirstName"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+
+                    <!-- LAST NAME -->
+
+                    <div>
+                        <label asp-for="LastName"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="LastName"
+                               class="form-control" />
+
+                        <span asp-validation-for="LastName"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div>
+                        <label asp-for="Email"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Email"
+                               class="form-control" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div>
+                        <label asp-for="Phone"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Phone"
+                               class="form-control"
+                               placeholder="Phone number" />
+
+                        <span asp-validation-for="Phone"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+
+                    <!-- DATE OF BIRTH -->
+
+                    <div>
+                        <label asp-for="DateOfBirth"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="DateOfBirth"
+                               type="date"
+                               class="form-control" />
+
+                        <span asp-validation-for="DateOfBirth"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+
+                    <!-- STREET ADDRESS -->
+
+                    <div>
+                        <label asp-for="StreetAddress"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="StreetAddress"
+                               class="form-control"
+                               placeholder="Street address" />
+
+                        <span asp-validation-for="StreetAddress"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+
+                    <!-- CITY -->
+
+                    <div>
+                        <label asp-for="City"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="City"
+                               class="form-control" />
+
+                        <span asp-validation-for="City"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+
+                    <!-- STATE -->
+
+                    <div>
+                        <label asp-for="State"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="State"
+                               class="form-control"
+                               placeholder="State / Province" />
+
+                        <span asp-validation-for="State"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+
+                    <!-- ZIP CODE -->
+
+                    <div>
+                        <label asp-for="ZipCode"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="ZipCode"
+                               class="form-control"
+                               placeholder="ZIP / Postal code" />
+
+                        <span asp-validation-for="ZipCode"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+
+                    <!-- COUNTRY -->
+
+                    <div>
+                        <label asp-for="Country"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Country"
+                               class="form-control" />
+
+                        <span asp-validation-for="Country"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div style="
+                    margin-top:2.5rem;
+                    padding-top:1.5rem;
+                    border-top:1px solid #ddd;
+                    display:flex;
+                    gap:1rem;
+                    flex-wrap:wrap;">
+
+                    <button type="submit"
+                            class="btn btn-dark">
+                        Save Changes
+                    </button>
+
+                    <a asp-controller="Member"
+                       asp-action="Profile"
+                       class="btn btn-outline-dark">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
