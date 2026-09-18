@@ -80,7 +80,7 @@
                             </td>
 
                             <td>
-                                @item.Price.ToString("C")
+                                $@item.Price.ToString("0.00")
                             </td>
 
                             <td>
@@ -114,7 +114,7 @@
 
                             <td>
                                 <strong>
-                                    @item.Total.ToString("C")
+                                    $@item.Total.ToString("0.00")
                                 </strong>
                             </td>
 
@@ -182,7 +182,7 @@
 
                 <h3>
                     Subtotal:
-                    @Model.Subtotal.ToString("C")
+                    $@Model.Subtotal.ToString("0.00")
                 </h3>
 
                 <a asp-controller="Checkout"
