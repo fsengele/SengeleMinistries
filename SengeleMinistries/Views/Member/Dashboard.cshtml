@@ -1,46 +1,209 @@
 @using System.Security.Claims
+
 @{
-	ViewData["Title"] = "Dashboard";
-	var name = User?.Identity?.Name ?? "Member";
+    ViewData["Title"] = "Dashboard";
+
+    var name = User?.Identity?.Name ?? "Member";
 }
 
 <div class="section">
-	<div class="container-wide" style="max-width:820px;margin:0 auto">
-		<h1 class="lead-heading">My Account</h1>
-		<p class="muted">Welcome, @name</p>
 
-		<section class="section--white" style="padding:1.5rem;border-radius:8px">
-			<h4>MY PROFILE</h4>
-			<p class="muted">Manage your personal information</p>
-		</section>
+    <div class="container-wide"
+         style="max-width:820px;margin:0 auto">
 
-		<section class="section--soft mt-3" style="padding:1.5rem;border-radius:8px">
-			<h4>MY PRAYER REQUESTS</h4>
-			<p class="muted">Prayer history and follow-up — coming next</p>
-		</section>
+        <h1 class="lead-heading">
+            My Account
+        </h1>
 
-		<section class="section--white mt-3" style="padding:1.5rem;border-radius:8px">
-			<h4>MY EVENTS</h4>
-			<p class="muted">Registrations — coming next</p>
-		</section>
+        <p class="muted">
+            Welcome, @name
+        </p>
 
-		<section class="section--soft mt-3" style="padding:1.5rem;border-radius:8px">
-			<h4>PROGRAMS &amp; TRAINING</h4>
-			<p class="muted">Programs and enrollments — coming next</p>
-		</section>
 
-		<section class="section--white mt-3" style="padding:1.5rem;border-radius:8px">
-			<h4>SERVE WITH US</h4>
-			<p class="muted">Volunteer applications — coming next</p>
-		</section>
+        @* =========================================
+           MY PROFILE
+           ========================================= *@
 
-		<section class="section--soft mt-3" style="padding:1.5rem;border-radius:8px">
-			<h4>MY GIVING</h4>
-			<p class="muted">Giving history — coming later</p>
-		</section>
+        <section class="section--white"
+                 style="padding:1.5rem;border-radius:8px">
 
-		<form asp-action="Logout" method="post" class="mt-4">
-			<button type="submit" class="btn btn-outline-cta">Sign out</button>
-		</form>
-	</div>
+            <h4>MY PROFILE</h4>
+
+            <p class="muted">
+                View and manage your personal information.
+            </p>
+
+            <a asp-area=""
+               asp-controller="Member"
+               asp-action="Profile"
+               class="btn btn-dark mt-2">
+                View My Profile
+            </a>
+
+        </section>
+
+
+        @* =========================================
+           MY CART
+           ========================================= *@
+
+        <section class="section--soft mt-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <h4>MY CART</h4>
+
+            <p class="muted">
+                View the products currently in your shopping cart.
+            </p>
+
+            <a asp-area=""
+               asp-controller="Cart"
+               asp-action="Index"
+               class="btn btn-dark mt-2">
+
+                View My Cart
+
+            </a>
+
+        </section>
+
+
+        @* =========================================
+           MY ORDERS
+           ========================================= *@
+
+        <section class="section--white mt-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <h4>MY ORDERS</h4>
+
+            <p class="muted">
+                View your purchases, order status and order history.
+            </p>
+
+            <a asp-area=""
+               asp-controller="Member"
+               asp-action="Orders"
+               class="btn btn-dark mt-2">
+
+                View My Orders
+
+            </a>
+
+        </section>
+
+
+        @* =========================================
+           PRAYER REQUESTS
+           ========================================= *@
+
+        
+        <section class="section--soft mt-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <h4>MY PRAYER REQUESTS</h4>
+
+            <p class="muted">
+                View the prayer requests you have submitted.
+            </p>
+
+            <a asp-area=""
+               asp-controller="Prayer"
+               asp-action="MyRequests"
+               class="btn btn-dark mt-2">
+
+                View My Prayer Requests
+
+            </a>
+
+        </section>
+
+
+        @* =========================================
+           EVENTS
+           ========================================= *@
+
+        <section class="section--white mt-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <h4>MY EVENTS</h4>
+
+            <p class="muted">
+                Registrations — coming next
+            </p>
+
+        </section>
+
+
+        @* =========================================
+           PROGRAMS & TRAINING
+           ========================================= *@
+
+        <section class="section--soft mt-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <h4>PROGRAMS &amp; TRAINING</h4>
+
+            <p class="muted">
+                Programs and enrollments — coming next
+            </p>
+
+        </section>
+
+
+        @* =========================================
+           SERVE WITH US
+           ========================================= *@
+
+        <section class="section--white mt-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <h4>SERVE WITH US</h4>
+
+            <p class="muted">
+                Volunteer applications — coming next
+            </p>
+
+        </section>
+
+
+        @* =========================================
+           MY GIVING
+           ========================================= *@
+
+        <section class="section--soft mt-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <h4>MY GIVING</h4>
+
+            <p class="muted">
+                Giving history — coming later
+            </p>
+
+        </section>
+
+
+        @* =========================================
+           SIGN OUT
+           ========================================= *@
+
+        <form asp-area=""
+              asp-controller="Member"
+              asp-action="Logout"
+              method="post"
+              class="mt-4">
+
+            @Html.AntiForgeryToken()
+
+            <button type="submit"
+                    class="btn btn-outline-cta">
+
+                Sign out
+
+            </button>
+
+        </form>
+
+    </div>
+
 </div>

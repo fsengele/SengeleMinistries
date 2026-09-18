@@ -1,42 +1,297 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+
 @model IEnumerable<SengeleMinistries.Models.Product>
+
 @{
-	var category = ViewData["Category"] as string ?? "";
-	ViewData["Title"] = category;
+    var category = ViewData["Category"] as string ?? "";
+
+    string categoryTitle = category;
+
+    if (category.Equals("Books", StringComparison.OrdinalIgnoreCase))
+    {
+        categoryTitle = Localizer["BooksAndBibles"].Value;
+    }
+    else if (category.Equals("Teachings", StringComparison.OrdinalIgnoreCase))
+    {
+        categoryTitle = Localizer["TeachingsAndResources"].Value;
+    }
+    else if (category.Equals("EventCollections", StringComparison.OrdinalIgnoreCase))
+    {
+        categoryTitle = Localizer["EventCollections"].Value;
+    }
+    else if (category.Equals("Apparel", StringComparison.OrdinalIgnoreCase))
+    {
+        categoryTitle = Localizer["Apparel"].Value;
+    }
+
+    ViewData["Title"] = categoryTitle;
+
+    var productNumber = 0;
 }
 
-<section class="section section--soft shop-hero">
-	<div class="container-wide text-center">
-		<h1 class="hero-heading">@category</h1>
-		<p class="muted">Resources and items in the @category category.</p>
-	</div>
-</section>
+<div class="sm-category-page">
 
-<main>
-	<section class="section section--white">
-		<div class="container-wide">
-			@if (Model != null && Model.Any())
-			{
-				<div class="grid">
-					@foreach (var p in Model)
-					{
-						<article class="product-card">
-							<a asp-controller="Shop" asp-action="Details" asp-route-id="@p.ProductId">
-								<div class="product-image" style="background-image:url('@(p.ImageUrl ?? "/images/placeholder-product.png")')"></div>
-								<h4 class="product-title">@p.Title</h4>
-							</a>
-							<p class="muted small">@p.Category</p>
-							<p class="product-price">@String.Format("{0:C}", p.Price)</p>
-						</article>
-					}
-				</div>
-			}
-			else
-			{
-				<div class="empty-state">
-					<p class="muted">There are no published items in this category yet. Please check back soon.</p>
-					<p><a class="btn btn-outline-cta" asp-controller="Shop" asp-action="Index">Browse all</a></p>
-				</div>
-			}
-		</div>
-	</section>
-</main>
+    <!-- =====================================================
+         PREMIUM HERO
+         ===================================================== -->
+    <section class="sm-category-hero">
+
+        <div class="container-wide">
+
+            <div class="sm-category-hero-content">
+
+                <p class="sm-category-eyebrow">
+                    SENGELE MINISTRIES @Localizer["Shop"]
+                </p>
+
+                <h1>
+                    @categoryTitle
+                </h1>
+
+                <p class="sm-category-hero-description">
+                    @Localizer["CategoryHeroDescription"]
+                </p>
+
+                <div class="sm-category-gold-line"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INTRODUCTION
+         ===================================================== -->
+    <section class="sm-category-intro">
+
+        <div class="container-wide">
+
+            <div class="sm-category-intro-grid">
+
+                <div>
+
+                    <span class="sm-category-small-label">
+                        @Localizer["CuratedResources"]
+                    </span>
+
+                    <h2>
+                        @Localizer["ResourcesWithPurpose"]
+                    </h2>
+
+                </div>
+
+                <div class="sm-category-intro-text">
+
+                    <p>
+                        @Localizer["CategoryIntroText"]
+                    </p>
+
+                    <a asp-controller="Shop"
+                       asp-action="Index"
+                       class="sm-category-back-link">
+                        @Localizer["ExploreFullShop"]
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PRODUCTS
+         ===================================================== -->
+    <section class="sm-category-products">
+
+        <div class="container-wide">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="sm-product-grid">
+
+                    @foreach (var p in Model)
+                    {
+                        productNumber++;
+
+                        var cardStyle =
+                            productNumber % 4 == 1 ? "sm-product-card--gold" :
+                            productNumber % 4 == 2 ? "sm-product-card--sage" :
+                            productNumber % 4 == 3 ? "sm-product-card--stone" :
+                                                   "sm-product-card--charcoal";
+
+                        <article class="sm-product-card @cardStyle">
+
+                            <!-- IMAGE -->
+                            <a asp-controller="Shop"
+                               asp-action="Details"
+                               asp-route-id="@p.ProductId"
+                               class="sm-product-image-link">
+
+                                <div class="sm-product-image-area">
+
+                                    <span class="sm-product-number">
+                                        @productNumber.ToString("00")
+                                    </span>
+
+                                    @if (!string.IsNullOrWhiteSpace(p.ImageUrl))
+                                    {
+                                        <img src="@p.ImageUrl"
+                                             alt="@p.Title"
+                                             class="sm-product-image" />
+                                    }
+                                    else
+                                    {
+                                        <div class="sm-product-placeholder">
+
+                                            <span>
+                                                SENGELE
+                                            </span>
+
+                                            <strong>
+                                                MINISTRIES
+                                            </strong>
+
+                                            <small>
+                                                @categoryTitle
+                                            </small>
+
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </a>
+
+
+                            <!-- PRODUCT INFORMATION -->
+                            <div class="sm-product-info">
+
+                                <span class="sm-product-category">
+                                    @categoryTitle
+                                </span>
+
+                                <h3 class="sm-product-title">
+
+                                    <a asp-controller="Shop"
+                                       asp-action="Details"
+                                       asp-route-id="@p.ProductId">
+
+                                        @p.Title
+
+                                    </a>
+
+                                </h3>
+
+
+                                @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
+                                {
+                                    <p class="sm-product-description">
+                                        @p.ShortDescription
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="sm-product-description">
+                                        @Localizer["SelectedResourceDescription"]
+                                    </p>
+                                }
+
+
+                                <div class="sm-product-bottom">
+
+                                    <div class="sm-product-price">
+                                        $@p.Price.ToString("0.00")
+                                    </div>
+
+                                    <a asp-controller="Shop"
+                                       asp-action="Details"
+                                       asp-route-id="@p.ProductId"
+                                       class="sm-product-view">
+
+                                        @Localizer["ViewItem"]
+
+                                        <span>→</span>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <!-- EMPTY CATEGORY -->
+
+                <div class="sm-category-empty">
+
+                    <span class="sm-category-small-label">
+                        SENGELE MINISTRIES @Localizer["Shop"]
+                    </span>
+
+                    <h2>
+                        @Localizer["NewResourcesComing"]
+                    </h2>
+
+                    <p>
+                        @Localizer["NoItemsInCollection"]
+                    </p>
+
+                    <a asp-controller="Shop"
+                       asp-action="Index"
+                       class="sm-category-empty-button">
+
+                        @Localizer["ExploreShop"]
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BOTTOM MESSAGE
+         ===================================================== -->
+    <section class="sm-category-footer-message">
+
+        <div class="container-wide">
+
+            <p class="sm-category-small-label">
+                @Localizer["MoreThanPurchase"]
+            </p>
+
+            <h2>
+                @Localizer["CarryMissionForward"]
+            </h2>
+
+            <p class="sm-category-footer-text">
+                @Localizer["SupportMissionText"]
+            </p>
+
+            <a asp-controller="Shop"
+               asp-action="Index"
+               class="sm-category-footer-button">
+
+                @Localizer["ContinueShopping"]
+
+            </a>
+
+        </div>
+
+    </section>
+
+</div>

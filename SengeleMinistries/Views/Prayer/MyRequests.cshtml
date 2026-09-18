@@ -1,0 +1,113 @@
+﻿@model IEnumerable<SengeleMinistries.Models.PrayerRequest>
+
+@{
+    ViewData["Title"] = "My Prayer Requests";
+}
+
+<div class="section">
+
+    <div class="container-wide"
+         style="max-width:900px;margin:0 auto">
+
+        <p class="muted"
+           style="font-size:.75rem;
+            letter-spacing:.14em;
+            font-weight:700">
+
+            SENGELE MINISTRIES
+
+        </p>
+
+        <h1 class="lead-heading">
+            My Prayer Requests
+        </h1>
+
+        <p class="muted">
+            View the prayer requests you have submitted.
+        </p>
+
+
+        @if (!Model.Any())
+        {
+            <section class="section--soft mt-4"
+                     style="padding:2rem;border-radius:8px">
+
+                <h4>No Prayer Requests Yet</h4>
+
+                <p class="muted">
+                    You have not submitted a prayer request yet.
+                </p>
+
+                <a asp-controller="Prayer"
+                   asp-action="Index"
+                   class="btn btn-dark mt-2">
+
+                    Send a Prayer Request
+
+                </a>
+
+            </section>
+        }
+        else
+        {
+            <div class="mt-4">
+
+                @foreach (var prayer in Model)
+                {
+                    <section class="section--soft mb-3"
+                             style="padding:1.7rem;
+                        border-radius:8px">
+
+                        <div style="
+                            display:flex;
+                            justify-content:space-between;
+                            gap:1rem;
+                            align-items:start">
+
+                            <h4>
+                                PRAYER REQUEST
+                            </h4>
+
+                            <span class="muted">
+                                @prayer.SubmittedAt
+                                .ToLocalTime()
+                                .ToString("MMM dd, yyyy")
+                            </span>
+
+                        </div>
+
+                        <p style="margin-top:1rem">
+                            @prayer.Request
+                        </p>
+
+                        <p class="muted"
+                           style="font-size:.9rem">
+
+                            Submitted by
+                            @prayer.FirstName
+                            @prayer.LastName
+
+                        </p>
+
+                    </section>
+                }
+
+            </div>
+        }
+
+
+        <div class="mt-4">
+
+            <a asp-controller="Member"
+               asp-action="Dashboard"
+               class="btn btn-outline-dark">
+
+                ← Back to My Account
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,30 +1,145 @@
 @model SengeleMinistries.Models.Product
+
 @{
-	ViewData["Title"] = Model?.Title ?? "Product";
+    ViewData["Title"] = Model?.Title ?? "Product";
 }
 
 <section class="section section--soft">
-	<div class="container-wide">
-		<div class="product-detail">
-			<div class="product-media">
-				<img src="@Model.ImageUrl ?? "/images/placeholder-product.png"" alt="@Model.Title" style="max-width:100%; height:auto; border-radius:8px;" />
-			</div>
-			<div class="product-info">
-				<h1>@Model.Title</h1>
-				<p class="muted small">@Model.Category</p>
-				<div class="product-description">@Html.Raw(Model.Description ?? string.Empty)</div>
-				<p class="product-price">@String.Format("{0:C}", Model.Price)</p>
-				@if (Model.StockQuantity.HasValue)
-				{
-					<p class="muted">Stock: @Model.StockQuantity</p>
-				}
-				else
-				{
-					<p class="muted">Stock information not available.</p>
-				}
 
-				<p class="mt-3"><a class="btn btn-outline-cta" asp-controller="Shop" asp-action="Index">Back to shop</a></p>
-			</div>
-		</div>
-	</div>
+    <div class="container-wide">
+
+        <div class="product-detail">
+
+            <!-- PRODUCT IMAGE -->
+            <div class="product-media">
+
+                @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl"
+                         alt="@Model.Title"
+                         style="max-width:100%; height:auto; border-radius:8px;" />
+                }
+                else
+                {
+                    <div class="product-image-placeholder">
+                        No image available
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- PRODUCT INFORMATION -->
+            <div class="product-info">
+
+                <p class="muted small">
+                    @Model.Category
+                </p>
+
+                <h1>
+                    @Model.Title
+                </h1>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <div class="product-description">
+                        @Model.Description
+                    </div>
+                }
+
+                <p class="product-price">
+                    @Model.Price.ToString("C")
+                </p>
+
+
+                <!-- STOCK -->
+                @if (Model.StockQuantity.HasValue)
+                {
+                    <p class="muted">
+                        Stock: @Model.StockQuantity
+                    </p>
+                }
+                else
+                {
+                    <p class="muted">
+                        Stock information not available.
+                    </p>
+                }
+
+
+                <!-- ADD TO CART -->
+                @if (!Model.StockQuantity.HasValue ||
+                     Model.StockQuantity.Value > 0)
+                {
+                    <form asp-controller="Cart"
+                          asp-action="AddToCart"
+                          method="post"
+                          class="mt-4">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="productId"
+                               value="@Model.ProductId" />
+
+
+                        <div class="mb-3">
+
+                            <label for="quantity"
+                                   class="form-label">
+                                Quantity
+                            </label>
+
+                            <input id="quantity"
+                                   name="quantity"
+                                   type="number"
+                                   value="1"
+                                   min="1"
+                                   max="@(Model.StockQuantity ?? 99)"
+                                   class="form-control"
+                                   style="max-width:100px;" />
+
+                        </div>
+
+
+                        <button type="submit"
+                                class="btn btn-dark">
+                            ADD TO CART
+                        </button>
+
+                    </form>
+                }
+                else
+                {
+                    <div class="mt-4">
+                        <strong>
+                            Out of stock
+                        </strong>
+                    </div>
+                }
+
+
+                <!-- NAVIGATION -->
+                <div class="mt-4">
+
+                    <a asp-controller="Cart"
+                       asp-action="Index"
+                       class="btn btn-outline-dark">
+                        VIEW CART
+                    </a>
+
+                    <a asp-controller="Shop"
+                       asp-action="Index"
+                       class="btn btn-outline-cta">
+                        BACK TO SHOP
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>

@@ -1,3 +1,6 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+
 @* Premium responsive navigation for Sengele Ministries *@
 
 <nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top">
@@ -69,7 +72,7 @@
                        asp-controller="Home"
                        asp-action="Index">
 
-                        Home
+                        @Localizer["Home"]
 
                     </a>
 
@@ -87,7 +90,7 @@
                        asp-controller="About"
                        asp-action="Index">
 
-                        About
+                        @Localizer["About"]
 
                     </a>
 
@@ -105,7 +108,7 @@
                        asp-controller="Messages"
                        asp-action="Index">
 
-                        Messages
+                        @Localizer["Messages"]
 
                     </a>
 
@@ -125,7 +128,7 @@
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
 
-                        Connect
+                        @Localizer["Connect"]
 
                     </a>
 
@@ -140,7 +143,7 @@
                                asp-controller="Member"
                                asp-action="Login">
 
-                                My Account
+                                @Localizer["MyAccount"]
 
                             </a>
 
@@ -154,7 +157,7 @@
                                asp-controller="Prayer"
                                asp-action="Index">
 
-                                Prayer Request
+                                @Localizer["PrayerRequest"]
 
                             </a>
 
@@ -168,7 +171,7 @@
                                asp-controller="Programs"
                                asp-action="Index">
 
-                                Programs &amp; Training
+                                @Localizer["Programs & Training"]
 
                             </a>
 
@@ -182,7 +185,7 @@
                                asp-controller="Serve"
                                asp-action="Index">
 
-                                Serve With Us
+                                @Localizer["Serve With Us"]
 
                             </a>
 
@@ -196,7 +199,7 @@
                                asp-controller="Contact"
                                asp-action="Index">
 
-                                Contact
+                                @Localizer["Contact"]
 
                             </a>
 
@@ -218,7 +221,7 @@
                        asp-controller="Events"
                        asp-action="Index">
 
-                        Events
+                        @Localizer["Event"]
 
                     </a>
 
@@ -227,7 +230,6 @@
 
                 @* =================================================
                    PUBLIC SHOP
-                   Visible to visitors and members
                    ================================================= *@
 
                 <li class="nav-item dropdown">
@@ -241,14 +243,13 @@
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
 
-                        Shop
+                        @Localizer["Shop"]
 
                     </a>
 
 
                     <ul class="dropdown-menu"
                         aria-labelledby="shopDropdown">
-
 
                         <li>
 
@@ -258,7 +259,7 @@
                                asp-action="Category"
                                asp-route-category="Books">
 
-                                Books &amp; Bibles
+                                @Localizer["BooksAndBibles"]
 
                             </a>
 
@@ -273,7 +274,7 @@
                                asp-action="Category"
                                asp-route-category="Teachings">
 
-                                Teachings &amp; Resources
+                                @Localizer["TeachingsAndResources"]
 
                             </a>
 
@@ -288,7 +289,7 @@
                                asp-action="Category"
                                asp-route-category="EventCollections">
 
-                                Event Collections
+                                @Localizer["EventCollections"]
 
                             </a>
 
@@ -303,7 +304,7 @@
                                asp-action="Category"
                                asp-route-category="Apparel">
 
-                                Apparel
+                                @Localizer["Apparel"]
 
                             </a>
 
@@ -327,7 +328,7 @@
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
 
-                        My Account
+                        @Localizer["MyAccount"]
 
                     </a>
 
@@ -340,9 +341,7 @@
                         {
 
                             @* =========================================
-                               NORMAL MEMBER DASHBOARD
-
-                               Every authenticated member can see this.
+                               MEMBER DASHBOARD
                                ========================================= *@
 
                             <li>
@@ -361,10 +360,6 @@
 
                             @* =========================================
                                ADMIN ONLY
-
-                               Only IsAdmin=true can see:
-                               - Admin Dashboard
-                               - Products
                                ========================================= *@
 
                             @if (User.HasClaim(c =>
@@ -393,7 +388,7 @@
                                        asp-controller="Products"
                                        asp-action="Index">
 
-                                        Products
+                                        @Localizer["Products"]
 
                                     </a>
 
@@ -426,7 +421,6 @@
                             </li>
 
                         }
-
                         else
                         {
 
@@ -463,6 +457,137 @@
 
                         }
 
+                    </ul>
+
+                </li>
+
+
+                @* =================================================
+                   LANGUAGE SELECTOR
+                   ================================================= *@
+
+                @{
+                    var currentCulture =
+                        System.Globalization.CultureInfo
+                            .CurrentUICulture
+                            .TwoLetterISOLanguageName;
+
+                    var currentLanguage =
+                        currentCulture == "fr" ? "FR" : "EN";
+
+                    var returnUrl =
+                        Context.Request.Path +
+                        Context.Request.QueryString;
+                }
+
+
+                <li class="nav-item dropdown ms-lg-2">
+
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       id="languageDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+
+                        <span style="color:#c9a24d;">
+                            ◉
+                        </span>
+
+                        @currentLanguage
+
+                    </a>
+
+
+                    <ul class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="languageDropdown">
+
+                        @* ENGLISH *@
+
+                        <li>
+
+                            <form asp-area=""
+                                  asp-controller="Language"
+                                  asp-action="SetLanguage"
+                                  method="post"
+                                  class="m-0">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="culture"
+                                       value="en" />
+
+                                <input type="hidden"
+                                       name="returnUrl"
+                                       value="@returnUrl" />
+
+                                <button type="submit"
+                                        class="dropdown-item">
+
+                                    <span class="me-2">
+                                        🇺🇸
+                                    </span>
+
+                                    English
+
+                                    @if (currentCulture == "en")
+                                    {
+                                        <span class="float-end"
+                                              style="color:#c9a24d;">
+                                            ✓
+                                        </span>
+                                    }
+
+                                </button>
+
+                            </form>
+
+                        </li>
+
+
+                        @* FRENCH *@
+
+                        <li>
+
+                            <form asp-area=""
+                                  asp-controller="Language"
+                                  asp-action="SetLanguage"
+                                  method="post"
+                                  class="m-0">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="culture"
+                                       value="fr" />
+
+                                <input type="hidden"
+                                       name="returnUrl"
+                                       value="@returnUrl" />
+
+                                <button type="submit"
+                                        class="dropdown-item">
+
+                                    <span class="me-2">
+                                        🇫🇷
+                                    </span>
+
+                                    Français
+
+                                    @if (currentCulture == "fr")
+                                    {
+                                        <span class="float-end"
+                                              style="color:#c9a24d;">
+                                            ✓
+                                        </span>
+                                    }
+
+                                </button>
+
+                            </form>
+
+                        </li>
 
                     </ul>
 
@@ -498,7 +623,25 @@
                        target="_blank"
                        rel="noopener noreferrer">
 
-                        Watch Now
+                        @Localizer["Watch Now"]
+
+                    </a>
+
+                </li>
+
+
+                @* =================================================
+                   FACEBOOK
+                   ================================================= *@
+
+                <li class="nav-item ms-3">
+
+                    <a class="btn btn-cta btn-sm"
+                       href="https://www.facebook.com/profile.php?id=100024839084763"
+                       target="_blank"
+                       rel="noopener noreferrer">
+
+                        Facebook
 
                     </a>
 

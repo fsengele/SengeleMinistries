@@ -1,14 +1,672 @@
 @{
-	ViewData["Title"] = "Donate";
+    ViewData["Title"] = "Give";
 }
 
-<section class="section section--white">
-	<div class="container-wide" style="max-width:760px;margin:0 auto;text-align:center">
-		<h1 class="lead-heading">Support Sengele Ministries</h1>
-		<p class="muted">Thank you for considering a gift. Your support helps sustain the ministry's mission of hope, prayer and the Word. We are preparing a secure donation experience. For now, please contact us to discuss giving options.</p>
+<section class="giving-page">
 
-		<p class="mt-3"><a class="btn btn-cta" asp-controller="Contact" asp-action="Index">Contact to Give</a></p>
+    <div class="giving-container">
 
-		<p class="muted mt-4">We will never store raw payment card details on this site. A secure third-party payment provider will be integrated in a future phase.</p>
-	</div>
+        @* =====================================================
+           HEADER
+           ===================================================== *@
+
+        <div class="giving-header">
+
+            <p class="giving-eyebrow">
+                SENGELE MINISTRIES
+            </p>
+
+            <h1>
+                Give With Purpose
+            </h1>
+
+            <p class="giving-scripture">
+                “God loves a cheerful giver.”
+            </p>
+
+            <p class="giving-reference">
+                2 Corinthians 9:7
+            </p>
+
+            <p class="giving-intro">
+                Your generosity helps Sengele Ministries continue
+                sharing the message of hope, prayer and the Word.
+                Give freely, securely and with purpose.
+            </p>
+
+        </div>
+
+
+        @* =====================================================
+           STEP 1 - CHOOSE AMOUNT
+           ===================================================== *@
+
+        <div class="giving-card">
+
+            <div class="giving-step">
+                <span>01</span>
+                CHOOSE YOUR GIFT
+            </div>
+
+            <h2>
+                Select an amount
+            </h2>
+
+            <p class="giving-description">
+                Choose an amount below or enter your own gift.
+            </p>
+
+
+            <div class="giving-amount-grid">
+
+                <button type="button"
+                        class="giving-amount-btn"
+                        data-amount="20">
+                    $20
+                </button>
+
+                <button type="button"
+                        class="giving-amount-btn"
+                        data-amount="50">
+                    $50
+                </button>
+
+                <button type="button"
+                        class="giving-amount-btn"
+                        data-amount="100">
+                    $100
+                </button>
+
+                <button type="button"
+                        class="giving-amount-btn"
+                        data-amount="250">
+                    $250
+                </button>
+
+                <button type="button"
+                        class="giving-amount-btn"
+                        data-amount="500">
+                    $500
+                </button>
+
+                <button type="button"
+                        class="giving-amount-btn"
+                        data-amount="1000">
+                    $1,000
+                </button>
+
+            </div>
+
+
+            <div class="giving-other">
+
+                <label for="customAmount">
+                    Other Amount
+                </label>
+
+                <div class="giving-custom-amount">
+
+                    <span>$</span>
+
+                    <input id="customAmount"
+                           type="number"
+                           min="1"
+                           step="1"
+                           placeholder="Enter amount" />
+
+                </div>
+
+            </div>
+
+
+            <div class="giving-selected">
+
+                Your Gift:
+
+                <strong id="selectedGift">
+                    Select an amount
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        @* =====================================================
+           STEP 2 - PAYMENT METHOD
+           ===================================================== *@
+
+        <div class="giving-card">
+
+            <div class="giving-step">
+                <span>02</span>
+                CHOOSE HOW TO GIVE
+            </div>
+
+            <h2>
+                Give securely
+            </h2>
+
+            <p class="giving-description">
+                Choose the giving method that is most convenient
+                for you.
+            </p>
+
+
+            <div class="giving-methods">
+
+
+                @* ==========================
+                   ZELLE
+                   ========================== *@
+
+                <div class="giving-method">
+
+                    <div class="giving-method-name">
+                        ZELLE
+                    </div>
+
+                    <h3>
+                        Give with Zelle
+                    </h3>
+
+                    <p>
+                        Send your gift directly using the official
+                        Zelle information for Sengele Ministries.
+                    </p>
+
+                    <div class="giving-method-info">
+
+                        <span>
+                            Zelle Giving Information
+                        </span>
+
+                        <strong>
+                            Coming next
+                        </strong>
+
+                    </div>
+
+                    <button type="button"
+                            class="giving-method-btn"
+                            disabled>
+
+                        GIVE WITH ZELLE
+
+                    </button>
+
+                </div>
+
+
+                @* ==========================
+                   CASH APP
+                   ========================== *@
+
+                <div class="giving-method">
+
+                    <div class="giving-method-name">
+                        CASH APP
+                    </div>
+
+                    <h3>
+                        Give with Cash App
+                    </h3>
+
+                    <p>
+                        Give quickly through the official
+                        Sengele Ministries Cash App account.
+                    </p>
+
+                    <div class="giving-method-info">
+
+                        <span>
+                            Cash App Giving Information
+                        </span>
+
+                        <strong>
+                            Coming next
+                        </strong>
+
+                    </div>
+
+                    <button type="button"
+                            class="giving-method-btn"
+                            disabled>
+
+                        GIVE WITH CASH APP
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        @* =====================================================
+           PRIVACY / SECURITY
+           ===================================================== *@
+
+        <div class="giving-security">
+
+            <h3>
+                Give Privately. Give Freely.
+            </h3>
+
+            <p>
+                Your gift is an act of worship between you and God.
+                You do not need to contact us before giving.
+            </p>
+
+            <blockquote>
+                “When you give to the needy, do not let your left hand
+                know what your right hand is doing.”
+            </blockquote>
+
+            <span>
+                Matthew 6:3
+            </span>
+
+        </div>
+
+
+        @* =====================================================
+           SECURITY NOTICE
+           ===================================================== *@
+
+        <div class="giving-security-note">
+
+            <strong>
+                Your security matters.
+            </strong>
+
+            <p>
+                Sengele Ministries will never ask for your online
+                banking password, PIN, routing number or bank account
+                number through this page.
+            </p>
+
+        </div>
+
+    </div>
+
 </section>
+
+
+<style>
+
+    .giving-page {
+        background: #f7f5ef;
+        padding: 9rem 1.5rem 6rem;
+        min-height: 100vh;
+    }
+
+    .giving-container {
+        max-width: 1050px;
+        margin: 0 auto;
+    }
+
+    .giving-header {
+        max-width: 760px;
+        margin: 0 auto 3.5rem;
+        text-align: center;
+    }
+
+    .giving-eyebrow {
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: .18em;
+        color: #a68128;
+        margin-bottom: 1rem;
+    }
+
+    .giving-header h1 {
+        font-size: clamp(2.7rem, 6vw, 4.8rem);
+        line-height: 1;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        color: #171717;
+    }
+
+    .giving-scripture {
+        font-family: Georgia, serif;
+        font-size: 1.4rem;
+        font-style: italic;
+        margin-bottom: .3rem;
+        color: #363636;
+    }
+
+    .giving-reference {
+        color: #a68128;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }
+
+    .giving-intro {
+        max-width: 680px;
+        margin: 0 auto;
+        color: #666;
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
+
+
+    .giving-card {
+        background: #fff;
+        border: 1px solid #e6e1d5;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .giving-step {
+        display: flex;
+        align-items: center;
+        gap: .7rem;
+        color: #a68128;
+        font-size: .76rem;
+        letter-spacing: .13em;
+        font-weight: 700;
+        margin-bottom: .8rem;
+    }
+
+        .giving-step span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #a68128;
+            border-radius: 50%;
+        }
+
+    .giving-card h2 {
+        color: #171717;
+        font-weight: 750;
+        margin-bottom: .5rem;
+    }
+
+    .giving-description {
+        color: #777;
+        margin-bottom: 2rem;
+    }
+
+
+    .giving-amount-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: .75rem;
+    }
+
+    .giving-amount-btn {
+        background: #fff;
+        color: #171717;
+        border: 1px solid #d7d1c5;
+        padding: 1rem .5rem;
+        font-size: 1rem;
+        font-weight: 700;
+        transition: .2s ease;
+    }
+
+        .giving-amount-btn:hover,
+        .giving-amount-btn.active {
+            background: #171717;
+            color: #fff;
+            border-color: #171717;
+        }
+
+
+    .giving-other {
+        margin-top: 1.5rem;
+    }
+
+        .giving-other label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: .5rem;
+        }
+
+    .giving-custom-amount {
+        display: flex;
+        align-items: center;
+        border: 1px solid #d7d1c5;
+        background: #fff;
+        max-width: 350px;
+    }
+
+        .giving-custom-amount span {
+            padding-left: 1rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .giving-custom-amount input {
+            width: 100%;
+            border: 0;
+            outline: none;
+            padding: .9rem;
+            background: transparent;
+        }
+
+    .giving-selected {
+        margin-top: 1.5rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid #eee9df;
+        color: #777;
+    }
+
+        .giving-selected strong {
+            color: #171717;
+            margin-left: .3rem;
+        }
+
+
+    .giving-methods {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+    }
+
+    .giving-method {
+        border: 1px solid #e3ddd1;
+        padding: 2rem;
+        background: #faf9f6;
+    }
+
+    .giving-method-name {
+        color: #a68128;
+        letter-spacing: .15em;
+        font-size: .72rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+    }
+
+    .giving-method h3 {
+        color: #171717;
+        margin-bottom: .8rem;
+    }
+
+    .giving-method p {
+        color: #777;
+        line-height: 1.65;
+        min-height: 55px;
+    }
+
+    .giving-method-info {
+        background: #fff;
+        border: 1px solid #e5e0d5;
+        padding: 1rem;
+        margin: 1.5rem 0;
+    }
+
+        .giving-method-info span {
+            display: block;
+            color: #777;
+            font-size: .8rem;
+            margin-bottom: .3rem;
+        }
+
+        .giving-method-info strong {
+            color: #171717;
+        }
+
+    .giving-method-btn {
+        width: 100%;
+        padding: .9rem 1rem;
+        border: 0;
+        background: #171717;
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: .05em;
+    }
+
+        .giving-method-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+
+    .giving-security {
+        background: #171717;
+        color: #fff;
+        text-align: center;
+        padding: 3.5rem 2rem;
+        margin-top: 2rem;
+    }
+
+        .giving-security h3 {
+            color: #d2ae54;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .giving-security p {
+            max-width: 650px;
+            margin: 0 auto 1.5rem;
+            color: #ddd;
+        }
+
+        .giving-security blockquote {
+            max-width: 680px;
+            margin: 0 auto .5rem;
+            font-family: Georgia, serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .giving-security span {
+            color: #d2ae54;
+            font-size: .85rem;
+        }
+
+
+    .giving-security-note {
+        text-align: center;
+        max-width: 720px;
+        margin: 2rem auto 0;
+        color: #777;
+        font-size: .9rem;
+    }
+
+        .giving-security-note strong {
+            display: block;
+            color: #333;
+            margin-bottom: .4rem;
+        }
+
+
+    @@media (max-width: 800px) {
+
+        .giving-amount-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .giving-methods {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .giving-page {
+            padding: 7rem 1rem 4rem;
+        }
+
+        .giving-card {
+            padding: 1.5rem;
+        }
+
+        .giving-amount-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+</style>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const amountButtons =
+            document.querySelectorAll(".giving-amount-btn");
+
+        const customAmount =
+            document.getElementById("customAmount");
+
+        const selectedGift =
+            document.getElementById("selectedGift");
+
+
+        amountButtons.forEach(function (button) {
+
+            button.addEventListener("click", function () {
+
+                amountButtons.forEach(function (btn) {
+                    btn.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                customAmount.value = "";
+
+                const amount =
+                    button.getAttribute("data-amount");
+
+                selectedGift.textContent =
+                    "$" + Number(amount).toLocaleString();
+
+            });
+
+        });
+
+
+        customAmount.addEventListener("input", function () {
+
+            amountButtons.forEach(function (btn) {
+                btn.classList.remove("active");
+            });
+
+            if (customAmount.value &&
+                Number(customAmount.value) > 0) {
+
+                selectedGift.textContent =
+                    "$" +
+                    Number(customAmount.value)
+                        .toLocaleString();
+
+            }
+            else {
+
+                selectedGift.textContent =
+                    "Select an amount";
+
+            }
+
+        });
+
+    });
+
+</script>

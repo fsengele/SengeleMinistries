@@ -1,66 +1,364 @@
+@model SengeleMinistries.Models.PrayerRequest
+
 @{
-	ViewData["Title"] = "REQUÊTE DE PRIÈRE";
+    ViewData["Title"] = "Requête de prière";
 }
 
-<section class="section section--soft prayer-hero">
-	<div class="container-wide text-center">
-		<h1 class="hero-heading">REQUÊTE DE PRIÈRE</h1>
-		<p class="hero-sub large">Comment pouvons-nous prier pour vous ?</p>
-		<p class="muted">Vous n'êtes pas seul. Partagez avec nous votre sujet de prière. Notre équipe prendra le temps de prier pour vous.</p>
-		<p class="muted small">Votre requête sera traitée avec respect et confidentialité.</p>
-	</div>
+<!-- =====================================================
+     PRAYER HERO
+     ===================================================== -->
+<section class="sm-prayer-hero">
+
+    <div class="container-wide sm-prayer-hero-inner">
+
+        <div class="sm-prayer-hero-content">
+
+            <p class="sm-prayer-eyebrow">
+                SENGELE MINISTRIES • PRIÈRE
+            </p>
+
+            <h1>
+                NOUS VOULONS
+                <span>PRIER AVEC VOUS.</span>
+            </h1>
+
+            <p class="sm-prayer-hero-text">
+                Quelle que soit la situation que vous traversez,
+                vous n'avez pas à la porter seul.
+                Partagez votre sujet de prière avec nous.
+            </p>
+
+            <div class="sm-prayer-hero-line"></div>
+
+            <p class="sm-prayer-confidential">
+                Votre requête sera reçue avec compassion,
+                respect et confidentialité.
+            </p>
+
+        </div>
+
+    </div>
+
 </section>
 
+
+<!-- =====================================================
+     PRAYER REQUEST SECTION
+     ===================================================== -->
 <main>
-	<section class="section section--white">
-		<div class="container-wide">
-			<div class="prayer-grid">
-				<div class="prayer-form-card">
-					<h3 class="card-heading">Envoyer une requête de prière</h3>
 
-					<form action="https://formspree.io/f/xgaezoaz" method="POST">
-						<div class="form-row">
-							<div class="form-group">
-								<label for="firstName">Prénom</label>
-								<input id="firstName" name="FirstName" type="text" placeholder="Votre prénom" class="form-control" required />
-							</div>
-							<div class="form-group">
-								<label for="lastName">Nom</label>
-								<input id="lastName" name="LastName" type="text" placeholder="Votre nom" class="form-control" required />
-							</div>
-						</div>
+    <section class="sm-prayer-section">
 
-						<div class="form-row">
-							<div class="form-group">
-								<label for="phone">Numéro de téléphone</label>
-								<input id="phone" name="Phone" type="tel" placeholder="+1 (425) 524-9990" class="form-control" />
-							</div>
-							<div class="form-group">
-								<label for="email">Adresse email</label>
-								<input id="email" name="Email" type="email" placeholder="votre@email.com" class="form-control" required />
-							</div>
-						</div>
+        <div class="container-wide">
 
-						<div class="form-group">
-							<label for="prayer">Requête de prière</label>
-							<textarea id="prayer" name="PrayerRequest" rows="8" placeholder="Partagez votre requête de prière ici" class="form-control" required></textarea>
-						</div>
+            <div class="sm-prayer-section-heading">
 
-						<div class="form-actions">
-							<button type="submit" class="btn btn-cta">ENVOYER MA REQUÊTE</button>
-						</div>
-					</form>
-				</div>
+                <div>
+                    <p class="sm-prayer-small-title">
+                        PARTAGEZ VOTRE REQUÊTE
+                    </p>
 
-				<aside class="prayer-side">
-					<div class="prayer-note">
-						<h4 class="muted small-uppercase">NOUS CROYONS EN LA PRIÈRE</h4>
-						<h3 class="prayer-verse">"Priez les uns pour les autres."</h3>
-						<p class="muted"> # Jacques 5:16</p>
-						<p class="muted mt-3">Notre équipe prie régulièrement pour les requêtes soumises. Vous êtes accueilli avec compassion et confidentialité.</p>
-					</div>
-				</aside>
-			</div>
-		</div>
-	</section>
+                    <h2>
+                        Comment pouvons-nous<br />
+                        prier pour vous ?
+                    </h2>
+                </div>
+
+                <p class="sm-prayer-heading-text">
+                    Prenez quelques instants pour nous écrire.
+                    Notre équipe de prière prendra le temps de présenter
+                    votre requête devant le Seigneur.
+                </p>
+
+            </div>
+
+
+            <!-- SUCCESS MESSAGE -->
+            @if (TempData["PrayerSuccess"] != null)
+            {
+                <div class="alert alert-success mb-4">
+                    @TempData["PrayerSuccess"]
+                </div>
+            }
+
+
+            <div class="sm-prayer-layout">
+
+                <!-- ==========================================
+                     FORM
+                     ========================================== -->
+                <div class="sm-prayer-form-card">
+
+                    <div class="sm-prayer-form-header">
+
+                        <div class="sm-prayer-form-number">
+                            01
+                        </div>
+
+                        <div>
+                            <p class="sm-prayer-form-label">
+                                REQUÊTE DE PRIÈRE
+                            </p>
+
+                            <h3>
+                                Parlez-nous de votre besoin.
+                            </h3>
+                        </div>
+
+                    </div>
+
+
+                    <form asp-controller="Prayer"
+                          asp-action="Index"
+                          method="post"
+                          class="sm-prayer-form">
+
+                        @Html.AntiForgeryToken()
+
+
+                        <!-- VALIDATION SUMMARY -->
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+
+                        <!-- NAME -->
+                        <div class="sm-prayer-form-row">
+
+                            <div class="sm-prayer-field">
+
+                                <label asp-for="FirstName">
+                                    PRÉNOM
+                                </label>
+
+                                <input asp-for="FirstName"
+                                       id="firstName"
+                                       type="text"
+                                       placeholder="Votre prénom" />
+
+                                <span asp-validation-for="FirstName"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="sm-prayer-field">
+
+                                <label asp-for="LastName">
+                                    NOM
+                                </label>
+
+                                <input asp-for="LastName"
+                                       id="lastName"
+                                       type="text"
+                                       placeholder="Votre nom" />
+
+                                <span asp-validation-for="LastName"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CONTACT -->
+                        <div class="sm-prayer-form-row">
+
+                            <div class="sm-prayer-field">
+
+                                <label asp-for="Phone">
+                                    TÉLÉPHONE
+                                    <span>OPTIONNEL</span>
+                                </label>
+
+                                <input asp-for="Phone"
+                                       id="phone"
+                                       type="tel"
+                                       placeholder="+1 (425) 524-9990" />
+
+                                <span asp-validation-for="Phone"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="sm-prayer-field">
+
+                                <label asp-for="Email">
+                                    ADRESSE EMAIL
+                                </label>
+
+                                <input asp-for="Email"
+                                       id="email"
+                                       type="email"
+                                       placeholder="votre@email.com" />
+
+                                <span asp-validation-for="Email"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PRAYER REQUEST -->
+                        <div class="sm-prayer-field sm-prayer-message-field">
+
+                            <label asp-for="Request">
+                                VOTRE REQUÊTE
+                            </label>
+
+                            <textarea asp-for="Request"
+                                      id="prayer"
+                                      rows="8"
+                                      placeholder="Écrivez votre requête de prière ici..."></textarea>
+
+                            <span asp-validation-for="Request"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- PRIVACY -->
+                        <div class="sm-prayer-privacy">
+
+                            <div class="sm-prayer-lock">
+                                ✦
+                            </div>
+
+                            <p>
+                                Votre requête est personnelle.
+                                Nous la traiterons avec respect
+                                et confidentialité.
+                            </p>
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+                        <div class="sm-prayer-form-actions">
+
+                            <button type="submit"
+                                    class="sm-prayer-submit">
+
+                                ENVOYER MA REQUÊTE
+                                <span>→</span>
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- ==========================================
+                     RIGHT SIDE
+                     ========================================== -->
+                <aside class="sm-prayer-side">
+
+
+                    <!-- VERSE -->
+                    <div class="sm-prayer-verse-card">
+
+                        <p class="sm-prayer-side-label">
+                            LA PAROLE DE DIEU
+                        </p>
+
+                        <div class="sm-prayer-quote">
+                            “
+                        </div>
+
+                        <blockquote>
+                            Priez les uns pour les autres,
+                            afin que vous soyez guéris.
+                        </blockquote>
+
+                        <p class="sm-prayer-reference">
+                            JACQUES 5:16
+                        </p>
+
+                    </div>
+
+
+                    <!-- BELIEF -->
+                    <div class="sm-prayer-belief-card">
+
+                        <p class="sm-prayer-side-label">
+                            NOTRE ENGAGEMENT
+                        </p>
+
+                        <h3>
+                            Nous croyons<br />
+                            en la puissance<br />
+                            de la prière.
+                        </h3>
+
+                        <div class="sm-prayer-belief-line"></div>
+
+                        <p>
+                            Chaque requête reçue représente
+                            une personne, une famille et une situation
+                            qui mérite notre attention.
+                        </p>
+
+                        <p>
+                            Notre équipe prie régulièrement
+                            pour les requêtes qui nous sont confiées.
+                        </p>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BOTTOM ENCOURAGEMENT
+         ===================================================== -->
+    <section class="sm-prayer-bottom">
+
+        <div class="container-wide sm-prayer-bottom-inner">
+
+            <p class="sm-prayer-small-title">
+                ESPÉRANCE • FOI • PRIÈRE
+            </p>
+
+            <h2>
+                Il y a encore de l'espérance.
+            </h2>
+
+            <p>
+                Nous ne pouvons peut-être pas connaître tout ce que
+                vous traversez, mais nous pouvons nous tenir avec vous
+                dans la prière.
+            </p>
+
+            <div class="sm-prayer-bottom-line"></div>
+
+            <p class="sm-prayer-bottom-scripture">
+                « Invoque-moi, et je te répondrai. »
+                <span>— Jérémie 33:3</span>
+            </p>
+
+        </div>
+
+    </section>
+
 </main>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

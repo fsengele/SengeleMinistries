@@ -1,0 +1,247 @@
+﻿@model SengeleMinistries.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="section">
+
+    <div class="container-wide"
+         style="max-width:900px;margin:0 auto">
+
+        <div class="mb-4">
+
+            <p class="text-uppercase small mb-1">
+                My Account
+            </p>
+
+            <h1 class="lead-heading">
+                Order #@Model.OrderId
+            </h1>
+
+            <p class="muted">
+                Placed on
+                @Model.CreatedAt.ToLocalTime().ToString("MMMM dd, yyyy")
+            </p>
+
+        </div>
+
+
+        @* =========================================
+           ORDER STATUS
+           ========================================= *@
+
+        <section class="section--soft mb-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3 mb-md-0">
+
+                    <p class="muted small mb-1">
+                        ORDER STATUS
+                    </p>
+
+                    <strong>
+                        @Model.OrderStatus
+                    </strong>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3 mb-md-0">
+
+                    <p class="muted small mb-1">
+                        PAYMENT STATUS
+                    </p>
+
+                    <strong>
+                        @Model.PaymentStatus
+                    </strong>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <p class="muted small mb-1">
+                        ORDER TOTAL
+                    </p>
+
+                    <strong>
+                        @Model.Total.ToString("C")
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        @* =========================================
+           ORDER ITEMS
+           ========================================= *@
+
+        <section class="section--white mb-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <h3 class="mb-4">
+                Order Items
+            </h3>
+
+            @if (Model.OrderItems != null &&
+                 Model.OrderItems.Count > 0)
+            {
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th class="text-end">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var item in Model.OrderItems)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            @item.ProductTitle
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        @item.Price.ToString("C")
+                                    </td>
+
+                                    <td>
+                                        @item.Quantity
+                                    </td>
+
+                                    <td class="text-end">
+                                        <strong>
+                                            @((item.Price * item.Quantity).ToString("C"))
+                                        </strong>
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <p class="muted">
+                    No items were found for this order.
+                </p>
+            }
+
+
+            <hr />
+
+
+            <div class="d-flex justify-content-between mb-2">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <strong>
+                    @Model.Subtotal.ToString("C")
+                </strong>
+
+            </div>
+
+
+            <div class="d-flex justify-content-between">
+
+                <h4>
+                    Total
+                </h4>
+
+                <h4>
+                    @Model.Total.ToString("C")
+                </h4>
+
+            </div>
+
+        </section>
+
+
+        @* =========================================
+           SHIPPING INFORMATION
+           ========================================= *@
+
+        <section class="section--soft mb-3"
+                 style="padding:1.5rem;border-radius:8px">
+
+            <h3 class="mb-4">
+                Shipping Information
+            </h3>
+
+            <p class="mb-1">
+                <strong>
+                    @Model.FirstName @Model.LastName
+                </strong>
+            </p>
+
+            <p class="mb-1">
+                @Model.Address
+            </p>
+
+            <p class="mb-1">
+                @Model.City, @Model.State @Model.ZipCode
+            </p>
+
+            <p class="mb-1">
+                @Model.Phone
+            </p>
+
+            <p class="mb-0">
+                @Model.Email
+            </p>
+
+        </section>
+
+
+        @* =========================================
+           NAVIGATION
+           ========================================= *@
+
+        <div class="mt-4">
+
+            <a asp-controller="Member"
+               asp-action="Orders"
+               class="btn btn-dark">
+
+                BACK TO MY ORDERS
+
+            </a>
+
+            <a asp-controller="Shop"
+               asp-action="Index"
+               class="btn btn-outline-dark ms-2">
+
+                CONTINUE SHOPPING
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

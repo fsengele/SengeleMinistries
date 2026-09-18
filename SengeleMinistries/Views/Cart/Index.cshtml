@@ -1,0 +1,203 @@
+﻿@model SengeleMinistries.Models.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="container py-5 mt-5">
+
+    <div class="mb-4">
+        <p class="text-uppercase small mb-1">
+            Sengele Ministries Shop
+        </p>
+
+        <h1>Shopping Cart</h1>
+
+        <p class="text-muted">
+            Review your items before checkout.
+        </p>
+    </div>
+
+    @if (TempData["CartMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["CartMessage"]
+        </div>
+    }
+
+    @if (TempData["CartError"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["CartError"]
+        </div>
+    }
+
+    @if (Model.Items.Count == 0)
+    {
+        <div class="border rounded p-5 text-center">
+
+            <h3>Your cart is empty</h3>
+
+            <p class="text-muted">
+                Explore our books, teachings,
+                event collections and apparel.
+            </p>
+
+            <a asp-controller="Shop"
+               asp-action="Index"
+               class="btn btn-dark">
+                CONTINUE SHOPPING
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    @item.Title
+                                </strong>
+                            </td>
+
+                            <td>
+                                $@item.Price.ToString("0.00")
+                            </td>
+
+                            <td>
+
+                                <form asp-controller="Cart"
+                                      asp-action="UpdateQuantity"
+                                      method="post"
+                                      class="d-flex align-items-center gap-2">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="productId"
+                                           value="@item.ProductId" />
+
+                                    <input type="number"
+                                           name="quantity"
+                                           value="@item.Quantity"
+                                           min="0"
+                                           class="form-control"
+                                           style="width:80px;" />
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-dark">
+                                        UPDATE
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                            <td>
+                                <strong>
+                                    $@item.Total.ToString("0.00")
+                                </strong>
+                            </td>
+
+                            <td class="text-end">
+
+                                <form asp-controller="Cart"
+                                      asp-action="Remove"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="productId"
+                                           value="@item.ProductId" />
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger">
+                                        REMOVE
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="row mt-5">
+
+            <div class="col-md-6">
+
+                <a asp-controller="Shop"
+                   asp-action="Index"
+                   class="btn btn-outline-dark">
+                    CONTINUE SHOPPING
+                </a>
+
+                <form asp-controller="Cart"
+                      asp-action="Clear"
+                      method="post"
+                      class="d-inline-block ms-2">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="btn btn-outline-danger">
+                        CLEAR CART
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="col-md-6 text-md-end">
+
+                <p class="text-muted mb-1">
+                    @Model.TotalItems item(s)
+                </p>
+
+                <h3>
+                    Subtotal:
+                    $@Model.Subtotal.ToString("0.00")
+                </h3>
+
+                <a asp-controller="Checkout"
+                   asp-action="Index"
+                   class="btn btn-dark btn-lg mt-3">
+                    CHECKOUT
+                </a>
+
+                <p class="small text-muted mt-2">
+                    Continue to shipping and order confirmation.
+                </p>
+
+            </div>
+
+        </div>
+    }
+
+</div>

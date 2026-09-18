@@ -1,0 +1,228 @@
+﻿@model SengeleMinistries.Models.Member
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="section">
+
+    <div class="container-wide"
+         style="max-width:900px;margin:0 auto">
+
+        <!-- =========================================
+             PAGE HEADER
+             ========================================= -->
+
+        <div style="margin-bottom:2rem">
+
+            <p class="muted"
+               style="font-size:.75rem;
+                letter-spacing:.14em;
+                font-weight:700">
+                SENGELE MINISTRIES
+            </p>
+
+            <h1 class="lead-heading">
+                My Profile
+            </h1>
+
+            <p class="muted">
+                View your personal information.
+            </p>
+
+        </div>
+
+
+        <!-- =========================================
+             PROFILE CARD
+             ========================================= -->
+
+        <section class="section--white"
+                 style="padding:2rem;
+            border-radius:8px">
+
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:1.5rem;
+                margin-bottom:2rem">
+
+                <!-- MEMBER PHOTO PROFIL-->
+                @if (!string.IsNullOrWhiteSpace(Model.ProfileImageUrl))
+                {
+                    <img src="@Model.ProfileImageUrl"
+                         alt="@Model.FirstName @Model.LastName"
+                         style="
+                    width:90px;
+                    height:90px;
+                    border-radius:50%;
+                    object-fit:cover;
+                    border:3px solid #66725f;" />
+                }
+                else
+                {
+                    <div style="
+                        width:90px;
+                        height:90px;
+                        border-radius:50%;
+                        background:#66725f;
+                        color:white;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-size:2rem;
+                        font-weight:700">
+
+                        @Model.FirstName.Substring(0, 1).ToUpper()
+                        @Model.LastName.Substring(0, 1).ToUpper()
+
+                    </div>
+                }
+
+                <div>
+
+                    <h2 style="margin-bottom:.3rem">
+                        @Model.FirstName @Model.LastName
+                    </h2>
+
+                    <p class="muted"
+                       style="margin-bottom:.2rem">
+                        @Model.Email
+                    </p>
+
+                    <p style="
+                        font-size:.75rem;
+                        letter-spacing:.1em;
+                        font-weight:700;
+                        color:#66725f;
+                        margin:0">
+
+                        MEMBER
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <hr />
+
+
+            <!-- =========================================
+                 PERSONAL INFORMATION
+                 ========================================= -->
+
+            <div style="margin-top:2rem">
+
+                <h4>
+                    PERSONAL INFORMATION
+                </h4>
+
+                <p class="muted">
+                    Your current account information.
+                </p>
+
+
+                <div style="
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:1.5rem;
+                    margin-top:2rem">
+
+
+                    <div>
+
+                        <p class="muted"
+                           style="font-size:.75rem;
+                            margin-bottom:.3rem">
+                            FIRST NAME
+                        </p>
+
+                        <strong>
+                            @Model.FirstName
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="muted"
+                           style="font-size:.75rem;
+                            margin-bottom:.3rem">
+                            LAST NAME
+                        </p>
+
+                        <strong>
+                            @Model.LastName
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="muted"
+                           style="font-size:.75rem;
+                            margin-bottom:.3rem">
+                            EMAIL
+                        </p>
+
+                        <strong>
+                            @Model.Email
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="muted"
+                           style="font-size:.75rem;
+                            margin-bottom:.3rem">
+                            MEMBER SINCE
+                        </p>
+
+                        <strong>
+                            @Model.CreatedAt.ToLocalTime().ToString("MMMM dd, yyyy")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 ACTIONS
+                 ========================================= -->
+
+            <div style="
+                margin-top:2.5rem;
+                padding-top:1.5rem;
+                border-top:1px solid #ddd;
+                display:flex;
+                gap:1rem;
+                flex-wrap:wrap;">
+
+                <a asp-controller="Member"
+                   asp-action="EditProfile"
+                   class="btn btn-dark">
+                    Edit My Profile
+                </a>
+
+                <a asp-controller="Member"
+                   asp-action="Dashboard"
+                   class="btn btn-outline-dark">
+                    ← Back to My Account
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>

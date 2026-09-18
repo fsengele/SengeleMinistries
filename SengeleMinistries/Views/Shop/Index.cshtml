@@ -1,49 +1,795 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+
 @model IEnumerable<SengeleMinistries.Models.Product>
+
 @{
-	ViewData["Title"] = "Shop";
+    ViewData["Title"] = Localizer["Shop"];
 }
 
-<section class="section section--soft shop-hero">
-	<div class="container-wide text-center">
-		<h1 class="hero-heading">SHOP</h1>
-		<p class="muted">Discover resources and items to support the ministry and your spiritual growth.</p>
-	</div>
+@* =========================================================
+   SHOP HERO
+   ========================================================= *@
+
+<section class="shop-page-hero">
+
+    <div class="container-wide text-center">
+
+        <p class="shop-eyebrow">
+            SENGELE MINISTRIES
+        </p>
+
+        <h1>
+            @Localizer["Shop"]
+        </h1>
+
+        <p class="shop-hero-text">
+            @Localizer["ShopHeroText"]
+        </p>
+
+    </div>
+
 </section>
 
-<main>
-	<section class="section section--white">
-		<div class="container-wide">
-			<div class="shop-categories mb-4 text-center">
-				<a class="btn btn-outline-cta me-2" asp-controller="Shop" asp-action="Category" asp-route-category="Books">Books &amp; Bibles</a>
-				<a class="btn btn-outline-cta me-2" asp-controller="Shop" asp-action="Category" asp-route-category="Teachings">Teachings &amp; Resources</a>
-				<a class="btn btn-outline-cta me-2" asp-controller="Shop" asp-action="Category" asp-route-category="EventCollections">Event Collections</a>
-				<a class="btn btn-outline-cta" asp-controller="Shop" asp-action="Category" asp-route-category="Apparel">Apparel</a>
-			</div>
 
-			<div class="product-grid">
-				@if (Model != null && Model.Any())
-				{
-					<div class="grid">
-						@foreach (var p in Model)
-						{
-							<article class="product-card">
-								<a asp-controller="Shop" asp-action="Details" asp-route-id="@p.ProductId">
-									<div class="product-image" style="background-image:url('@(p.ImageUrl ?? "/images/placeholder-product.png")')"></div>
-									<h4 class="product-title">@p.Title</h4>
-								</a>
-								<p class="muted small">@p.Category</p>
-								<p class="product-price">@String.Format("{0:C}", p.Price)</p>
-							</article>
-						}
-					</div>
-				}
-				else
-				{
-					<div class="empty-state">
-						<p class="muted">There are no published products available right now. Please check back later.</p>
-					</div>
-				}
-			</div>
-		</div>
-	</section>
-</main>
+@* =========================================================
+   SHOP CONTENT
+   ========================================================= *@
+
+<section class="shop-page">
+
+    <div class="container-wide">
+
+
+        @* =====================================================
+           CATEGORY NAVIGATION
+           ===================================================== *@
+
+        <div class="shop-category-header">
+
+            <div>
+                <p class="shop-small-title">
+                    @Localizer["ExploreCollection"]
+                </p>
+
+                <h2>
+                    @Localizer["ShopOurResources"]
+                </h2>
+            </div>
+
+            <p class="shop-product-count">
+                @(Model?.Count() ?? 0) @Localizer["Products"]
+            </p>
+
+        </div>
+
+
+        <div class="shop-category-buttons">
+
+            <a asp-controller="Shop"
+               asp-action="Index"
+               class="shop-category-btn active">
+
+                @Localizer["AllProducts"]
+
+            </a>
+
+            <a asp-controller="Shop"
+               asp-action="Category"
+               asp-route-category="Books"
+               class="shop-category-btn">
+
+                @Localizer["BooksAndBibles"]
+
+            </a>
+
+            <a asp-controller="Shop"
+               asp-action="Category"
+               asp-route-category="Teachings"
+               class="shop-category-btn">
+
+                @Localizer["TeachingsAndResources"]
+
+            </a>
+
+            <a asp-controller="Shop"
+               asp-action="Category"
+               asp-route-category="EventCollections"
+               class="shop-category-btn">
+
+                @Localizer["EventCollections"]
+
+            </a>
+
+            <a asp-controller="Shop"
+               asp-action="Category"
+               asp-route-category="Apparel"
+               class="shop-category-btn">
+
+                @Localizer["Apparel"]
+
+            </a>
+
+        </div>
+
+
+        @* =====================================================
+           PRODUCTS
+           ===================================================== *@
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="shop-product-grid">
+
+                @foreach (var p in Model)
+                {
+                    <article class="shop-product-card">
+
+
+                        @* =========================================
+                           PRODUCT IMAGE
+                           ========================================= *@
+
+                        <a asp-controller="Shop"
+                           asp-action="Details"
+                           asp-route-id="@p.ProductId"
+                           class="shop-product-image-link">
+
+                            <div class="shop-product-image-wrapper">
+
+                                @if (!string.IsNullOrWhiteSpace(p.ImageUrl))
+                                {
+                                    <img src="@p.ImageUrl"
+                                         alt="@p.Title"
+                                         class="shop-product-image" />
+                                }
+                                else
+                                {
+                                    <div class="shop-product-placeholder">
+
+                                        <span class="placeholder-mark">
+                                            SM
+                                        </span>
+
+                                        <span>
+                                            Sengele Ministries
+                                        </span>
+
+                                    </div>
+                                }
+
+
+                                @* STOCK BADGE *@
+
+                                @if (p.StockQuantity.HasValue &&
+                                     p.StockQuantity.Value <= 0)
+                                {
+                                    <span class="shop-stock-badge sold-out">
+                                        @Localizer["SoldOut"]
+                                    </span>
+                                }
+                                else if (p.StockQuantity.HasValue &&
+                                         p.StockQuantity.Value <= 5)
+                                {
+                                    <span class="shop-stock-badge low-stock">
+                                        @Localizer["OnlyLeft", p.StockQuantity.Value]
+                                    </span>
+                                }
+
+                            </div>
+
+                        </a>
+
+
+                        @* =========================================
+                           PRODUCT INFORMATION
+                           ========================================= *@
+
+                        <div class="shop-product-content">
+
+                            <p class="shop-product-category">
+                                @FormatCategory(p.Category)
+                            </p>
+
+
+                            <h3 class="shop-product-title">
+
+                                <a asp-controller="Shop"
+                                   asp-action="Details"
+                                   asp-route-id="@p.ProductId">
+
+                                    @p.Title
+
+                                </a>
+
+                            </h3>
+
+
+                            @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
+                            {
+                                <p class="shop-product-description">
+                                    @p.ShortDescription
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="shop-product-description">
+                                    @Localizer["DiscoverResource"]
+                                </p>
+                            }
+
+
+                            <div class="shop-product-price-row">
+
+                                <span class="shop-product-price">
+                                    @p.Price.ToString("C")
+                                </span>
+
+
+                                @if (!p.StockQuantity.HasValue)
+                                {
+                                    <span class="shop-product-availability">
+                                        @Localizer["Available"]
+                                    </span>
+                                }
+                                else if (p.StockQuantity.Value > 0)
+                                {
+                                    <span class="shop-product-availability">
+                                        @Localizer["InStock"]
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="shop-product-unavailable">
+                                        @Localizer["OutOfStock"]
+                                    </span>
+                                }
+
+                            </div>
+
+
+                            @* =========================================
+                               ACTIONS
+                               ========================================= *@
+
+                            <div class="shop-product-actions">
+
+                                <a asp-controller="Shop"
+                                   asp-action="Details"
+                                   asp-route-id="@p.ProductId"
+                                   class="shop-view-btn">
+
+                                    @Localizer["ViewProduct"]
+
+                                </a>
+
+
+                                @if (!p.StockQuantity.HasValue ||
+                                     p.StockQuantity.Value > 0)
+                                {
+                                    <form asp-controller="Cart"
+                                          asp-action="AddToCart"
+                                          method="post"
+                                          class="shop-cart-form">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="productId"
+                                               value="@p.ProductId" />
+
+                                        <input type="hidden"
+                                               name="quantity"
+                                               value="1" />
+
+                                        <button type="submit"
+                                                class="shop-add-btn">
+
+                                            @Localizer["AddToCart"]
+
+                                        </button>
+
+                                    </form>
+                                }
+                                else
+                                {
+                                    <button type="button"
+                                            class="shop-add-btn disabled"
+                                            disabled>
+
+                                        @Localizer["SoldOut"]
+
+                                    </button>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </article>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="shop-empty-state">
+
+                <div class="shop-empty-mark">
+                    SM
+                </div>
+
+                <h2>
+                    @Localizer["ShopBeingPrepared"]
+                </h2>
+
+                <p>
+                    @Localizer["NoProductsAvailable"]
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</section>
+
+
+@functions {
+
+    public string FormatCategory(string category)
+    {
+        return category switch
+        {
+            "Books" =>
+                Localizer["BooksAndBibles"].Value,
+
+            "Teachings" =>
+                Localizer["TeachingsAndResources"].Value,
+
+            "EventCollections" =>
+                Localizer["EventCollections"].Value,
+
+            "Apparel" =>
+                Localizer["Apparel"].Value,
+
+            _ => category
+        };
+    }
+
+}
+
+
+<style>
+
+    /* =========================================================
+           SHOP HERO
+           ========================================================= */
+
+    .shop-page-hero {
+        background: #f1eee6;
+        padding: 9rem 1.5rem 4.5rem;
+        border-bottom: 1px solid #e5dfd2;
+    }
+
+    .shop-eyebrow {
+        color: #a7832f;
+        font-size: .76rem;
+        letter-spacing: .2em;
+        font-weight: 700;
+        margin-bottom: .8rem;
+    }
+
+    .shop-page-hero h1 {
+        color: #171717;
+        font-size: clamp(3rem, 7vw, 5.5rem);
+        font-weight: 800;
+        letter-spacing: -.03em;
+        line-height: .95;
+        margin-bottom: 1.2rem;
+    }
+
+    .shop-hero-text {
+        color: #6f6b63;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+
+    /* =========================================================
+           SHOP
+           ========================================================= */
+
+    .shop-page {
+        background: #faf9f6;
+        padding: 4.5rem 1.5rem 6rem;
+    }
+
+    .shop-category-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .shop-small-title {
+        color: #a7832f;
+        letter-spacing: .16em;
+        font-size: .72rem;
+        font-weight: 700;
+        margin-bottom: .5rem;
+    }
+
+    .shop-category-header h2 {
+        color: #171717;
+        font-size: 2rem;
+        font-weight: 750;
+        margin: 0;
+    }
+
+    .shop-product-count {
+        color: #89847a;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+           CATEGORY BUTTONS
+           ========================================================= */
+
+    .shop-category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .65rem;
+        padding-bottom: 2rem;
+        margin-bottom: 2.5rem;
+        border-bottom: 1px solid #e4dfd5;
+    }
+
+    .shop-category-btn {
+        display: inline-block;
+        text-decoration: none;
+        color: #272727;
+        background: transparent;
+        border: 1px solid #d7d0c3;
+        padding: .72rem 1.1rem;
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: .04em;
+        transition: all .2s ease;
+    }
+
+        .shop-category-btn:hover,
+        .shop-category-btn.active {
+            color: #fff;
+            background: #191919;
+            border-color: #191919;
+        }
+
+
+    /* =========================================================
+           PRODUCT GRID
+           ========================================================= */
+
+    .shop-product-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 2rem;
+    }
+
+
+    /* =========================================================
+           PRODUCT CARD
+           ========================================================= */
+
+    .shop-product-card {
+        background: #fff;
+        border: 1px solid #e5e0d6;
+        overflow: hidden;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+        .shop-product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .08);
+        }
+
+
+    /* =========================================================
+           IMAGE
+           ========================================================= */
+
+    .shop-product-image-link {
+        display: block;
+        text-decoration: none;
+    }
+
+    .shop-product-image-wrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: #f1efe9;
+        overflow: hidden;
+    }
+
+    .shop-product-image {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: contain;
+        padding: 1rem;
+        transition: transform .35s ease;
+    }
+
+    .shop-product-card:hover .shop-product-image {
+        transform: scale(1.035);
+    }
+
+
+    /* =========================================================
+           PLACEHOLDER
+           ========================================================= */
+
+    .shop-product-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: .7rem;
+        color: #777167;
+        background: linear-gradient(145deg, #f5f3ed, #ebe7dd);
+        text-transform: uppercase;
+        letter-spacing: .12em;
+        font-size: .7rem;
+    }
+
+    .placeholder-mark {
+        width: 65px;
+        height: 65px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #191919;
+        color: #d5b15b;
+        font-size: 1.2rem;
+        font-weight: 800;
+        letter-spacing: .05em;
+    }
+
+
+    /* =========================================================
+           STOCK BADGES
+           ========================================================= */
+
+    .shop-stock-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        padding: .45rem .65rem;
+        font-size: .66rem;
+        font-weight: 800;
+        letter-spacing: .08em;
+    }
+
+        .shop-stock-badge.low-stock {
+            background: #d0aa50;
+            color: #171717;
+        }
+
+        .shop-stock-badge.sold-out {
+            background: #191919;
+            color: #fff;
+        }
+
+
+    /* =========================================================
+           PRODUCT CONTENT
+           ========================================================= */
+
+    .shop-product-content {
+        padding: 1.5rem;
+    }
+
+    .shop-product-category {
+        color: #a7832f;
+        text-transform: uppercase;
+        font-size: .68rem;
+        font-weight: 800;
+        letter-spacing: .13em;
+        margin-bottom: .65rem;
+    }
+
+    .shop-product-title {
+        font-size: 1.2rem;
+        line-height: 1.35;
+        margin-bottom: .7rem;
+    }
+
+        .shop-product-title a {
+            color: #191919;
+            text-decoration: none;
+        }
+
+            .shop-product-title a:hover {
+                color: #a7832f;
+            }
+
+    .shop-product-description {
+        color: #777269;
+        line-height: 1.6;
+        font-size: .9rem;
+        min-height: 45px;
+        margin-bottom: 1.3rem;
+    }
+
+
+    /* =========================================================
+           PRICE
+           ========================================================= */
+
+    .shop-product-price-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eeeae2;
+        margin-bottom: 1.25rem;
+    }
+
+    .shop-product-price {
+        color: #171717;
+        font-size: 1.3rem;
+        font-weight: 800;
+    }
+
+    .shop-product-availability {
+        color: #52735b;
+        font-size: .72rem;
+        font-weight: 700;
+    }
+
+        .shop-product-availability::before {
+            content: "✓ ";
+        }
+
+    .shop-product-unavailable {
+        color: #a04a4a;
+        font-size: .72rem;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+           ACTION BUTTONS
+           ========================================================= */
+
+    .shop-product-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .6rem;
+    }
+
+    .shop-cart-form {
+        margin: 0;
+    }
+
+    .shop-view-btn,
+    .shop-add-btn {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        text-decoration: none;
+        font-size: .7rem;
+        font-weight: 800;
+        letter-spacing: .055em;
+        padding: .7rem .5rem;
+        transition: all .2s ease;
+    }
+
+    .shop-view-btn {
+        color: #191919;
+        background: #fff;
+        border: 1px solid #191919;
+    }
+
+        .shop-view-btn:hover {
+            background: #f1eee7;
+            color: #191919;
+        }
+
+    .shop-add-btn {
+        color: #fff;
+        background: #191919;
+        border: 1px solid #191919;
+    }
+
+        .shop-add-btn:hover {
+            color: #191919;
+            background: #d0aa50;
+            border-color: #d0aa50;
+        }
+
+        .shop-add-btn.disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+
+    /* =========================================================
+           EMPTY SHOP
+           ========================================================= */
+
+    .shop-empty-state {
+        background: #fff;
+        border: 1px solid #e4ded2;
+        padding: 5rem 2rem;
+        text-align: center;
+    }
+
+    .shop-empty-mark {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #191919;
+        color: #d0aa50;
+        font-weight: 800;
+    }
+
+    .shop-empty-state h2 {
+        color: #171717;
+        margin-bottom: .8rem;
+    }
+
+    .shop-empty-state p {
+        color: #777269;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+
+    /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+    @@media (max-width: 1000px) {
+
+        .shop-product-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+
+    @@media (max-width: 700px) {
+
+        .shop-page-hero {
+            padding-top: 7rem;
+        }
+
+        .shop-category-header {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: .5rem;
+        }
+
+        .shop-product-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .shop-product-actions {
+            grid-template-columns: 1fr;
+        }
+    }
+
+</style>
