@@ -2,15 +2,13 @@
     ViewData["Title"] = "Give";
 }
 
-<section class="giving-page">
+<div class="giving-page">
 
-    <div class="giving-container">
-
-        @* =====================================================
-           HEADER
-           ===================================================== *@
-
-        <div class="giving-header">
+    <!-- ==========================================
+         GIVE PAGE HEADER
+         ========================================== -->
+    <section class="giving-hero">
+        <div class="giving-container giving-hero-inner">
 
             <p class="giving-eyebrow">
                 SENGELE MINISTRIES
@@ -24,73 +22,76 @@
                 “God loves a cheerful giver.”
             </p>
 
-            <p class="giving-reference">
+            <p class="giving-scripture-reference">
                 2 Corinthians 9:7
             </p>
 
             <p class="giving-intro">
-                Your generosity helps Sengele Ministries continue
-                sharing the message of hope, prayer and the Word.
+                Your generosity helps Sengele Ministries continue sharing
+                the message of hope, prayer and the Word.
                 Give freely, securely and with purpose.
             </p>
 
         </div>
+    </section>
 
 
-        @* =====================================================
-           STEP 1 - CHOOSE AMOUNT
-           ===================================================== *@
+    <div class="giving-container">
 
-        <div class="giving-card">
+        <!-- ==========================================
+             01 - CHOOSE YOUR GIFT
+             ========================================== -->
+        <section class="giving-section giving-amount-section">
 
             <div class="giving-step">
-                <span>01</span>
-                CHOOSE YOUR GIFT
+                <span class="giving-step-number">01</span>
+                <span class="giving-step-title">
+                    CHOOSE YOUR GIFT
+                </span>
             </div>
 
-            <h2>
-                Select an amount
-            </h2>
+            <h2>Select an amount</h2>
 
-            <p class="giving-description">
+            <p class="giving-section-description">
                 Choose an amount below or enter your own gift.
             </p>
 
 
-            <div class="giving-amount-grid">
+            <!-- PRESET AMOUNTS -->
+            <div class="giving-amounts">
 
                 <button type="button"
-                        class="giving-amount-btn"
+                        class="giving-amount"
                         data-amount="20">
                     $20
                 </button>
 
                 <button type="button"
-                        class="giving-amount-btn"
+                        class="giving-amount"
                         data-amount="50">
                     $50
                 </button>
 
                 <button type="button"
-                        class="giving-amount-btn"
+                        class="giving-amount"
                         data-amount="100">
                     $100
                 </button>
 
                 <button type="button"
-                        class="giving-amount-btn"
+                        class="giving-amount active"
                         data-amount="250">
                     $250
                 </button>
 
                 <button type="button"
-                        class="giving-amount-btn"
+                        class="giving-amount"
                         data-amount="500">
                     $500
                 </button>
 
                 <button type="button"
-                        class="giving-amount-btn"
+                        class="giving-amount"
                         data-amount="1000">
                     $1,000
                 </button>
@@ -98,161 +99,146 @@
             </div>
 
 
-            <div class="giving-other">
+            <!-- OTHER AMOUNT -->
+            <div class="giving-other-amount">
 
-                <label for="customAmount">
+                <label for="customGivingAmount">
                     Other Amount
                 </label>
 
-                <div class="giving-custom-amount">
-
+                <div class="giving-custom-input">
                     <span>$</span>
 
-                    <input id="customAmount"
-                           type="number"
+                    <input type="number"
+                           id="customGivingAmount"
                            min="1"
                            step="1"
                            placeholder="Enter amount" />
-
                 </div>
 
             </div>
 
 
-            <div class="giving-selected">
+            <!-- SELECTED GIFT -->
+            <div class="giving-selected-total">
+                <span>Your Gift:</span>
 
-                Your Gift:
-
-                <strong id="selectedGift">
-                    Select an amount
+                <strong id="selectedGivingAmount">
+                    $250
                 </strong>
-
             </div>
 
-        </div>
+        </section>
 
 
-        @* =====================================================
-           STEP 2 - PAYMENT METHOD
-           ===================================================== *@
-
-        <div class="giving-card">
+        <!-- ==========================================
+             02 - CHOOSE HOW TO GIVE
+             ========================================== -->
+        <section class="giving-section giving-method-section">
 
             <div class="giving-step">
-                <span>02</span>
-                CHOOSE HOW TO GIVE
+                <span class="giving-step-number">02</span>
+
+                <span class="giving-step-title">
+                    CHOOSE HOW TO GIVE
+                </span>
             </div>
 
-            <h2>
-                Give securely
-            </h2>
+            <h2>Give securely</h2>
 
-            <p class="giving-description">
-                Choose the giving method that is most convenient
-                for you.
+            <p class="giving-section-description">
+                Choose the giving method that is most convenient for you.
             </p>
 
 
-            <div class="giving-methods">
+            <div class="giving-method-grid">
 
+                <!-- ==================================
+                     ZELLE
+                     ================================== -->
+                <article class="giving-method-card">
 
-                @* ==========================
-                   ZELLE
-                   ========================== *@
-
-                <div class="giving-method">
-
-                    <div class="giving-method-name">
+                    <p class="giving-method-label">
                         ZELLE
-                    </div>
+                    </p>
 
                     <h3>
                         Give with Zelle
                     </h3>
 
-                    <p>
+                    <p class="giving-method-description">
                         Send your gift directly using the official
                         Zelle information for Sengele Ministries.
                     </p>
 
                     <div class="giving-method-info">
-
                         <span>
                             Zelle Giving Information
                         </span>
 
                         <strong>
-                            Coming next
+                            francis.sengele@gmail.com
                         </strong>
-
                     </div>
 
-                    <button type="button"
-                            class="giving-method-btn"
-                            disabled>
-
+                    <a href="mailto:francis.sengele@gmail.com"
+                       class="giving-method-button giving-method-link">
                         GIVE WITH ZELLE
+                    </a>
 
-                    </button>
-
-                </div>
+                </article>
 
 
-                @* ==========================
-                   CASH APP
-                   ========================== *@
+                <!-- ==================================
+                     CASH APP
+                     ================================== -->
+                <article class="giving-method-card">
 
-                <div class="giving-method">
-
-                    <div class="giving-method-name">
+                    <p class="giving-method-label">
                         CASH APP
-                    </div>
+                    </p>
 
                     <h3>
                         Give with Cash App
                     </h3>
 
-                    <p>
+                    <p class="giving-method-description">
                         Give quickly through the official
                         Sengele Ministries Cash App account.
                     </p>
 
                     <div class="giving-method-info">
-
                         <span>
                             Cash App Giving Information
                         </span>
 
                         <strong>
-                            Coming next
+                            $francissengel
                         </strong>
-
                     </div>
 
-                    <button type="button"
-                            class="giving-method-btn"
-                            disabled>
-
+                    <a href="https://cash.app/$francissengel"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="giving-method-button giving-method-link">
                         GIVE WITH CASH APP
+                    </a>
 
-                    </button>
-
-                </div>
+                </article>
 
             </div>
 
-        </div>
+        </section>
 
 
-        @* =====================================================
-           PRIVACY / SECURITY
-           ===================================================== *@
+        <!-- ==========================================
+             GIVE PRIVATELY
+             ========================================== -->
+        <section class="giving-privacy">
 
-        <div class="giving-security">
-
-            <h3>
+            <h2>
                 Give Privately. Give Freely.
-            </h3>
+            </h2>
 
             <p>
                 Your gift is an act of worship between you and God.
@@ -264,409 +250,111 @@
                 know what your right hand is doing.”
             </blockquote>
 
-            <span>
+            <p class="giving-privacy-reference">
                 Matthew 6:3
-            </span>
+            </p>
 
-        </div>
+        </section>
 
 
-        @* =====================================================
-           SECURITY NOTICE
-           ===================================================== *@
-
-        <div class="giving-security-note">
+        <!-- ==========================================
+             SECURITY MESSAGE
+             ========================================== -->
+        <section class="giving-security">
 
             <strong>
                 Your security matters.
             </strong>
 
             <p>
-                Sengele Ministries will never ask for your online
-                banking password, PIN, routing number or bank account
-                number through this page.
+                Sengele Ministries will never ask for your online banking
+                password, PIN, routing number or bank account number
+                through this page.
             </p>
 
-        </div>
+        </section>
 
     </div>
 
-</section>
-
-
-<style>
-
-    .giving-page {
-        background: #f7f5ef;
-        padding: 9rem 1.5rem 6rem;
-        min-height: 100vh;
-    }
-
-    .giving-container {
-        max-width: 1050px;
-        margin: 0 auto;
-    }
-
-    .giving-header {
-        max-width: 760px;
-        margin: 0 auto 3.5rem;
-        text-align: center;
-    }
-
-    .giving-eyebrow {
-        font-size: .78rem;
-        font-weight: 700;
-        letter-spacing: .18em;
-        color: #a68128;
-        margin-bottom: 1rem;
-    }
-
-    .giving-header h1 {
-        font-size: clamp(2.7rem, 6vw, 4.8rem);
-        line-height: 1;
-        font-weight: 800;
-        margin-bottom: 1.5rem;
-        color: #171717;
-    }
-
-    .giving-scripture {
-        font-family: Georgia, serif;
-        font-size: 1.4rem;
-        font-style: italic;
-        margin-bottom: .3rem;
-        color: #363636;
-    }
-
-    .giving-reference {
-        color: #a68128;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-    }
-
-    .giving-intro {
-        max-width: 680px;
-        margin: 0 auto;
-        color: #666;
-        line-height: 1.8;
-        font-size: 1.05rem;
-    }
-
-
-    .giving-card {
-        background: #fff;
-        border: 1px solid #e6e1d5;
-        padding: 2.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .giving-step {
-        display: flex;
-        align-items: center;
-        gap: .7rem;
-        color: #a68128;
-        font-size: .76rem;
-        letter-spacing: .13em;
-        font-weight: 700;
-        margin-bottom: .8rem;
-    }
-
-        .giving-step span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            border: 1px solid #a68128;
-            border-radius: 50%;
-        }
-
-    .giving-card h2 {
-        color: #171717;
-        font-weight: 750;
-        margin-bottom: .5rem;
-    }
-
-    .giving-description {
-        color: #777;
-        margin-bottom: 2rem;
-    }
-
-
-    .giving-amount-grid {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: .75rem;
-    }
-
-    .giving-amount-btn {
-        background: #fff;
-        color: #171717;
-        border: 1px solid #d7d1c5;
-        padding: 1rem .5rem;
-        font-size: 1rem;
-        font-weight: 700;
-        transition: .2s ease;
-    }
-
-        .giving-amount-btn:hover,
-        .giving-amount-btn.active {
-            background: #171717;
-            color: #fff;
-            border-color: #171717;
-        }
-
-
-    .giving-other {
-        margin-top: 1.5rem;
-    }
-
-        .giving-other label {
-            display: block;
-            font-weight: 700;
-            margin-bottom: .5rem;
-        }
-
-    .giving-custom-amount {
-        display: flex;
-        align-items: center;
-        border: 1px solid #d7d1c5;
-        background: #fff;
-        max-width: 350px;
-    }
-
-        .giving-custom-amount span {
-            padding-left: 1rem;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .giving-custom-amount input {
-            width: 100%;
-            border: 0;
-            outline: none;
-            padding: .9rem;
-            background: transparent;
-        }
-
-    .giving-selected {
-        margin-top: 1.5rem;
-        padding-top: 1.25rem;
-        border-top: 1px solid #eee9df;
-        color: #777;
-    }
-
-        .giving-selected strong {
-            color: #171717;
-            margin-left: .3rem;
-        }
-
-
-    .giving-methods {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.25rem;
-    }
-
-    .giving-method {
-        border: 1px solid #e3ddd1;
-        padding: 2rem;
-        background: #faf9f6;
-    }
-
-    .giving-method-name {
-        color: #a68128;
-        letter-spacing: .15em;
-        font-size: .72rem;
-        font-weight: 800;
-        margin-bottom: 1rem;
-    }
-
-    .giving-method h3 {
-        color: #171717;
-        margin-bottom: .8rem;
-    }
-
-    .giving-method p {
-        color: #777;
-        line-height: 1.65;
-        min-height: 55px;
-    }
-
-    .giving-method-info {
-        background: #fff;
-        border: 1px solid #e5e0d5;
-        padding: 1rem;
-        margin: 1.5rem 0;
-    }
-
-        .giving-method-info span {
-            display: block;
-            color: #777;
-            font-size: .8rem;
-            margin-bottom: .3rem;
-        }
-
-        .giving-method-info strong {
-            color: #171717;
-        }
-
-    .giving-method-btn {
-        width: 100%;
-        padding: .9rem 1rem;
-        border: 0;
-        background: #171717;
-        color: #fff;
-        font-weight: 700;
-        letter-spacing: .05em;
-    }
-
-        .giving-method-btn:disabled {
-            opacity: .45;
-            cursor: not-allowed;
-        }
-
-
-    .giving-security {
-        background: #171717;
-        color: #fff;
-        text-align: center;
-        padding: 3.5rem 2rem;
-        margin-top: 2rem;
-    }
-
-        .giving-security h3 {
-            color: #d2ae54;
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .giving-security p {
-            max-width: 650px;
-            margin: 0 auto 1.5rem;
-            color: #ddd;
-        }
-
-        .giving-security blockquote {
-            max-width: 680px;
-            margin: 0 auto .5rem;
-            font-family: Georgia, serif;
-            font-style: italic;
-            font-size: 1.1rem;
-            color: #fff;
-        }
-
-        .giving-security span {
-            color: #d2ae54;
-            font-size: .85rem;
-        }
-
-
-    .giving-security-note {
-        text-align: center;
-        max-width: 720px;
-        margin: 2rem auto 0;
-        color: #777;
-        font-size: .9rem;
-    }
-
-        .giving-security-note strong {
-            display: block;
-            color: #333;
-            margin-bottom: .4rem;
-        }
-
-
-    @@media (max-width: 800px) {
-
-        .giving-amount-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .giving-methods {
-            grid-template-columns: 1fr;
-        }
-    }
-
-
-    @@media (max-width: 480px) {
-
-        .giving-page {
-            padding: 7rem 1rem 4rem;
-        }
-
-        .giving-card {
-            padding: 1.5rem;
-        }
-
-        .giving-amount-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-</style>
-
-
-<script>
-
-    document.addEventListener("DOMContentLoaded", function () {
-
-        const amountButtons =
-            document.querySelectorAll(".giving-amount-btn");
-
-        const customAmount =
-            document.getElementById("customAmount");
-
-        const selectedGift =
-            document.getElementById("selectedGift");
-
-
-        amountButtons.forEach(function (button) {
-
-            button.addEventListener("click", function () {
-
-                amountButtons.forEach(function (btn) {
-                    btn.classList.remove("active");
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        // ==========================================
+        // GIVING AMOUNT SELECTION
+        // ==========================================
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const amountButtons =
+                document.querySelectorAll(".giving-amount");
+
+            const customAmount =
+                document.getElementById("customGivingAmount");
+
+            const selectedAmount =
+                document.getElementById("selectedGivingAmount");
+
+
+            // ======================================
+            // PRESET AMOUNT BUTTONS
+            // ======================================
+
+            amountButtons.forEach(function (button) {
+
+                button.addEventListener("click", function () {
+
+                    amountButtons.forEach(function (item) {
+                        item.classList.remove("active");
+                    });
+
+                    button.classList.add("active");
+
+                    const amount =
+                        Number(button.dataset.amount);
+
+                    selectedAmount.textContent =
+                        "$" + amount.toLocaleString();
+
+                    customAmount.value = "";
+
                 });
 
-                button.classList.add("active");
+            });
 
-                customAmount.value = "";
+
+            // ======================================
+            // CUSTOM GIVING AMOUNT
+            // ======================================
+
+            customAmount.addEventListener("input", function () {
+
+                amountButtons.forEach(function (item) {
+                    item.classList.remove("active");
+                });
 
                 const amount =
-                    button.getAttribute("data-amount");
+                    Number(customAmount.value);
 
-                selectedGift.textContent =
-                    "$" + Number(amount).toLocaleString();
+                if (amount > 0) {
+
+                    selectedAmount.textContent =
+                        "$" + amount.toLocaleString();
+
+                }
+                else {
+
+                    selectedAmount.textContent = "$0";
+
+                }
 
             });
 
         });
 
+    </script>
 
-        customAmount.addEventListener("input", function () {
-
-            amountButtons.forEach(function (btn) {
-                btn.classList.remove("active");
-            });
-
-            if (customAmount.value &&
-                Number(customAmount.value) > 0) {
-
-                selectedGift.textContent =
-                    "$" +
-                    Number(customAmount.value)
-                        .toLocaleString();
-
-            }
-            else {
-
-                selectedGift.textContent =
-                    "Select an amount";
-
-            }
-
-        });
-
-    });
-
-</script>
+}
