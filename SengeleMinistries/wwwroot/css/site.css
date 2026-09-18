@@ -3121,3 +3121,490 @@ img{max-width:100%;height:auto;display:block}
         padding: 90px 20px;
     }
 }
+/* =========================================================
+   SENGELE MINISTRIES
+   GIVING / DONATE PAGE
+   ========================================================= */
+
+.giving-page {
+    background: #f7f5ef;
+    color: #20211f;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.giving-container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   GIVE WITH PURPOSE - HEADER
+   ========================================================= */
+
+.giving-hero {
+    padding: 110px 0 70px;
+    background: #f7f5ef;
+    text-align: center;
+}
+
+.giving-hero-inner {
+    max-width: 900px;
+}
+
+.giving-eyebrow {
+    margin: 0 0 22px;
+    color: #9a762d;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.giving-hero h1 {
+    margin: 0;
+    color: #1c1d1b;
+    font-size: clamp(48px, 6vw, 76px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.giving-scripture {
+    margin: 28px 0 4px;
+    color: #44433f;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    font-style: italic;
+}
+
+.giving-scripture-reference {
+    margin: 0;
+    color: #a68128;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.giving-intro {
+    max-width: 760px;
+    margin: 34px auto 0;
+    color: #77756f;
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   GENERAL GIVING SECTIONS
+   ========================================================= */
+
+.giving-section {
+    margin-bottom: 28px;
+    padding: 48px;
+    background: #ffffff;
+    border: 1px solid #dedbd2;
+}
+
+.giving-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.giving-step-number {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #c7b88f;
+    border-radius: 50%;
+    color: #9a762d;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.giving-step-title {
+    color: #8d6d2d;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.giving-section h2 {
+    margin: 0 0 8px;
+    color: #20211f;
+    font-size: clamp(30px, 3vw, 42px);
+    line-height: 1.15;
+    font-weight: 700;
+}
+
+.giving-section-description {
+    margin: 0 0 34px;
+    color: #85827b;
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   01 - SELECT AN AMOUNT
+   ========================================================= */
+
+.giving-amounts {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 26px;
+}
+
+.giving-amount {
+    min-height: 64px;
+    padding: 12px 8px;
+    background: #ffffff;
+    border: 1px solid #d8d4ca;
+    color: #343532;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+
+    .giving-amount:hover {
+        border-color: #a68128;
+    }
+
+    .giving-amount.active {
+        background: #20211f;
+        border-color: #20211f;
+        color: #ffffff;
+    }
+
+.giving-other-amount {
+    width: 360px;
+    max-width: 100%;
+}
+
+    .giving-other-amount label {
+        display: block;
+        margin-bottom: 9px;
+        color: #555650;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+.giving-custom-input {
+    display: flex;
+    min-height: 58px;
+    align-items: center;
+    border: 1px solid #d8d4ca;
+    background: #ffffff;
+}
+
+    .giving-custom-input span {
+        padding-left: 18px;
+        color: #4c4d49;
+        font-size: 16px;
+    }
+
+    .giving-custom-input input {
+        width: 100%;
+        min-height: 56px;
+        padding: 0 16px 0 10px;
+        border: 0;
+        outline: none;
+        background: transparent;
+        color: #252623;
+        font-size: 16px;
+    }
+
+        .giving-custom-input input:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+.giving-selected-total {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid #e4e1da;
+    color: #88857e;
+    font-size: 15px;
+}
+
+    .giving-selected-total strong {
+        color: #30312e;
+    }
+
+
+/* =========================================================
+   02 - CHOOSE HOW TO GIVE
+   ========================================================= */
+
+.giving-method-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.giving-method-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 410px;
+    padding: 36px;
+    background: #ffffff;
+    border: 1px solid #d8d4ca;
+}
+
+.giving-method-label {
+    margin: 0 0 20px;
+    color: #9a762d;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.giving-method-card h3 {
+    margin: 0 0 14px;
+    color: #252623;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 500;
+}
+
+.giving-method-description {
+    min-height: 54px;
+    margin: 0 0 28px;
+    color: #77756f;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.giving-method-info {
+    margin-bottom: 18px;
+    padding: 20px;
+    border: 1px solid #ddd9cf;
+    background: #fbfaf7;
+}
+
+    .giving-method-info span {
+        display: block;
+        margin-bottom: 7px;
+        color: #8a877f;
+        font-size: 13px;
+    }
+
+    .giving-method-info strong {
+        display: block;
+        color: #30312e;
+        font-size: 16px;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+
+/* =========================================================
+   ACTIVE ZELLE + CASH APP BUTTONS
+   ========================================================= */
+
+.giving-method-button {
+    display: block;
+    width: 100%;
+    margin-top: auto;
+    padding: 18px 20px;
+    border: 0;
+    background: #20211f;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+    .giving-method-button:link,
+    .giving-method-button:visited {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .giving-method-button:hover {
+        background: #a68128;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+.giving-method-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   GIVE PRIVATELY. GIVE FREELY.
+   ========================================================= */
+
+.giving-privacy {
+    margin: 32px 0;
+    padding: 58px 70px;
+    background: #20211f;
+    color: #ffffff;
+    text-align: center;
+}
+
+    .giving-privacy h2 {
+        margin: 0 0 20px;
+        color: #d5a92f;
+        font-size: 31px;
+        font-weight: 700;
+    }
+
+    .giving-privacy > p:not(.giving-privacy-reference) {
+        max-width: 760px;
+        margin: 0 auto;
+        color: #ffffff;
+        font-size: 16px;
+        line-height: 1.7;
+    }
+
+    .giving-privacy blockquote {
+        max-width: 780px;
+        margin: 28px auto 16px;
+        color: #ffffff;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 21px;
+        font-style: italic;
+        font-weight: 600;
+        line-height: 1.55;
+    }
+
+.giving-privacy-reference {
+    margin: 0;
+    color: #d5a92f;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SECURITY MESSAGE
+   ========================================================= */
+
+.giving-security {
+    padding: 4px 20px 70px;
+    text-align: center;
+}
+
+    .giving-security strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #555650;
+        font-size: 15px;
+    }
+
+    .giving-security p {
+        max-width: 850px;
+        margin: 0 auto;
+        color: #8a877f;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .giving-hero {
+        padding: 80px 0 55px;
+    }
+
+    .giving-section {
+        padding: 36px;
+    }
+
+    .giving-amounts {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .giving-method-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .giving-method-card {
+        min-height: auto;
+    }
+
+    .giving-privacy {
+        padding: 50px 35px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+    .giving-container {
+        width: min(100% - 28px, 1180px);
+    }
+
+    .giving-hero {
+        padding: 65px 0 45px;
+    }
+
+        .giving-hero h1 {
+            font-size: 44px;
+            letter-spacing: -1px;
+        }
+
+    .giving-scripture {
+        font-size: 20px;
+    }
+
+    .giving-intro {
+        font-size: 15px;
+    }
+
+    .giving-section {
+        padding: 26px 20px;
+    }
+
+    .giving-amounts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .giving-amount {
+        min-height: 58px;
+    }
+
+    .giving-method-card {
+        padding: 25px 20px;
+    }
+
+        .giving-method-card h3 {
+            font-size: 26px;
+        }
+
+    .giving-privacy {
+        padding: 45px 22px;
+    }
+
+        .giving-privacy h2 {
+            font-size: 27px;
+        }
+
+        .giving-privacy blockquote {
+            font-size: 18px;
+        }
+}
