@@ -90,7 +90,7 @@ namespace SengeleMinistries.Controllers
         {
             if (!ModelState.IsValid)
                 return View(model);
-
+            
             var member = _db.Members?
                 .FirstOrDefault(m => m.Email == model.Email);
 
