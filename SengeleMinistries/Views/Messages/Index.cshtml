@@ -1,55 +1,570 @@
 @{
-	ViewData["Title"] = "Messages";
+    var currentCulture =
+        System.Globalization.CultureInfo
+            .CurrentUICulture
+            .TwoLetterISOLanguageName;
+
+    var isFrench = currentCulture == "fr";
+
+    ViewData["Title"] = isFrench
+        ? "Messages"
+        : "Messages";
 }
 
-<section class="messages-hero">
-	<div class="hero-inner container-wide">
-		<div class="hero-content">
-			<div class="eyebrow">MESSAGES • SERMONS • TEACHINGS</div>
-			<h1 class="messages-headline">UNE PAROLE QUI TRANSFORME.</h1>
-			<p class="messages-sub">Découvrez les enseignements et les messages du Pasteur Francis Sengele, centrés sur l'espérance, la prière et la Parole de Dieu.</p>
-		<p class="hero-ctas">
-			<a class="btn btn-cta" href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN" target="_blank" rel="noopener noreferrer">▶ WATCH MESSAGE</a>
-		</p>
-		</div>
-	</div>
+
+<!-- =====================================================
+     MESSAGES HERO
+     ===================================================== -->
+
+<section class="sm-messages-hero">
+
+    <div class="container-wide sm-messages-hero-inner">
+
+        <div class="sm-messages-hero-grid">
+
+            <!-- LEFT CONTENT -->
+
+            <div class="sm-messages-hero-content">
+
+                <p class="sm-messages-eyebrow">
+                    SENGELE MINISTRIES •
+                    @(isFrench ? "MESSAGES" : "MESSAGES")
+                </p>
+
+                <h1>
+                    @if (isFrench)
+                    {
+                        <text>
+                            UNE PAROLE QUI
+                            <span>TRANSFORME.</span>
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            A WORD THAT
+                            <span>TRANSFORMS.</span>
+                        </text>
+                    }
+                </h1>
+
+                <p class="sm-messages-hero-text">
+                    @if (isFrench)
+                    {
+                        <text>
+                            La Parole de Dieu n'est pas seulement destinée
+                            à être entendue. Elle produit la foi,
+                            relève l'espérance et transforme des vies.
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            The Word of God is not only meant to be heard.
+                            It produces faith, restores hope
+                            and transforms lives.
+                        </text>
+                    }
+                </p>
+
+                <div class="sm-messages-hero-line"></div>
+
+                <p class="sm-messages-hero-note">
+                    @(isFrench
+                        ? "Découvrez les messages et enseignements du Pasteur Francis Sengele, centrés sur l'espérance, la prière et la Parole de Dieu."
+                        : "Discover messages and teachings from Pastor Francis Sengele, centered on hope, prayer and the Word of God.")
+                </p>
+
+                <a class="sm-messages-watch"
+                   href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN"
+                   target="_blank"
+                   rel="noopener noreferrer">
+
+                    @(isFrench
+                        ? "REGARDER LES MESSAGES"
+                        : "WATCH THE MESSAGES")
+
+                    <span>→</span>
+                </a>
+
+            </div>
+
+
+            <!-- HERO IMAGE -->
+
+            <div class="sm-messages-hero-image">
+
+                <div class="sm-messages-image-frame">
+
+                    <img src="~/images/Francis5.jpeg"
+                         alt="Francis Sengele - Sengele Ministries" />
+
+                    <div class="sm-messages-image-label">
+
+                        <span>SENGELE</span>
+
+                        <strong>MINISTRIES</strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 
-<section class="section section--soft">
-	<div class="container-wide">
-		<div class="eyebrow">LATEST MESSAGES</div>
-		<h2 class="lead-heading">Recent teachings & sermons</h2>
-		<p class="muted">A curated selection of recent messages. This area is prepared to display database-driven message records in the future.</p>
+<main>
 
-		<div class="programs" style="margin-top:1.5rem">
-			<article class="program">
-				<h4>Message: Hope After the Storm</h4>
-				<p class="muted">An encouraging message about restoration and faith in adversity.</p>
-				<p><a class="link-accent" asp-controller="Messages" asp-action="Index">WATCH →</a></p>
-			</article>
-			<article class="program">
-				<h4>Teaching: The Power of Prayer</h4>
-				<p class="muted">Practical teaching on persistent prayer and intercession.</p>
-				<p><a class="link-accent" asp-controller="Messages" asp-action="Index">WATCH →</a></p>
-			</article>
-			<article class="program">
-				<h4>Devotional: Walking in Hope</h4>
-				<p class="muted">Short devotional to encourage your daily walk.</p>
-				<p><a class="link-accent" asp-controller="Messages" asp-action="Index">WATCH →</a></p>
-			</article>
-		</div>
-	</div>
-</section>
+    <!-- =====================================================
+         LATEST MESSAGES
+         ===================================================== -->
 
-<section class="section section--dark messages-core">
-	<div class="container-wide behind-grid">
-		<div class="behind-copy">
-			<div class="eyebrow">ABOUT THE MESSENGER</div>
-			<h2 class="lead-heading">FRANCIS SENGELE</h2>
-			<p class="muted">Francis Sengele is a pastor and teacher committed to proclaiming hope through prayer and the Word of God. Learn more about his life and ministry.</p>
-			<p><a class="link-accent" asp-controller="About" asp-action="Index">ABOUT FRANCIS →</a></p>
-		</div>
-		<div class="behind-media" aria-hidden="true" style="background-image:url('/images/Francis5.jpeg');background-size:cover;background-position:center;border-radius:8px;height:280px"></div>
-	</div>
-</section>
+    <section class="sm-messages-latest">
+
+        <div class="container-wide">
+
+            <!-- HEADING -->
+
+            <div class="sm-messages-section-heading">
+
+                <div>
+
+                    <p class="sm-messages-small-title">
+                        @(isFrench
+                            ? "DERNIERS MESSAGES"
+                            : "LATEST MESSAGES")
+                    </p>
+
+                    <h2>
+                        @if (isFrench)
+                        {
+                            <text>
+                                Une Parole pour<br />
+                                votre marche avec Dieu.
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                A Word for<br />
+                                your walk with God.
+                            </text>
+                        }
+                    </h2>
+
+                </div>
+
+                <p class="sm-messages-heading-text">
+                    @(isFrench
+                        ? "Des enseignements pour fortifier votre foi, nourrir votre vie de prière et vous aider à marcher dans l'espérance."
+                        : "Teachings to strengthen your faith, nourish your prayer life and help you walk in hope.")
+                </p>
+
+            </div>
+
+
+            <!-- MESSAGE GRID -->
+
+            <div class="sm-messages-grid">
+
+
+                <!-- MESSAGE 01 -->
+
+                <article class="sm-message-card sm-message-card-featured">
+
+                    <div class="sm-message-number">
+                        01
+                    </div>
+
+                    <p class="sm-message-type">
+                        @(isFrench ? "MESSAGE" : "MESSAGE")
+                    </p>
+
+                    <h3>
+                        @(isFrench
+                            ? "L'espérance après la tempête"
+                            : "Hope After the Storm")
+                    </h3>
+
+                    <p>
+                        @(isFrench
+                            ? "Un message d'encouragement sur la restauration, la foi et l'espérance au milieu de l'adversité."
+                            : "An encouraging message about restoration, faith and hope in the midst of adversity.")
+                    </p>
+
+                    <a href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="sm-message-link">
+
+                        @(isFrench ? "REGARDER" : "WATCH")
+
+                        <span>→</span>
+
+                    </a>
+
+                </article>
+
+
+                <!-- MESSAGE 02 -->
+
+                <article class="sm-message-card">
+
+                    <div class="sm-message-number">
+                        02
+                    </div>
+
+                    <p class="sm-message-type">
+                        @(isFrench ? "ENSEIGNEMENT" : "TEACHING")
+                    </p>
+
+                    <h3>
+                        @(isFrench
+                            ? "La puissance de la prière"
+                            : "The Power of Prayer")
+                    </h3>
+
+                    <p>
+                        @(isFrench
+                            ? "Un enseignement pratique sur la prière persévérante, l'intercession et la confiance en Dieu."
+                            : "Practical teaching on persistent prayer, intercession and trusting God.")
+                    </p>
+
+                    <a href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="sm-message-link">
+
+                        @(isFrench ? "REGARDER" : "WATCH")
+
+                        <span>→</span>
+
+                    </a>
+
+                </article>
+
+
+                <!-- MESSAGE 03 -->
+
+                <article class="sm-message-card">
+
+                    <div class="sm-message-number">
+                        03
+                    </div>
+
+                    <p class="sm-message-type">
+                        @(isFrench ? "MÉDITATION" : "DEVOTIONAL")
+                    </p>
+
+                    <h3>
+                        @(isFrench
+                            ? "Marcher dans l'espérance"
+                            : "Walking in Hope")
+                    </h3>
+
+                    <p>
+                        @(isFrench
+                            ? "Une courte méditation pour vous encourager à continuer à marcher avec Dieu chaque jour."
+                            : "A short devotional to encourage you to continue walking with God each day.")
+                    </p>
+
+                    <a href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="sm-message-link">
+
+                        @(isFrench ? "REGARDER" : "WATCH")
+
+                        <span>→</span>
+
+                    </a>
+
+                </article>
+
+            </div>
+
+
+            <!-- YOUTUBE CTA -->
+
+            <div class="sm-messages-all">
+
+                <p>
+                    @(isFrench
+                        ? "Retrouvez davantage de messages et d'enseignements sur notre chaîne YouTube."
+                        : "Discover more messages and teachings on our YouTube channel.")
+                </p>
+
+                <a href="https://youtube.com/@@francissengele?si=DV-a-vbLbis8i2IN"
+                   target="_blank"
+                   rel="noopener noreferrer">
+
+                    @(isFrench
+                        ? "VOIR TOUS LES MESSAGES"
+                        : "VIEW ALL MESSAGES")
+
+                    <span>→</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         WORD OF GOD
+         ===================================================== -->
+
+    <section class="sm-messages-word">
+
+        <div class="container-wide sm-messages-word-grid">
+
+            <!-- LEFT -->
+
+            <div class="sm-messages-word-intro">
+
+                <p class="sm-messages-side-label">
+                    @(isFrench
+                        ? "LA PAROLE DE DIEU"
+                        : "THE WORD OF GOD")
+                </p>
+
+                <h2>
+                    @if (isFrench)
+                    {
+                        <text>
+                            Sa Parole<br />
+                            ne revient pas<br />
+                            <span>sans effet.</span>
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            His Word<br />
+                            does not return<br />
+                            <span>without effect.</span>
+                        </text>
+                    }
+                </h2>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="sm-messages-scripture">
+
+                <div class="sm-messages-quote">
+                    “
+                </div>
+
+                <blockquote>
+
+                    @if (isFrench)
+                    {
+                        <text>
+                            Ainsi en est-il de ma parole,
+                            qui sort de ma bouche :
+                            elle ne retourne point à moi sans effet,
+                            sans avoir exécuté ma volonté
+                            et accompli mes desseins.
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            So is my word that goes out from my mouth:
+                            It will not return to me empty,
+                            but will accomplish what I desire
+                            and achieve the purpose for which I sent it.
+                        </text>
+                    }
+
+                </blockquote>
+
+                <p class="sm-messages-reference">
+                    @(isFrench ? "ÉSAÏE 55:11" : "ISAIAH 55:11")
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ABOUT THE MESSENGER
+         ===================================================== -->
+
+    <section class="sm-messages-messenger">
+
+        <div class="container-wide sm-messages-messenger-grid">
+
+            <!-- IMAGE -->
+
+            <div class="sm-messages-messenger-image">
+
+                <img src="~/images/Francis5.jpeg"
+                     alt="Pastor Francis Sengele" />
+
+                <div class="sm-messages-pastor-label">
+
+                    <span>PASTOR</span>
+
+                    <strong>FRANCIS SENGELE</strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTENT -->
+
+            <div class="sm-messages-messenger-content">
+
+                <p class="sm-messages-small-title">
+                    @(isFrench
+                        ? "À PROPOS DU MESSAGER"
+                        : "ABOUT THE MESSENGER")
+                </p>
+
+                <h2>
+                    FRANCIS<br />
+                    <span>SENGELE.</span>
+                </h2>
+
+                <p class="sm-messages-messenger-role">
+                    @(isFrench
+                        ? "PASTEUR • ENSEIGNANT"
+                        : "PASTOR • TEACHER")
+                </p>
+
+                <div class="sm-messages-messenger-line"></div>
+
+                <p>
+                    @if (isFrench)
+                    {
+                        <text>
+                            Francis Sengele est pasteur et enseignant,
+                            engagé à proclamer un message d'espérance
+                            à travers la prière et la Parole de Dieu.
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            Francis Sengele is a pastor and teacher
+                            committed to proclaiming a message of hope
+                            through prayer and the Word of God.
+                        </text>
+                    }
+                </p>
+
+                <div class="sm-messages-foundations">
+
+                    <span>
+                        @(isFrench ? "ESPÉRANCE" : "HOPE")
+                    </span>
+
+                    <span>
+                        @(isFrench ? "PRIÈRE" : "PRAYER")
+                    </span>
+
+                    <span>
+                        @(isFrench ? "LA PAROLE" : "THE WORD")
+                    </span>
+
+                </div>
+
+                <a asp-controller="About"
+                   asp-action="Index"
+                   class="sm-messages-about-link">
+
+                    @(isFrench
+                        ? "DÉCOUVRIR FRANCIS"
+                        : "ABOUT FRANCIS")
+
+                    <span>→</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BOTTOM
+         ===================================================== -->
+
+    <section class="sm-messages-bottom">
+
+        <div class="container-wide sm-messages-bottom-inner">
+
+            <p class="sm-messages-small-title">
+                @(isFrench
+                    ? "ÉCOUTER • CROIRE • VIVRE"
+                    : "HEAR • BELIEVE • LIVE")
+            </p>
+
+            <h2>
+                @(isFrench
+                    ? "La Parole continue d'agir."
+                    : "The Word is still at work.")
+            </h2>
+
+            <p>
+                @if (isFrench)
+                {
+                    <text>
+                        Un message peut être entendu en quelques minutes,
+                        mais la Parole de Dieu peut continuer à travailler
+                        dans un cœur bien après que le message soit terminé.
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        A message may be heard in a few minutes,
+                        but the Word of God can continue working
+                        in a heart long after the message has ended.
+                    </text>
+                }
+            </p>
+
+            <div class="sm-messages-bottom-line"></div>
+
+            <p class="sm-messages-bottom-scripture">
+
+                @if (isFrench)
+                {
+                    <text>
+                        « La foi vient de ce qu'on entend. »
+                        <span>— Romains 10:17</span>
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        “Faith comes from hearing.”
+                        <span>— Romans 10:17</span>
+                    </text>
+                }
+
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
