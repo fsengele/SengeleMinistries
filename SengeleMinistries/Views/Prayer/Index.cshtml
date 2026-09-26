@@ -1,12 +1,23 @@
 @model SengeleMinistries.Models.PrayerRequest
 
 @{
-    ViewData["Title"] = "Requête de prière";
+    var currentCulture =
+        System.Globalization.CultureInfo
+            .CurrentUICulture
+            .TwoLetterISOLanguageName;
+
+    var isFrench = currentCulture == "fr";
+
+    ViewData["Title"] = isFrench
+        ? "Requête de prière"
+        : "Prayer Request";
 }
+
 
 <!-- =====================================================
      PRAYER HERO
      ===================================================== -->
+
 <section class="sm-prayer-hero">
 
     <div class="container-wide sm-prayer-hero-inner">
@@ -14,25 +25,51 @@
         <div class="sm-prayer-hero-content">
 
             <p class="sm-prayer-eyebrow">
-                SENGELE MINISTRIES • PRIÈRE
+                SENGELE MINISTRIES • @(isFrench ? "PRIÈRE" : "PRAYER")
             </p>
 
             <h1>
-                NOUS VOULONS
-                <span>PRIER AVEC VOUS.</span>
+                @if (isFrench)
+                {
+                    <text>
+                        NOUS VOULONS
+                        <span>PRIER AVEC VOUS.</span>
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        WE WANT TO
+                        <span>PRAY WITH YOU.</span>
+                    </text>
+                }
             </h1>
 
             <p class="sm-prayer-hero-text">
-                Quelle que soit la situation que vous traversez,
-                vous n'avez pas à la porter seul.
-                Partagez votre sujet de prière avec nous.
+                @if (isFrench)
+                {
+                    <text>
+                        Quelle que soit la situation que vous traversez,
+                        vous n'avez pas à la porter seul.
+                        Partagez votre sujet de prière avec nous.
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        Whatever situation you are going through,
+                        you do not have to carry it alone.
+                        Share your prayer request with us.
+                    </text>
+                }
             </p>
 
             <div class="sm-prayer-hero-line"></div>
 
             <p class="sm-prayer-confidential">
-                Votre requête sera reçue avec compassion,
-                respect et confidentialité.
+                @(isFrench
+                    ? "Votre requête sera reçue avec compassion, respect et confidentialité."
+                    : "Your request will be received with compassion, respect and confidentiality.")
             </p>
 
         </div>
@@ -45,6 +82,7 @@
 <!-- =====================================================
      PRAYER REQUEST SECTION
      ===================================================== -->
+
 <main>
 
     <section class="sm-prayer-section">
@@ -54,20 +92,49 @@
             <div class="sm-prayer-section-heading">
 
                 <div>
+
                     <p class="sm-prayer-small-title">
-                        PARTAGEZ VOTRE REQUÊTE
+                        @(isFrench
+                            ? "PARTAGEZ VOTRE REQUÊTE"
+                            : "SHARE YOUR REQUEST")
                     </p>
 
                     <h2>
-                        Comment pouvons-nous<br />
-                        prier pour vous ?
+                        @if (isFrench)
+                        {
+                            <text>
+                                Comment pouvons-nous<br />
+                                prier pour vous ?
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                How can we<br />
+                                pray for you?
+                            </text>
+                        }
                     </h2>
+
                 </div>
 
                 <p class="sm-prayer-heading-text">
-                    Prenez quelques instants pour nous écrire.
-                    Notre équipe de prière prendra le temps de présenter
-                    votre requête devant le Seigneur.
+                    @if (isFrench)
+                    {
+                        <text>
+                            Prenez quelques instants pour nous écrire.
+                            Notre équipe de prière prendra le temps de présenter
+                            votre requête devant le Seigneur.
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            Take a few moments to write to us.
+                            Our prayer team will take time to bring
+                            your request before the Lord.
+                        </text>
+                    }
                 </p>
 
             </div>
@@ -84,9 +151,11 @@
 
             <div class="sm-prayer-layout">
 
+
                 <!-- ==========================================
                      FORM
                      ========================================== -->
+
                 <div class="sm-prayer-form-card">
 
                     <div class="sm-prayer-form-header">
@@ -96,13 +165,19 @@
                         </div>
 
                         <div>
+
                             <p class="sm-prayer-form-label">
-                                REQUÊTE DE PRIÈRE
+                                @(isFrench
+                                    ? "REQUÊTE DE PRIÈRE"
+                                    : "PRAYER REQUEST")
                             </p>
 
                             <h3>
-                                Parlez-nous de votre besoin.
+                                @(isFrench
+                                    ? "Parlez-nous de votre besoin."
+                                    : "Tell us about your need.")
                             </h3>
+
                         </div>
 
                     </div>
@@ -117,24 +192,26 @@
 
 
                         <!-- VALIDATION SUMMARY -->
+
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger mb-3">
                         </div>
 
 
                         <!-- NAME -->
+
                         <div class="sm-prayer-form-row">
 
                             <div class="sm-prayer-field">
 
                                 <label asp-for="FirstName">
-                                    PRÉNOM
+                                    @(isFrench ? "PRÉNOM" : "FIRST NAME")
                                 </label>
 
                                 <input asp-for="FirstName"
                                        id="firstName"
                                        type="text"
-                                       placeholder="Votre prénom" />
+                                       placeholder="@(isFrench ? "Votre prénom" : "Your first name")" />
 
                                 <span asp-validation-for="FirstName"
                                       class="text-danger">
@@ -146,13 +223,13 @@
                             <div class="sm-prayer-field">
 
                                 <label asp-for="LastName">
-                                    NOM
+                                    @(isFrench ? "NOM" : "LAST NAME")
                                 </label>
 
                                 <input asp-for="LastName"
                                        id="lastName"
                                        type="text"
-                                       placeholder="Votre nom" />
+                                       placeholder="@(isFrench ? "Votre nom" : "Your last name")" />
 
                                 <span asp-validation-for="LastName"
                                       class="text-danger">
@@ -164,13 +241,16 @@
 
 
                         <!-- CONTACT -->
+
                         <div class="sm-prayer-form-row">
 
                             <div class="sm-prayer-field">
 
                                 <label asp-for="Phone">
-                                    TÉLÉPHONE
-                                    <span>OPTIONNEL</span>
+                                    @(isFrench ? "TÉLÉPHONE" : "PHONE")
+                                    <span>
+                                        @(isFrench ? "OPTIONNEL" : "OPTIONAL")
+                                    </span>
                                 </label>
 
                                 <input asp-for="Phone"
@@ -188,13 +268,15 @@
                             <div class="sm-prayer-field">
 
                                 <label asp-for="Email">
-                                    ADRESSE EMAIL
+                                    @(isFrench
+                                        ? "ADRESSE EMAIL"
+                                        : "EMAIL ADDRESS")
                                 </label>
 
                                 <input asp-for="Email"
                                        id="email"
                                        type="email"
-                                       placeholder="votre@email.com" />
+                                       placeholder="@(isFrench ? "votre@email.com" : "your@email.com")" />
 
                                 <span asp-validation-for="Email"
                                       class="text-danger">
@@ -206,16 +288,21 @@
 
 
                         <!-- PRAYER REQUEST -->
+
                         <div class="sm-prayer-field sm-prayer-message-field">
 
                             <label asp-for="Request">
-                                VOTRE REQUÊTE
+                                @(isFrench
+                                    ? "VOTRE REQUÊTE"
+                                    : "YOUR PRAYER REQUEST")
                             </label>
 
                             <textarea asp-for="Request"
                                       id="prayer"
                                       rows="8"
-                                      placeholder="Écrivez votre requête de prière ici..."></textarea>
+                                      placeholder="@(isFrench
+                                                                      ? "Écrivez votre requête de prière ici..."
+                                                                      : "Write your prayer request here...")"></textarea>
 
                             <span asp-validation-for="Request"
                                   class="text-danger">
@@ -225,6 +312,7 @@
 
 
                         <!-- PRIVACY -->
+
                         <div class="sm-prayer-privacy">
 
                             <div class="sm-prayer-lock">
@@ -232,21 +320,38 @@
                             </div>
 
                             <p>
-                                Votre requête est personnelle.
-                                Nous la traiterons avec respect
-                                et confidentialité.
+                                @if (isFrench)
+                                {
+                                    <text>
+                                        Votre requête est personnelle.
+                                        Nous la traiterons avec respect
+                                        et confidentialité.
+                                    </text>
+                                }
+                                else
+                                {
+                                    <text>
+                                        Your request is personal.
+                                        We will treat it with respect
+                                        and confidentiality.
+                                    </text>
+                                }
                             </p>
 
                         </div>
 
 
                         <!-- BUTTON -->
+
                         <div class="sm-prayer-form-actions">
 
                             <button type="submit"
                                     class="sm-prayer-submit">
 
-                                ENVOYER MA REQUÊTE
+                                @(isFrench
+                                    ? "ENVOYER MA REQUÊTE"
+                                    : "SEND MY REQUEST")
+
                                 <span>→</span>
 
                             </button>
@@ -261,14 +366,18 @@
                 <!-- ==========================================
                      RIGHT SIDE
                      ========================================== -->
+
                 <aside class="sm-prayer-side">
 
 
                     <!-- VERSE -->
+
                     <div class="sm-prayer-verse-card">
 
                         <p class="sm-prayer-side-label">
-                            LA PAROLE DE DIEU
+                            @(isFrench
+                                ? "LA PAROLE DE DIEU"
+                                : "THE WORD OF GOD")
                         </p>
 
                         <div class="sm-prayer-quote">
@@ -276,41 +385,94 @@
                         </div>
 
                         <blockquote>
-                            Priez les uns pour les autres,
-                            afin que vous soyez guéris.
+                            @if (isFrench)
+                            {
+                                <text>
+                                    Priez les uns pour les autres,
+                                    afin que vous soyez guéris.
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    Pray for one another,
+                                    that you may be healed.
+                                </text>
+                            }
                         </blockquote>
 
                         <p class="sm-prayer-reference">
-                            JACQUES 5:16
+                            @(isFrench ? "JACQUES 5:16" : "JAMES 5:16")
                         </p>
 
                     </div>
 
 
                     <!-- BELIEF -->
+
                     <div class="sm-prayer-belief-card">
 
                         <p class="sm-prayer-side-label">
-                            NOTRE ENGAGEMENT
+                            @(isFrench
+                                ? "NOTRE ENGAGEMENT"
+                                : "OUR COMMITMENT")
                         </p>
 
                         <h3>
-                            Nous croyons<br />
-                            en la puissance<br />
-                            de la prière.
+                            @if (isFrench)
+                            {
+                                <text>
+                                    Nous croyons<br />
+                                    en la puissance<br />
+                                    de la prière.
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    We believe<br />
+                                    in the power<br />
+                                    of prayer.
+                                </text>
+                            }
                         </h3>
 
                         <div class="sm-prayer-belief-line"></div>
 
                         <p>
-                            Chaque requête reçue représente
-                            une personne, une famille et une situation
-                            qui mérite notre attention.
+                            @if (isFrench)
+                            {
+                                <text>
+                                    Chaque requête reçue représente
+                                    une personne, une famille et une situation
+                                    qui mérite notre attention.
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    Every request we receive represents
+                                    a person, a family and a situation
+                                    worthy of our attention.
+                                </text>
+                            }
                         </p>
 
                         <p>
-                            Notre équipe prie régulièrement
-                            pour les requêtes qui nous sont confiées.
+                            @if (isFrench)
+                            {
+                                <text>
+                                    Notre équipe prie régulièrement
+                                    pour les requêtes qui nous sont confiées.
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    Our team regularly prays
+                                    for the requests entrusted to us.
+                                </text>
+                            }
                         </p>
 
                     </div>
@@ -327,29 +489,61 @@
     <!-- =====================================================
          BOTTOM ENCOURAGEMENT
          ===================================================== -->
+
     <section class="sm-prayer-bottom">
 
         <div class="container-wide sm-prayer-bottom-inner">
 
             <p class="sm-prayer-small-title">
-                ESPÉRANCE • FOI • PRIÈRE
+                @(isFrench
+                    ? "ESPÉRANCE • FOI • PRIÈRE"
+                    : "HOPE • FAITH • PRAYER")
             </p>
 
             <h2>
-                Il y a encore de l'espérance.
+                @(isFrench
+                    ? "Il y a encore de l'espérance."
+                    : "There is still hope.")
             </h2>
 
             <p>
-                Nous ne pouvons peut-être pas connaître tout ce que
-                vous traversez, mais nous pouvons nous tenir avec vous
-                dans la prière.
+                @if (isFrench)
+                {
+                    <text>
+                        Nous ne pouvons peut-être pas connaître tout ce que
+                        vous traversez, mais nous pouvons nous tenir avec vous
+                        dans la prière.
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        We may not know everything you are going through,
+                        but we can stand with you
+                        in prayer.
+                    </text>
+                }
             </p>
 
             <div class="sm-prayer-bottom-line"></div>
 
             <p class="sm-prayer-bottom-scripture">
-                « Invoque-moi, et je te répondrai. »
-                <span>— Jérémie 33:3</span>
+
+                @if (isFrench)
+                {
+                    <text>
+                        « Invoque-moi, et je te répondrai. »
+                        <span>— Jérémie 33:3</span>
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        “Call to me and I will answer you.”
+                        <span>— Jeremiah 33:3</span>
+                    </text>
+                }
+
             </p>
 
         </div>

@@ -1,203 +1,1014 @@
 @model SengeleMinistries.Models.VolunteerApplication
+
 @{
-	ViewData["Title"] = "Serve With Us";
+    var currentCulture =
+        System.Globalization.CultureInfo
+            .CurrentUICulture
+            .TwoLetterISOLanguageName;
+
+    var isFrench = currentCulture == "fr";
+
+    ViewData["Title"] = isFrench
+        ? "Servir avec nous"
+        : "Serve With Us";
 }
 
-<section class="hero section--dark">
-	<div class="hero-inner">
-		<div class="hero-grid">
-			<div>
-				<div class="hero-kicker">SERVE WITH US</div>
-				<h1 class="hero-title">Votre appel et vos dons peuvent faire une différence.</h1>
-				<p class="hero-sub"> Si vous sentez que Dieu vous appelle à vous engager avec nous, nous serions heureux de vous connaître. »</p>
-			</div>
-			<div>
-				<!-- Nothing 1 'empty' visual column -->
-			</div>
-		</div>
-	</div>
+<!-- =====================================================
+     SERVE HERO
+     ===================================================== -->
+
+<section class="sm-serve-hero">
+
+    <div class="container-wide sm-serve-hero-inner">
+
+        <div class="sm-serve-hero-content">
+
+            <p class="sm-serve-eyebrow">
+                SENGELE MINISTRIES • @(isFrench ? "SERVIR" : "SERVE")
+            </p>
+
+            <h1>
+                @if (isFrench)
+                {
+                    <text>VOTRE APPEL PEUT</text>
+                    <span>FAIRE UNE DIFFÉRENCE.</span>
+                }
+                else
+                {
+                    <text>YOUR CALL CAN</text>
+                    <span>MAKE A DIFFERENCE.</span>
+                }
+            </h1>
+
+            <p class="sm-serve-hero-text">
+                @(isFrench
+                    ? "Vos dons, votre temps et votre cœur peuvent être utilisés pour servir Dieu et faire une différence dans la vie des autres."
+                    : "Your gifts, your time and your heart can be used to serve God and make a difference in the lives of others.")
+            </p>
+
+            <div class="sm-serve-hero-line"></div>
+
+            <p class="sm-serve-hero-note">
+                @(isFrench
+                    ? "Si vous vous sentez appelé à servir avec nous, nous serions honorés de faire votre connaissance."
+                    : "If you feel called to serve with us, we would be honored to get to know you.")
+            </p>
+
+        </div>
+
+    </div>
+
 </section>
 
-<section class="section section--white">
-	<div class="container container-wide">
-		<div class="who-label">Find your place to serve</div>
-		<h2 class="lead-heading">Apply to serve with Sengele Ministries</h2>
-		<p class="muted">Please complete the form below. Our team will review your application and contact you about next steps.</p>
 
-		<form asp-action="Index" method="post" class="mt-4">
-			<div class="row g-3">
-				<div class="col-md-6">
-					<label asp-for="FirstName" class="form-label"></label>
-					<input asp-for="FirstName" class="form-control" />
-					<span asp-validation-for="FirstName" class="text-danger small"></span>
-				</div>
-				<div class="col-md-6">
-					<label asp-for="LastName" class="form-label"></label>
-					<input asp-for="LastName" class="form-control" />
-					<span asp-validation-for="LastName" class="text-danger small"></span>
-				</div>
+<!-- =====================================================
+     SERVE APPLICATION
+     ===================================================== -->
 
-				<div class="col-md-6">
-					<label asp-for="Email" class="form-label"></label>
-					<input asp-for="Email" class="form-control" />
-					<span asp-validation-for="Email" class="text-danger small"></span>
-				</div>
-				<div class="col-md-6">
-					<label asp-for="Phone" class="form-label"></label>
-					<input asp-for="Phone" class="form-control" />
-					<span asp-validation-for="Phone" class="text-danger small"></span>
-				</div>
+<main>
 
-				<div class="col-md-4">
-					<label asp-for="DateOfBirth" class="form-label"></label>
-					<input asp-for="DateOfBirth" class="form-control" type="date" />
-					<span asp-validation-for="DateOfBirth" class="text-danger small"></span>
-				</div>
-				<div class="col-12">
-					<h5 class="who-label">Your location</h5>
-				</div>
+    <section class="sm-serve-section">
 
-				<div class="col-12">
-					<label asp-for="StreetAddress" class="form-label"></label>
-					<input asp-for="StreetAddress" class="form-control" />
-				</div>
+        <div class="container-wide">
 
-				<div class="col-12">
-					<label asp-for="ApartmentOrUnit" class="form-label"></label>
-					<input asp-for="ApartmentOrUnit" class="form-control" />
-				</div>
+            <!-- SECTION HEADING -->
 
-				<div class="col-md-4">
-					<label asp-for="City" class="form-label"></label>
-					<input asp-for="City" class="form-control" />
-				</div>
-				<div class="col-md-6">
-					<label asp-for="Country" class="form-label">Country</label>
-					<select asp-for="Country" class="form-select" id="countrySelect">
-						<option value="">Select a country</option>
-						<option>United States</option>
-						<option>Canada</option>
-						<option>United Kingdom</option>
-						<option>France</option>
-						<option>Belgium</option>
-						<option>Democratic Republic of the Congo</option>
-						<option>Republic of the Congo</option>
-						<option>Other</option>
-					</select>
-					<span asp-validation-for="Country" class="text-danger small"></span>
-				</div>
+            <div class="sm-serve-section-heading">
 
-				<div class="col-md-6">
-					<label id="stateLabel" class="form-label">State / Province / Region</label>
-					<!-- US state select (enabled when United States selected) -->
-					<select asp-for="State" class="form-select d-none" id="stateSelect">
-						<option value="">Select a state</option>
-						<option>Alabama</option>
-						<option>Alaska</option>
-						<option>Arizona</option>
-						<option>Arkansas</option>
-						<option>California</option>
-						<option>Colorado</option>
-						<option>Connecticut</option>
-						<option>Delaware</option>
-						<option>District of Columbia</option>
-						<option>Florida</option>
-						<option>Georgia</option>
-						<option>Hawaii</option>
-						<option>Idaho</option>
-						<option>Illinois</option>
-						<option>Indiana</option>
-						<option>Iowa</option>
-						<option>Kansas</option>
-						<option>Kentucky</option>
-						<option>Louisiana</option>
-						<option>Maine</option>
-						<option>Maryland</option>
-						<option>Massachusetts</option>
-						<option>Michigan</option>
-						<option>Minnesota</option>
-						<option>Mississippi</option>
-						<option>Missouri</option>
-						<option>Montana</option>
-						<option>Nebraska</option>
-						<option>Nevada</option>
-						<option>New Hampshire</option>
-						<option>New Jersey</option>
-						<option>New Mexico</option>
-						<option>New York</option>
-						<option>North Carolina</option>
-						<option>North Dakota</option>
-						<option>Ohio</option>
-						<option>Oklahoma</option>
-						<option>Oregon</option>
-						<option>Pennsylvania</option>
-						<option>Rhode Island</option>
-						<option>South Carolina</option>
-						<option>South Dakota</option>
-						<option>Tennessee</option>
-						<option>Texas</option>
-						<option>Utah</option>
-						<option>Vermont</option>
-						<option>Virginia</option>
-						<option>Washington</option>
-						<option>West Virginia</option>
-						<option>Wisconsin</option>
-						<option>Wyoming</option>
-					</select>
+                <div>
 
-					<!-- International free-text state input (enabled for non-US) -->
-					<input asp-for="State" class="form-control d-none" id="stateInput" />
-					<span asp-validation-for="State" class="text-danger small"></span>
-				</div>
+                    <p class="sm-serve-small-title">
+                        @(isFrench
+                            ? "TROUVEZ VOTRE PLACE POUR SERVIR"
+                            : "FIND YOUR PLACE TO SERVE")
+                    </p>
 
-				<div class="col-md-4">
-					<label id="zipLabel" asp-for="ZipCode" class="form-label">ZIP / Postal Code</label>
-					<input asp-for="ZipCode" class="form-control" />
-					<span asp-validation-for="ZipCode" class="text-danger small"></span>
-				</div>
+                    <h2>
+                        @if (isFrench)
+                        {
+                            <text>
+                                Servez avec<br />
+                                Sengele Ministries.
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                Serve with<br />
+                                Sengele Ministries.
+                            </text>
+                        }
+                    </h2>
 
-				<div class="col-md-8">
-					<label asp-for="ServiceArea" class="form-label"></label>
-					<select asp-for="ServiceArea" class="form-select">
-						<option value="">Select an area</option>
-						<option>Prayer &amp; Intercession</option>
-						<option>Outreach &amp; Evangelism</option>
-						<option>Media</option>
-						<option>Events</option>
-						<option>Hospitality</option>
-						<option>Worship / Music</option>
-						<option>Other</option>
-					</select>
-					<span asp-validation-for="ServiceArea" class="text-danger small"></span>
-				</div>
+                </div>
 
-				<div class="col-12">
-					<div class="form-check">
-						<input asp-for="IsCurrentMember" class="form-check-input" />
-						<label asp-for="IsCurrentMember" class="form-check-label"></label>
-					</div>
-				</div>
+                <p class="sm-serve-heading-text">
+                    @(isFrench
+                        ? "Remplissez le formulaire ci-dessous. Notre équipe examinera vos informations et vous contactera pour les prochaines étapes."
+                        : "Complete the application below. Our team will review your information and contact you about the next steps.")
+                </p>
 
-				<div class="col-12">
-					<label asp-for="WhyServe" class="form-label"></label>
-					<textarea asp-for="WhyServe" class="form-control" rows="4"></textarea>
-				</div>
+            </div>
 
-				<div class="col-12">
-					<div class="form-check">
-						<input asp-for="MayContact" class="form-check-input" />
-						<label asp-for="MayContact" class="form-check-label"></label>
-					</div>
-				</div>
 
-				<div class="col-12 text-end">
-					<button type="submit" class="btn btn-cta">Submit application</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</section>
+            <div class="sm-serve-layout">
 
-@section Scripts{
-	<partial name="_ValidationScriptsPartial" />
+                <!-- =====================================================
+                     FORM
+                     ===================================================== -->
+
+                <div class="sm-serve-form-card">
+
+                    <form asp-action="Index"
+                          method="post"
+                          class="sm-serve-form">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-4">
+                        </div>
+
+
+                        <!-- =================================================
+                             01 - ABOUT YOU
+                             ================================================= -->
+
+                        <div class="sm-serve-form-section">
+
+                            <div class="sm-serve-form-header">
+
+                                <div class="sm-serve-form-number">
+                                    01
+                                </div>
+
+                                <div>
+
+                                    <p class="sm-serve-form-label">
+                                        @(isFrench
+                                            ? "À PROPOS DE VOUS"
+                                            : "ABOUT YOU")
+                                    </p>
+
+                                    <h3>
+                                        @(isFrench
+                                            ? "Parlez-nous de vous."
+                                            : "Tell us about yourself.")
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="sm-serve-form-row">
+
+                                <div class="sm-serve-field">
+
+                                    <label asp-for="FirstName">
+                                        @(isFrench
+                                            ? "PRÉNOM"
+                                            : "FIRST NAME")
+                                    </label>
+
+                                    <input asp-for="FirstName"
+                                           placeholder="@(isFrench ? "Votre prénom" : "Your first name")" />
+
+                                    <span asp-validation-for="FirstName"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="sm-serve-field">
+
+                                    <label asp-for="LastName">
+                                        @(isFrench
+                                            ? "NOM"
+                                            : "LAST NAME")
+                                    </label>
+
+                                    <input asp-for="LastName"
+                                           placeholder="@(isFrench ? "Votre nom" : "Your last name")" />
+
+                                    <span asp-validation-for="LastName"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="sm-serve-form-row">
+
+                                <div class="sm-serve-field">
+
+                                    <label asp-for="Email">
+                                        @(isFrench
+                                            ? "ADRESSE EMAIL"
+                                            : "EMAIL ADDRESS")
+                                    </label>
+
+                                    <input asp-for="Email"
+                                           type="email"
+                                           placeholder="votre@email.com" />
+
+                                    <span asp-validation-for="Email"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="sm-serve-field">
+
+                                    <label asp-for="Phone">
+                                        @(isFrench
+                                            ? "TÉLÉPHONE"
+                                            : "PHONE")
+                                    </label>
+
+                                    <input asp-for="Phone"
+                                           type="tel"
+                                           placeholder="+1 (425) 000-0000" />
+
+                                    <span asp-validation-for="Phone"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="sm-serve-field sm-serve-field-half">
+
+                                <label asp-for="DateOfBirth">
+                                    @(isFrench
+                                        ? "DATE DE NAISSANCE"
+                                        : "DATE OF BIRTH")
+                                </label>
+
+                                <input asp-for="DateOfBirth"
+                                       type="date" />
+
+                                <span asp-validation-for="DateOfBirth"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             02 - YOUR LOCATION
+                             ================================================= -->
+
+                        <div class="sm-serve-form-section">
+
+                            <div class="sm-serve-form-header">
+
+                                <div class="sm-serve-form-number">
+                                    02
+                                </div>
+
+                                <div>
+
+                                    <p class="sm-serve-form-label">
+                                        @(isFrench
+                                            ? "VOTRE LOCALISATION"
+                                            : "YOUR LOCATION")
+                                    </p>
+
+                                    <h3>
+                                        @(isFrench
+                                            ? "Où êtes-vous situé ?"
+                                            : "Where are you located?")
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="sm-serve-field">
+
+                                <label asp-for="StreetAddress">
+                                    @(isFrench
+                                        ? "ADRESSE"
+                                        : "STREET ADDRESS")
+                                </label>
+
+                                <input asp-for="StreetAddress"
+                                       placeholder="@(isFrench ? "Votre adresse" : "Street address")" />
+
+                                <span asp-validation-for="StreetAddress"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="sm-serve-field">
+
+                                <label asp-for="ApartmentOrUnit">
+
+                                    @(isFrench
+                                        ? "APPARTEMENT / UNITÉ"
+                                        : "APARTMENT / UNIT")
+
+                                    <span>
+                                        @(isFrench
+                                            ? "FACULTATIF"
+                                            : "OPTIONAL")
+                                    </span>
+
+                                </label>
+
+                                <input asp-for="ApartmentOrUnit"
+                                       placeholder="@(isFrench ? "Appartement, suite ou unité" : "Apartment, suite or unit")" />
+
+                                <span asp-validation-for="ApartmentOrUnit"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="sm-serve-form-row">
+
+                                <div class="sm-serve-field">
+
+                                    <label asp-for="City">
+                                        @(isFrench ? "VILLE" : "CITY")
+                                    </label>
+
+                                    <input asp-for="City"
+                                           placeholder="@(isFrench ? "Ville" : "City")" />
+
+                                    <span asp-validation-for="City"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="sm-serve-field">
+
+                                    <label asp-for="Country">
+                                        @(isFrench ? "PAYS" : "COUNTRY")
+                                    </label>
+
+                                    <select asp-for="Country"
+                                            id="countrySelect">
+
+                                        <option value="">
+                                            @(isFrench
+                                                ? "Sélectionnez un pays"
+                                                : "Select a country")
+                                        </option>
+
+                                        <!--
+                                            Keep the values in English.
+                                            Only the visible text changes.
+                                        -->
+
+                                        <option value="United States">
+                                            @(isFrench
+                                                ? "États-Unis"
+                                                : "United States")
+                                        </option>
+
+                                        <option value="Canada">
+                                            Canada
+                                        </option>
+
+                                        <option value="United Kingdom">
+                                            @(isFrench
+                                                ? "Royaume-Uni"
+                                                : "United Kingdom")
+                                        </option>
+
+                                        <option value="France">
+                                            France
+                                        </option>
+
+                                        <option value="Belgium">
+                                            @(isFrench
+                                                ? "Belgique"
+                                                : "Belgium")
+                                        </option>
+
+                                        <option value="Democratic Republic of the Congo">
+                                            @(isFrench
+                                                ? "République démocratique du Congo"
+                                                : "Democratic Republic of the Congo")
+                                        </option>
+
+                                        <option value="Republic of the Congo">
+                                            @(isFrench
+                                                ? "République du Congo"
+                                                : "Republic of the Congo")
+                                        </option>
+
+                                        <option value="Other">
+                                            @(isFrench
+                                                ? "Autre"
+                                                : "Other")
+                                        </option>
+
+                                    </select>
+
+                                    <span asp-validation-for="Country"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="sm-serve-form-row">
+
+                                <div class="sm-serve-field">
+
+                                    <label id="stateLabel">
+                                        @(isFrench
+                                            ? "ÉTAT / PROVINCE / RÉGION"
+                                            : "STATE / PROVINCE / REGION")
+                                    </label>
+
+
+                                    <!-- UNITED STATES -->
+
+                                    <select asp-for="State"
+                                            id="stateSelect"
+                                            class="d-none">
+
+                                        <option value="">
+                                            @(isFrench
+                                                ? "Sélectionnez un État"
+                                                : "Select a state")
+                                        </option>
+
+                                        <option>Alabama</option>
+                                        <option>Alaska</option>
+                                        <option>Arizona</option>
+                                        <option>Arkansas</option>
+                                        <option>California</option>
+                                        <option>Colorado</option>
+                                        <option>Connecticut</option>
+                                        <option>Delaware</option>
+                                        <option>District of Columbia</option>
+                                        <option>Florida</option>
+                                        <option>Georgia</option>
+                                        <option>Hawaii</option>
+                                        <option>Idaho</option>
+                                        <option>Illinois</option>
+                                        <option>Indiana</option>
+                                        <option>Iowa</option>
+                                        <option>Kansas</option>
+                                        <option>Kentucky</option>
+                                        <option>Louisiana</option>
+                                        <option>Maine</option>
+                                        <option>Maryland</option>
+                                        <option>Massachusetts</option>
+                                        <option>Michigan</option>
+                                        <option>Minnesota</option>
+                                        <option>Mississippi</option>
+                                        <option>Missouri</option>
+                                        <option>Montana</option>
+                                        <option>Nebraska</option>
+                                        <option>Nevada</option>
+                                        <option>New Hampshire</option>
+                                        <option>New Jersey</option>
+                                        <option>New Mexico</option>
+                                        <option>New York</option>
+                                        <option>North Carolina</option>
+                                        <option>North Dakota</option>
+                                        <option>Ohio</option>
+                                        <option>Oklahoma</option>
+                                        <option>Oregon</option>
+                                        <option>Pennsylvania</option>
+                                        <option>Rhode Island</option>
+                                        <option>South Carolina</option>
+                                        <option>South Dakota</option>
+                                        <option>Tennessee</option>
+                                        <option>Texas</option>
+                                        <option>Utah</option>
+                                        <option>Vermont</option>
+                                        <option>Virginia</option>
+                                        <option>Washington</option>
+                                        <option>West Virginia</option>
+                                        <option>Wisconsin</option>
+                                        <option>Wyoming</option>
+
+                                    </select>
+
+
+                                    <!-- OUTSIDE UNITED STATES -->
+
+                                    <input asp-for="State"
+                                           id="stateInput"
+                                           class="d-none"
+                                           placeholder="@(isFrench ? "État, province ou région" : "State, province or region")" />
+
+                                    <span asp-validation-for="State"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="sm-serve-field">
+
+                                    <label id="zipLabel"
+                                           asp-for="ZipCode">
+
+                                        @(isFrench
+                                            ? "CODE POSTAL"
+                                            : "ZIP / POSTAL CODE")
+
+                                    </label>
+
+                                    <input asp-for="ZipCode"
+                                           placeholder="@(isFrench ? "Code postal" : "ZIP / Postal Code")" />
+
+                                    <span asp-validation-for="ZipCode"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             03 - YOUR CALL TO SERVE
+                             ================================================= -->
+
+                        <div class="sm-serve-form-section sm-serve-form-section-last">
+
+                            <div class="sm-serve-form-header">
+
+                                <div class="sm-serve-form-number">
+                                    03
+                                </div>
+
+                                <div>
+
+                                    <p class="sm-serve-form-label">
+                                        @(isFrench
+                                            ? "VOTRE APPEL À SERVIR"
+                                            : "YOUR CALL TO SERVE")
+                                    </p>
+
+                                    <h3>
+                                        @(isFrench
+                                            ? "Comment aimeriez-vous servir ?"
+                                            : "How would you like to serve?")
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="sm-serve-field">
+
+                                <label asp-for="ServiceArea">
+                                    @(isFrench
+                                        ? "DOMAINE DE SERVICE"
+                                        : "AREA OF SERVICE")
+                                </label>
+
+                                <select asp-for="ServiceArea">
+
+                                    <option value="">
+                                        @(isFrench
+                                            ? "Sélectionnez un domaine"
+                                            : "Select an area")
+                                    </option>
+
+
+                                    <option value="Prayer & Intercession">
+                                        @(isFrench
+                                            ? "Prière et intercession"
+                                            : "Prayer & Intercession")
+                                    </option>
+
+
+                                    <option value="Outreach & Evangelism">
+                                        @(isFrench
+                                            ? "Évangélisation et mission"
+                                            : "Outreach & Evangelism")
+                                    </option>
+
+
+                                    <option value="Media">
+                                        @(isFrench
+                                            ? "Médias"
+                                            : "Media")
+                                    </option>
+
+
+                                    <option value="Events">
+                                        @(isFrench
+                                            ? "Événements"
+                                            : "Events")
+                                    </option>
+
+
+                                    <option value="Hospitality">
+                                        @(isFrench
+                                            ? "Accueil et hospitalité"
+                                            : "Hospitality")
+                                    </option>
+
+
+                                    <option value="Worship / Music">
+                                        @(isFrench
+                                            ? "Louange / Musique"
+                                            : "Worship / Music")
+                                    </option>
+
+
+                                    <option value="Other">
+                                        @(isFrench
+                                            ? "Autre"
+                                            : "Other")
+                                    </option>
+
+                                </select>
+
+                                <span asp-validation-for="ServiceArea"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="sm-serve-check">
+
+                                <input asp-for="IsCurrentMember" />
+
+                                <label asp-for="IsCurrentMember">
+
+                                    @(isFrench
+                                        ? "Je suis actuellement membre de Sengele Ministries."
+                                        : "I am currently a member of Sengele Ministries.")
+
+                                </label>
+
+                            </div>
+
+
+                            <div class="sm-serve-field sm-serve-message-field">
+
+                                <label asp-for="WhyServe">
+
+                                    @(isFrench
+                                        ? "POURQUOI AIMERIEZ-VOUS SERVIR ?"
+                                        : "WHY WOULD YOU LIKE TO SERVE?")
+
+                                </label>
+
+                                <textarea asp-for="WhyServe"
+                                          rows="6"
+                                          placeholder="@(isFrench ? "Parlez-nous de votre désir de servir..." : "Tell us about your desire to serve...")"></textarea>
+
+                                <span asp-validation-for="WhyServe"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="sm-serve-check">
+
+                                <input asp-for="MayContact" />
+
+                                <label asp-for="MayContact">
+
+                                    @(isFrench
+                                        ? "J'autorise Sengele Ministries à me contacter concernant les possibilités de service."
+                                        : "I give Sengele Ministries permission to contact me about serving opportunities.")
+
+                                </label>
+
+                            </div>
+
+
+                            <!-- PRIVACY -->
+
+                            <div class="sm-serve-privacy">
+
+                                <div class="sm-serve-privacy-symbol">
+                                    ✦
+                                </div>
+
+                                <p>
+                                    @(isFrench
+                                        ? "Vos informations seront traitées avec soin, respect et confidentialité."
+                                        : "Your information will be treated with care, respect and confidentiality.")
+                                </p>
+
+                            </div>
+
+
+                            <!-- SUBMIT -->
+
+                            <div class="sm-serve-form-actions">
+
+                                <button type="submit"
+                                        class="sm-serve-submit">
+
+                                    @(isFrench
+                                        ? "ENVOYER MA DEMANDE"
+                                        : "SUBMIT MY APPLICATION")
+
+                                    <span>→</span>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- =====================================================
+                     RIGHT SIDE
+                     ===================================================== -->
+
+                <aside class="sm-serve-side">
+
+
+                    <!-- WORD OF GOD -->
+
+                    <div class="sm-serve-verse-card">
+
+                        <p class="sm-serve-side-label">
+                            @(isFrench
+                                ? "LA PAROLE DE DIEU"
+                                : "THE WORD OF GOD")
+                        </p>
+
+                        <div class="sm-serve-quote">
+                            “
+                        </div>
+
+                        <blockquote>
+
+                            @if (isFrench)
+                            {
+                                <text>
+                                    Que chacun de vous mette au service
+                                    des autres le don qu'il a reçu.
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    Each of you should use whatever gift
+                                    you have received to serve others.
+                                </text>
+                            }
+
+                        </blockquote>
+
+                        <p class="sm-serve-reference">
+                            @(isFrench
+                                ? "1 PIERRE 4:10"
+                                : "1 PETER 4:10")
+                        </p>
+
+                    </div>
+
+
+                    <!-- VISION -->
+
+                    <div class="sm-serve-vision-card">
+
+                        <p class="sm-serve-side-label">
+                            @(isFrench
+                                ? "NOTRE VISION"
+                                : "OUR VISION")
+                        </p>
+
+                        <h3>
+
+                            @if (isFrench)
+                            {
+                                <text>
+                                    Il y a<br />
+                                    une place pour<br />
+                                    vous servir.
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    There is<br />
+                                    a place for<br />
+                                    you to serve.
+                                </text>
+                            }
+
+                        </h3>
+
+                        <div class="sm-serve-vision-line"></div>
+
+                        <p>
+                            @(isFrench
+                                ? "Chaque don compte. Chaque personne peut contribuer à la mission que Dieu nous a confiée."
+                                : "Every gift matters. Every person can contribute to the mission God has entrusted to us.")
+                        </p>
+
+                        <p>
+                            @(isFrench
+                                ? "Servir, c'est plus qu'occuper une fonction. C'est une occasion d'utiliser ce que Dieu a placé en vous pour le bien des autres."
+                                : "Serving is more than filling a position. It is an opportunity to use what God has placed in you for the benefit of others.")
+                        </p>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BOTTOM
+         ===================================================== -->
+
+    <section class="sm-serve-bottom">
+
+        <div class="container-wide sm-serve-bottom-inner">
+
+            <p class="sm-serve-small-title">
+
+                @(isFrench
+                    ? "APPEL • SERVICE • MISSION"
+                    : "CALLING • SERVICE • MISSION")
+
+            </p>
+
+            <h2>
+
+                @(isFrench
+                    ? "Votre don a un but."
+                    : "Your gift has a purpose.")
+
+            </h2>
+
+            <p>
+
+                @(isFrench
+                    ? "Vous n'avez pas besoin d'avoir toutes les réponses avant de commencer. Soyez disponible, soyez disposé, et permettez à Dieu d'utiliser ce qu'Il a placé en vous."
+                    : "You do not need to have everything figured out before you begin. Be available, be willing, and allow God to use what He has placed in you.")
+
+            </p>
+
+            <div class="sm-serve-bottom-line"></div>
+
+            <p class="sm-serve-bottom-scripture">
+
+                @(isFrench
+                    ? "« Servez l'Éternel avec joie. »"
+                    : "“Serve the Lord with gladness.”")
+
+                <span>
+                    — @(isFrench ? "Psaume 100:2" : "Psalm 100:2")
+                </span>
+
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const isFrench = @isFrench.ToString().ToLower();
+
+            const countrySelect =
+                document.getElementById("countrySelect");
+
+            const stateSelect =
+                document.getElementById("stateSelect");
+
+            const stateInput =
+                document.getElementById("stateInput");
+
+            const stateLabel =
+                document.getElementById("stateLabel");
+
+            const zipLabel =
+                document.getElementById("zipLabel");
+
+
+            function updateLocationFields() {
+
+                const country = countrySelect.value;
+
+
+                // ==========================================
+                // UNITED STATES
+                // ==========================================
+
+                if (country === "United States") {
+
+                    stateSelect.classList.remove("d-none");
+                    stateSelect.disabled = false;
+
+                    stateInput.classList.add("d-none");
+                    stateInput.disabled = true;
+
+
+                    if (isFrench) {
+
+                        stateLabel.textContent = "ÉTAT";
+                        zipLabel.textContent = "CODE POSTAL";
+
+                    }
+                    else {
+
+                        stateLabel.textContent = "STATE";
+                        zipLabel.textContent = "ZIP CODE";
+
+                    }
+
+                }
+
+
+                // ==========================================
+                // OTHER COUNTRIES
+                // ==========================================
+
+                else {
+
+                    stateSelect.classList.add("d-none");
+                    stateSelect.disabled = true;
+
+                    stateInput.classList.remove("d-none");
+                    stateInput.disabled = false;
+
+
+                    if (isFrench) {
+
+                        stateLabel.textContent =
+                            "ÉTAT / PROVINCE / RÉGION";
+
+                        zipLabel.textContent =
+                            "CODE POSTAL";
+
+                    }
+                    else {
+
+                        stateLabel.textContent =
+                            "STATE / PROVINCE / REGION";
+
+                        zipLabel.textContent =
+                            "POSTAL CODE";
+
+                    }
+
+                }
+
+            }
+
+
+            countrySelect.addEventListener(
+                "change",
+                updateLocationFields
+            );
+
+
+            updateLocationFields();
+
+        });
+
+    </script>
 }
