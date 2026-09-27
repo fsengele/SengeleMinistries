@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 
-namespace SengeleMinistries.Services
+namespace SengeleMinistries.Services;
+
+public interface IEmailSender
 {
-    public interface IEmailSender
-    {
-        Task SendEmailAsync(string to, string subject, string htmlMessage);
-    }
+    Task SendEmailAsync(string to, string subject, string htmlMessage);
 }
