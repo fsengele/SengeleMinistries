@@ -47,6 +47,21 @@ namespace SengeleMinistries.Models
         public string? ProfileImageUrl { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        /// <summary>
+        /// Indicates whether the member's email has been confirmed. This is used for account verification and security purposes.
+        /// </summary>
+        public bool EmailConfirmed { get; set; } = false;
+
+        /// <summary>
+        /// Token used for email confirmation. This token is sent to the member's email address and must be used to verify the email.
+        /// </summary>
+        public string? EmailConfirmationToken { get; set; }
+
+        /// <summary>
+        /// The date and time when the email confirmation token expires.
+        /// </summary>
+        public DateTime? EmailConfirmationTokenExpiresAt { get; set; }
+
 
         // Administrator flag - do not expose in public forms
         public bool IsAdmin { get; set; } = false;
