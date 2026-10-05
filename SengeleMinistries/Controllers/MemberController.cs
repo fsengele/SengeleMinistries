@@ -29,7 +29,7 @@ namespace SengeleMinistries.Controllers
 
 
         // ==========================================
-        // REGISTER
+        // REGISTER - GET
         // ==========================================
 
         [HttpGet]
@@ -39,17 +39,28 @@ namespace SengeleMinistries.Controllers
         }
 
 
+        // ==========================================
+        // REGISTER - POST
+        // ==========================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(
             RegistrationViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
 
-            var exists = _db.Members?
-                .FirstOrDefault(m => m.Email == model.Email);
+            // ==========================================
+            // CHECK IF EMAIL ALREADY EXISTS
+            // ==========================================
+
+            var exists = await _db.Members
+                .FirstOrDefaultAsync(
+                    m => m.Email == model.Email);
 
 
             if (exists != null)
@@ -62,10 +73,14 @@ namespace SengeleMinistries.Controllers
             }
 
 
-            // Use ASP.NET Core PasswordHasher
+            // ==========================================
+            // CREATE MEMBER
+            // ==========================================
+
             var hasher =
                 new Microsoft.AspNetCore.Identity
                     .PasswordHasher<Member>();
+
 
             var member = new Member
             {
@@ -74,13 +89,20 @@ namespace SengeleMinistries.Controllers
                 Email = model.Email,
                 CreatedAt = DateTime.UtcNow,
 
-                // Email confirmation
                 EmailConfirmed = false,
+
                 EmailConfirmationToken =
-                    Convert.ToHexString(RandomNumberGenerator.GetBytes(32)),
+                    Convert.ToHexString(
+                        RandomNumberGenerator.GetBytes(32)),
+
                 EmailConfirmationTokenExpiresAt =
                     DateTime.UtcNow.AddHours(24)
             };
+
+
+            // ==========================================
+            // HASH PASSWORD
+            // ==========================================
 
             member.PasswordHash =
                 hasher.HashPassword(
@@ -88,13 +110,129 @@ namespace SengeleMinistries.Controllers
                     model.Password);
 
 
-            _db.Members?.Add(member);
+            // ==========================================
+            // SAVE MEMBER
+            // ==========================================
+
+            _db.Members.Add(member);
 
             await _db.SaveChangesAsync();
 
 
+            // ==========================================
+            // CREATE CONFIRMATION LINK
+            // ==========================================
+
+            var confirmationUrl =
+                Url.Action(
+                    "ConfirmEmail",
+                    "Member",
+                    new
+                    {
+                        memberId = member.Id,
+                        token = member.EmailConfirmationToken
+                    },
+                    Request.Scheme);
+
+
+            // ==========================================
+            // SEND CONFIRMATION EMAIL
+            // ==========================================
+
+            try
+            {
+                var firstName =
+                    System.Net.WebUtility.HtmlEncode(
+                        member.FirstName);
+
+
+                var safeConfirmationUrl =
+                    System.Net.WebUtility.HtmlEncode(
+                        confirmationUrl);
+
+
+                var subject =
+                    "Confirm your email — Sengele Ministries";
+
+
+                var html = $@"
+<div style='font-family:Arial,Helvetica,sans-serif;
+            color:#222;
+            line-height:1.6;
+            max-width:650px;'>
+
+    <h2 style='color:#111;'>
+        SENGELE MINISTRIES
+    </h2>
+
+    <p>
+        Hello {firstName},
+    </p>
+
+    <p>
+        Thank you for creating your
+        Sengele Ministries account.
+    </p>
+
+    <p>
+        Please confirm your email address
+        by clicking the button below.
+    </p>
+
+    <p style='margin:30px 0;'>
+
+        <a href='{safeConfirmationUrl}'
+           style='background:#111;
+                  color:#ffffff;
+                  padding:14px 24px;
+                  text-decoration:none;
+                  display:inline-block;
+                  font-weight:600;'>
+
+            CONFIRM MY EMAIL
+
+        </a>
+
+    </p>
+
+    <p>
+        This confirmation link will expire
+        in 24 hours.
+    </p>
+
+    <p style='color:#666;'>
+        If you did not create this account,
+        you can ignore this email.
+    </p>
+
+</div>";
+
+
+                await _emailSender.SendEmailAsync(
+                    member.Email,
+                    subject,
+                    html);
+            }
+            catch (Exception ex)
+            {
+                // Member is already saved.
+                // Email failure must not delete account.
+
+                _logger.LogError(
+                    ex,
+                    "Error sending confirmation email " +
+                    "for member {MemberId}",
+                    member.Id);
+            }
+
+
+            // ==========================================
+            // SUCCESS
+            // ==========================================
+
             TempData["SuccessMessage"] =
-                "Registration successful. You may now log in.";
+                "Registration successful. " +
+                "Please check your email to confirm your account.";
 
 
             return RedirectToAction("Login");
@@ -102,7 +240,97 @@ namespace SengeleMinistries.Controllers
 
 
         // ==========================================
-        // LOGIN
+        // CONFIRM EMAIL
+        // ==========================================
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(
+            int memberId,
+            string? token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                TempData["ErrorMessage"] =
+                    "Invalid email confirmation link.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            var member = await _db.Members
+                .FirstOrDefaultAsync(
+                    m => m.Id == memberId);
+
+
+            if (member == null)
+            {
+                TempData["ErrorMessage"] =
+                    "Invalid email confirmation link.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            // Already confirmed
+            if (member.EmailConfirmed)
+            {
+                TempData["SuccessMessage"] =
+                    "Your email is already confirmed. " +
+                    "You may log in.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            // Check token
+            if (string.IsNullOrWhiteSpace(
+                    member.EmailConfirmationToken) ||
+                !string.Equals(
+                    member.EmailConfirmationToken,
+                    token,
+                    StringComparison.Ordinal))
+            {
+                TempData["ErrorMessage"] =
+                    "Invalid email confirmation link.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            // Check expiration
+            if (member.EmailConfirmationTokenExpiresAt == null ||
+                member.EmailConfirmationTokenExpiresAt <
+                    DateTime.UtcNow)
+            {
+                TempData["ErrorMessage"] =
+                    "This email confirmation link has expired.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            // ==========================================
+            // CONFIRM EMAIL
+            // ==========================================
+
+            member.EmailConfirmed = true;
+            member.EmailConfirmationToken = null;
+            member.EmailConfirmationTokenExpiresAt = null;
+
+            await _db.SaveChangesAsync();
+
+
+            TempData["SuccessMessage"] =
+                "Your email has been confirmed successfully. " +
+                "You may now log in.";
+
+
+            return RedirectToAction("Login");
+        }
+
+
+        // ==========================================
+        // LOGIN - GET
         // ==========================================
 
         [HttpGet]
@@ -112,17 +340,23 @@ namespace SengeleMinistries.Controllers
         }
 
 
+        // ==========================================
+        // LOGIN - POST
+        // ==========================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(
             LoginViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
 
-            var member = _db.Members?
-                .FirstOrDefault(
+            var member = await _db.Members
+                .FirstOrDefaultAsync(
                     m => m.Email == model.Email);
 
 
@@ -145,8 +379,7 @@ namespace SengeleMinistries.Controllers
             var verify =
                 hasher.VerifyHashedPassword(
                     member,
-                    member.PasswordHash
-                        ?? string.Empty,
+                    member.PasswordHash ?? string.Empty,
                     model.Password);
 
 
@@ -180,7 +413,7 @@ namespace SengeleMinistries.Controllers
                         model.Password);
 
 
-                _db.Members?.Update(member);
+                _db.Members.Update(member);
 
                 await _db.SaveChangesAsync();
             }
@@ -221,25 +454,20 @@ namespace SengeleMinistries.Controllers
 
 
             var identity =
-                new System.Security.Claims
-                    .ClaimsIdentity(
-                        claims,
-                        Microsoft.AspNetCore
-                            .Authentication
-                            .Cookies
-                            .CookieAuthenticationDefaults
-                            .AuthenticationScheme);
+                new System.Security.Claims.ClaimsIdentity(
+                    claims,
+                    Microsoft.AspNetCore.Authentication.Cookies
+                        .CookieAuthenticationDefaults
+                        .AuthenticationScheme);
 
 
             var principal =
-                new System.Security.Claims
-                    .ClaimsPrincipal(identity);
+                new System.Security.Claims.ClaimsPrincipal(
+                    identity);
 
 
             await HttpContext.SignInAsync(
-                Microsoft.AspNetCore
-                    .Authentication
-                    .Cookies
+                Microsoft.AspNetCore.Authentication.Cookies
                     .CookieAuthenticationDefaults
                     .AuthenticationScheme,
                 principal);
@@ -262,9 +490,7 @@ namespace SengeleMinistries.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(
-                Microsoft.AspNetCore
-                    .Authentication
-                    .Cookies
+                Microsoft.AspNetCore.Authentication.Cookies
                     .CookieAuthenticationDefaults
                     .AuthenticationScheme);
 
@@ -308,10 +534,9 @@ namespace SengeleMinistries.Controllers
             }
 
 
-            var member =
-                await _db.Members
-                    .FirstOrDefaultAsync(
-                        m => m.Id == memberId);
+            var member = await _db.Members
+                .FirstOrDefaultAsync(
+                    m => m.Id == memberId);
 
 
             if (member == null)
@@ -345,10 +570,9 @@ namespace SengeleMinistries.Controllers
             }
 
 
-            var member =
-                await _db.Members
-                    .FirstOrDefaultAsync(
-                        m => m.Id == memberId);
+            var member = await _db.Members
+                .FirstOrDefaultAsync(
+                    m => m.Id == memberId);
 
 
             if (member == null)
@@ -385,10 +609,9 @@ namespace SengeleMinistries.Controllers
             }
 
 
-            var member =
-                await _db.Members
-                    .FirstOrDefaultAsync(
-                        m => m.Id == memberId);
+            var member = await _db.Members
+                .FirstOrDefaultAsync(
+                    m => m.Id == memberId);
 
 
             if (member == null)
@@ -401,35 +624,16 @@ namespace SengeleMinistries.Controllers
             // UPDATE PERSONAL INFORMATION
             // ==========================================
 
-            member.FirstName =
-                model.FirstName;
-
-            member.LastName =
-                model.LastName;
-
-            member.Email =
-                model.Email;
-
-            member.Phone =
-                model.Phone;
-
-            member.DateOfBirth =
-                model.DateOfBirth;
-
-            member.StreetAddress =
-                model.StreetAddress;
-
-            member.City =
-                model.City;
-
-            member.State =
-                model.State;
-
-            member.ZipCode =
-                model.ZipCode;
-
-            member.Country =
-                model.Country;
+            member.FirstName = model.FirstName;
+            member.LastName = model.LastName;
+            member.Email = model.Email;
+            member.Phone = model.Phone;
+            member.DateOfBirth = model.DateOfBirth;
+            member.StreetAddress = model.StreetAddress;
+            member.City = model.City;
+            member.State = model.State;
+            member.ZipCode = model.ZipCode;
+            member.Country = model.Country;
 
 
             // ==========================================
@@ -466,8 +670,7 @@ namespace SengeleMinistries.Controllers
                 }
 
 
-                // Create the profile images
-                // folder if needed
+                // Create profile image folder
                 var profilesFolder =
                     Path.Combine(
                         Directory.GetCurrentDirectory(),
@@ -480,7 +683,7 @@ namespace SengeleMinistries.Controllers
                     profilesFolder);
 
 
-                // Create a unique image file name
+                // Create unique file name
                 var fileName =
                     $"member-{member.Id}-" +
                     $"{Guid.NewGuid()}{extension}";
@@ -492,7 +695,7 @@ namespace SengeleMinistries.Controllers
                         fileName);
 
 
-                // Save the image
+                // Save image
                 using (var stream =
                     new FileStream(
                         filePath,
@@ -504,7 +707,6 @@ namespace SengeleMinistries.Controllers
 
 
                 // Save image path
-                // in the database
                 member.ProfileImageUrl =
                     $"/images/profiles/{fileName}";
             }
