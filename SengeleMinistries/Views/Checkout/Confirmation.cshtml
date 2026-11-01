@@ -92,13 +92,13 @@
                                 </p>
 
                                 <p class="text-muted small mb-0">
-                                    @item.Price.ToString("C") each
+                                    $@item.Price.ToString("0.00") each
                                 </p>
 
                             </div>
 
                             <strong>
-                                @((item.Price * item.Quantity).ToString("C"))
+                                $@((item.Price * item.Quantity).ToString("0.00"))
                             </strong>
 
                         </div>
@@ -113,7 +113,7 @@
                     </span>
 
                     <strong>
-                        @Model.Subtotal.ToString("C")
+                        $@Model.Subtotal.ToString("0.00")
                     </strong>
 
                 </div>
@@ -126,7 +126,7 @@
                     </span>
 
                     <span class="fs-5 fw-bold">
-                        @Model.Total.ToString("C")
+                        $@Model.Total.ToString("0.00")
                     </span>
 
                 </div>

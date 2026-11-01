@@ -2,26 +2,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using SengeleMinistries.Data;
 using SengeleMinistries.Models;
+using SengeleMinistries.Services;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 
 namespace SengeleMinistries.Controllers
 {
     public class MemberController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly IEmailSender _emailSender;
+        private readonly ILogger<MemberController> _logger;
 
-        public MemberController(ApplicationDbContext db)
+        public MemberController(
+            ApplicationDbContext db,
+            IEmailSender emailSender,
+            ILogger<MemberController> logger)
         {
             _db = db;
+            _emailSender = emailSender;
+            _logger = logger;
         }
 
 
         // ==========================================
-        // REGISTER
+        // REGISTER - GET
         // ==========================================
 
         [HttpGet]
@@ -30,15 +38,30 @@ namespace SengeleMinistries.Controllers
             return View();
         }
 
+
+        // ==========================================
+        // REGISTER - POST
+        // ==========================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegistrationViewModel model)
+        public async Task<IActionResult> Register(
+            RegistrationViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
-            var exists = _db.Members?
-                .FirstOrDefault(m => m.Email == model.Email);
+
+            // ==========================================
+            // CHECK IF EMAIL ALREADY EXISTS
+            // ==========================================
+
+            var exists = await _db.Members
+                .FirstOrDefaultAsync(
+                    m => m.Email == model.Email);
+
 
             if (exists != null)
             {
@@ -49,33 +72,265 @@ namespace SengeleMinistries.Controllers
                 return View(model);
             }
 
-            // Use ASP.NET Core PasswordHasher
+
+            // ==========================================
+            // CREATE MEMBER
+            // ==========================================
+
             var hasher =
-                new Microsoft.AspNetCore.Identity.PasswordHasher<Member>();
+                new Microsoft.AspNetCore.Identity
+                    .PasswordHasher<Member>();
+
 
             var member = new Member
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+
+                EmailConfirmed = false,
+
+                EmailConfirmationToken =
+                    Convert.ToHexString(
+                        RandomNumberGenerator.GetBytes(32)),
+
+                EmailConfirmationTokenExpiresAt =
+                    DateTime.UtcNow.AddHours(24)
             };
 
-            member.PasswordHash =
-                hasher.HashPassword(member, model.Password);
 
-            _db.Members?.Add(member);
+            // ==========================================
+            // HASH PASSWORD
+            // ==========================================
+
+            member.PasswordHash =
+                hasher.HashPassword(
+                    member,
+                    model.Password);
+
+
+            // ==========================================
+            // SAVE MEMBER
+            // ==========================================
+
+            _db.Members.Add(member);
+
             await _db.SaveChangesAsync();
 
+
+            // ==========================================
+            // CREATE CONFIRMATION LINK
+            // ==========================================
+
+            var confirmationUrl =
+                Url.Action(
+                    "ConfirmEmail",
+                    "Member",
+                    new
+                    {
+                        memberId = member.Id,
+                        token = member.EmailConfirmationToken
+                    },
+                    Request.Scheme);
+
+
+            // ==========================================
+            // SEND CONFIRMATION EMAIL
+            // ==========================================
+
+            try
+            {
+                var firstName =
+                    System.Net.WebUtility.HtmlEncode(
+                        member.FirstName);
+
+
+                var safeConfirmationUrl =
+                    System.Net.WebUtility.HtmlEncode(
+                        confirmationUrl);
+
+
+                var subject =
+                    "Confirm your email — Sengele Ministries";
+
+
+                var html = $@"
+<div style='font-family:Arial,Helvetica,sans-serif;
+            color:#222;
+            line-height:1.6;
+            max-width:650px;'>
+
+    <h2 style='color:#111;'>
+        SENGELE MINISTRIES
+    </h2>
+
+    <p>
+        Hello {firstName},
+    </p>
+
+    <p>
+        Thank you for creating your
+        Sengele Ministries account.
+    </p>
+
+    <p>
+        Please confirm your email address
+        by clicking the button below.
+    </p>
+
+    <p style='margin:30px 0;'>
+
+        <a href='{safeConfirmationUrl}'
+           style='background:#111;
+                  color:#ffffff;
+                  padding:14px 24px;
+                  text-decoration:none;
+                  display:inline-block;
+                  font-weight:600;'>
+
+            CONFIRM MY EMAIL
+
+        </a>
+
+    </p>
+
+    <p>
+        This confirmation link will expire
+        in 24 hours.
+    </p>
+
+    <p style='color:#666;'>
+        If you did not create this account,
+        you can ignore this email.
+    </p>
+
+</div>";
+
+
+                await _emailSender.SendEmailAsync(
+                    member.Email,
+                    subject,
+                    html);
+            }
+            catch (Exception ex)
+            {
+                // Member is already saved.
+                // Email failure must not delete account.
+
+                _logger.LogError(
+                    ex,
+                    "Error sending confirmation email " +
+                    "for member {MemberId}",
+                    member.Id);
+            }
+
+
+            // ==========================================
+            // SUCCESS
+            // ==========================================
+
             TempData["SuccessMessage"] =
-                "Registration successful. You may now log in.";
+                "Registration successful. " +
+                "Please check your email to confirm your account.";
+
 
             return RedirectToAction("Login");
         }
 
 
         // ==========================================
-        // LOGIN
+        // CONFIRM EMAIL
+        // ==========================================
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(
+            int memberId,
+            string? token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                TempData["ErrorMessage"] =
+                    "Invalid email confirmation link.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            var member = await _db.Members
+                .FirstOrDefaultAsync(
+                    m => m.Id == memberId);
+
+
+            if (member == null)
+            {
+                TempData["ErrorMessage"] =
+                    "Invalid email confirmation link.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            // Already confirmed
+            if (member.EmailConfirmed)
+            {
+                TempData["SuccessMessage"] =
+                    "Your email is already confirmed. " +
+                    "You may log in.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            // Check token
+            if (string.IsNullOrWhiteSpace(
+                    member.EmailConfirmationToken) ||
+                !string.Equals(
+                    member.EmailConfirmationToken,
+                    token,
+                    StringComparison.Ordinal))
+            {
+                TempData["ErrorMessage"] =
+                    "Invalid email confirmation link.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            // Check expiration
+            if (member.EmailConfirmationTokenExpiresAt == null ||
+                member.EmailConfirmationTokenExpiresAt <
+                    DateTime.UtcNow)
+            {
+                TempData["ErrorMessage"] =
+                    "This email confirmation link has expired.";
+
+                return RedirectToAction("Login");
+            }
+
+
+            // ==========================================
+            // CONFIRM EMAIL
+            // ==========================================
+
+            member.EmailConfirmed = true;
+            member.EmailConfirmationToken = null;
+            member.EmailConfirmationTokenExpiresAt = null;
+
+            await _db.SaveChangesAsync();
+
+
+            TempData["SuccessMessage"] =
+                "Your email has been confirmed successfully. " +
+                "You may now log in.";
+
+
+            return RedirectToAction("Login");
+        }
+
+
+        // ==========================================
+        // LOGIN - GET
         // ==========================================
 
         [HttpGet]
@@ -84,15 +339,26 @@ namespace SengeleMinistries.Controllers
             return View();
         }
 
+
+        // ==========================================
+        // LOGIN - POST
+        // ==========================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(
+            LoginViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
-            
-            var member = _db.Members?
-                .FirstOrDefault(m => m.Email == model.Email);
+            }
+
+
+            var member = await _db.Members
+                .FirstOrDefaultAsync(
+                    m => m.Email == model.Email);
+
 
             if (member == null)
             {
@@ -103,20 +369,28 @@ namespace SengeleMinistries.Controllers
                 return View(model);
             }
 
+
             var hasher =
-                new Microsoft.AspNetCore.Identity.PasswordHasher<Member>();
+                new Microsoft.AspNetCore.Identity
+                    .PasswordHasher<Member>();
+
 
             // First try PasswordHasher verification
-            var verify = hasher.VerifyHashedPassword(
-                member,
-                member.PasswordHash ?? string.Empty,
-                model.Password);
+            var verify =
+                hasher.VerifyHashedPassword(
+                    member,
+                    member.PasswordHash ?? string.Empty,
+                    model.Password);
+
 
             if (verify ==
-                Microsoft.AspNetCore.Identity.PasswordVerificationResult.Failed)
+                Microsoft.AspNetCore.Identity
+                    .PasswordVerificationResult.Failed)
             {
                 // Support older SHA256 passwords
-                var legacy = HashPassword(model.Password);
+                var legacy =
+                    HashPassword(model.Password);
+
 
                 if (!string.Equals(
                     legacy,
@@ -130,30 +404,44 @@ namespace SengeleMinistries.Controllers
                     return View(model);
                 }
 
-                // Convert old password hash to PasswordHasher
-                member.PasswordHash =
-                    hasher.HashPassword(member, model.Password);
 
-                _db.Members?.Update(member);
+                // Convert old password hash
+                // to PasswordHasher
+                member.PasswordHash =
+                    hasher.HashPassword(
+                        member,
+                        model.Password);
+
+
+                _db.Members.Update(member);
+
                 await _db.SaveChangesAsync();
             }
 
-            // Create claims for the logged-in member
+
+            // ==========================================
+            // CREATE CLAIMS
+            // ==========================================
+
             var claims =
                 new List<System.Security.Claims.Claim>
                 {
                     new System.Security.Claims.Claim(
-                        System.Security.Claims.ClaimTypes.NameIdentifier,
+                        System.Security.Claims
+                            .ClaimTypes.NameIdentifier,
                         member.Id.ToString()),
 
                     new System.Security.Claims.Claim(
-                        System.Security.Claims.ClaimTypes.Name,
-                        member.FirstName + " " + member.LastName),
+                        System.Security.Claims
+                            .ClaimTypes.Name,
+                        member.FirstName + " " +
+                        member.LastName),
 
                     new System.Security.Claims.Claim(
                         "MemberId",
                         member.Id.ToString())
                 };
+
 
             // Add administrator claim when applicable
             if (member.IsAdmin)
@@ -164,22 +452,30 @@ namespace SengeleMinistries.Controllers
                         "true"));
             }
 
+
             var identity =
                 new System.Security.Claims.ClaimsIdentity(
                     claims,
                     Microsoft.AspNetCore.Authentication.Cookies
-                        .CookieAuthenticationDefaults.AuthenticationScheme);
+                        .CookieAuthenticationDefaults
+                        .AuthenticationScheme);
+
 
             var principal =
-                new System.Security.Claims.ClaimsPrincipal(identity);
+                new System.Security.Claims.ClaimsPrincipal(
+                    identity);
+
 
             await HttpContext.SignInAsync(
                 Microsoft.AspNetCore.Authentication.Cookies
-                    .CookieAuthenticationDefaults.AuthenticationScheme,
+                    .CookieAuthenticationDefaults
+                    .AuthenticationScheme,
                 principal);
+
 
             TempData["SuccessMessage"] =
                 $"Welcome back, {member.FirstName}!";
+
 
             return RedirectToAction("Dashboard");
         }
@@ -195,9 +491,13 @@ namespace SengeleMinistries.Controllers
         {
             await HttpContext.SignOutAsync(
                 Microsoft.AspNetCore.Authentication.Cookies
-                    .CookieAuthenticationDefaults.AuthenticationScheme);
+                    .CookieAuthenticationDefaults
+                    .AuthenticationScheme);
 
-            return RedirectToAction("Index", "Home");
+
+            return RedirectToAction(
+                "Index",
+                "Home");
         }
 
 
@@ -221,21 +521,29 @@ namespace SengeleMinistries.Controllers
         [Authorize]
         public async Task<IActionResult> Profile()
         {
-            var memberIdClaim = User.FindFirst("MemberId");
+            var memberIdClaim =
+                User.FindFirst("MemberId");
+
 
             if (memberIdClaim == null ||
-                !int.TryParse(memberIdClaim.Value, out int memberId))
+                !int.TryParse(
+                    memberIdClaim.Value,
+                    out int memberId))
             {
                 return RedirectToAction("Login");
             }
 
+
             var member = await _db.Members
-                .FirstOrDefaultAsync(m => m.Id == memberId);
+                .FirstOrDefaultAsync(
+                    m => m.Id == memberId);
+
 
             if (member == null)
             {
                 return NotFound();
             }
+
 
             return View(member);
         }
@@ -249,21 +557,29 @@ namespace SengeleMinistries.Controllers
         [Authorize]
         public async Task<IActionResult> EditProfile()
         {
-            var memberIdClaim = User.FindFirst("MemberId");
+            var memberIdClaim =
+                User.FindFirst("MemberId");
+
 
             if (memberIdClaim == null ||
-                !int.TryParse(memberIdClaim.Value, out int memberId))
+                !int.TryParse(
+                    memberIdClaim.Value,
+                    out int memberId))
             {
                 return RedirectToAction("Login");
             }
 
+
             var member = await _db.Members
-                .FirstOrDefaultAsync(m => m.Id == memberId);
+                .FirstOrDefaultAsync(
+                    m => m.Id == memberId);
+
 
             if (member == null)
             {
                 return NotFound();
             }
+
 
             return View(member);
         }
@@ -280,16 +596,23 @@ namespace SengeleMinistries.Controllers
             Member model,
             IFormFile? profileImage)
         {
-            var memberIdClaim = User.FindFirst("MemberId");
+            var memberIdClaim =
+                User.FindFirst("MemberId");
+
 
             if (memberIdClaim == null ||
-                !int.TryParse(memberIdClaim.Value, out int memberId))
+                !int.TryParse(
+                    memberIdClaim.Value,
+                    out int memberId))
             {
                 return RedirectToAction("Login");
             }
 
+
             var member = await _db.Members
-                .FirstOrDefaultAsync(m => m.Id == memberId);
+                .FirstOrDefaultAsync(
+                    m => m.Id == memberId);
+
 
             if (member == null)
             {
@@ -317,21 +640,27 @@ namespace SengeleMinistries.Controllers
             // PROFILE PICTURE
             // ==========================================
 
-            if (profileImage != null && profileImage.Length > 0)
+            if (profileImage != null &&
+                profileImage.Length > 0)
             {
-                var allowedExtensions = new[]
-                {
-                    ".jpg",
-                    ".jpeg",
-                    ".png",
-                    ".webp"
-                };
+                var allowedExtensions =
+                    new[]
+                    {
+                        ".jpg",
+                        ".jpeg",
+                        ".png",
+                        ".webp"
+                    };
+
 
                 var extension =
-                    Path.GetExtension(profileImage.FileName)
+                    Path.GetExtension(
+                        profileImage.FileName)
                         .ToLowerInvariant();
 
-                if (!allowedExtensions.Contains(extension))
+
+                if (!allowedExtensions.Contains(
+                    extension))
                 {
                     ModelState.AddModelError(
                         string.Empty,
@@ -341,34 +670,43 @@ namespace SengeleMinistries.Controllers
                 }
 
 
-                // Create the profile images folder if needed
-                var profilesFolder = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "wwwroot",
-                    "images",
-                    "profiles");
+                // Create profile image folder
+                var profilesFolder =
+                    Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot",
+                        "images",
+                        "profiles");
 
-                Directory.CreateDirectory(profilesFolder);
+
+                Directory.CreateDirectory(
+                    profilesFolder);
 
 
-                // Create a unique image file name
+                // Create unique file name
                 var fileName =
-                    $"member-{member.Id}-{Guid.NewGuid()}{extension}";
+                    $"member-{member.Id}-" +
+                    $"{Guid.NewGuid()}{extension}";
+
 
                 var filePath =
-                    Path.Combine(profilesFolder, fileName);
+                    Path.Combine(
+                        profilesFolder,
+                        fileName);
 
 
-                // Save the image inside wwwroot/images/profiles
-                using (var stream = new FileStream(
-                    filePath,
-                    FileMode.Create))
+                // Save image
+                using (var stream =
+                    new FileStream(
+                        filePath,
+                        FileMode.Create))
                 {
-                    await profileImage.CopyToAsync(stream);
+                    await profileImage
+                        .CopyToAsync(stream);
                 }
 
 
-                // Save the image path in the database
+                // Save image path
                 member.ProfileImageUrl =
                     $"/images/profiles/{fileName}";
             }
@@ -380,8 +718,10 @@ namespace SengeleMinistries.Controllers
 
             await _db.SaveChangesAsync();
 
+
             TempData["SuccessMessage"] =
                 "Your profile was updated successfully.";
+
 
             return RedirectToAction("Profile");
         }
@@ -395,18 +735,27 @@ namespace SengeleMinistries.Controllers
         [Authorize]
         public async Task<IActionResult> Orders()
         {
-            var memberIdClaim = User.FindFirst("MemberId");
+            var memberIdClaim =
+                User.FindFirst("MemberId");
+
 
             if (memberIdClaim == null ||
-                !int.TryParse(memberIdClaim.Value, out int memberId))
+                !int.TryParse(
+                    memberIdClaim.Value,
+                    out int memberId))
             {
                 return RedirectToAction("Login");
             }
 
-            var orders = await _db.Orders
-                .Where(o => o.MemberId == memberId)
-                .OrderByDescending(o => o.CreatedAt)
-                .ToListAsync();
+
+            var orders =
+                await _db.Orders
+                    .Where(
+                        o => o.MemberId == memberId)
+                    .OrderByDescending(
+                        o => o.CreatedAt)
+                    .ToListAsync();
+
 
             return View(orders);
         }
@@ -418,26 +767,37 @@ namespace SengeleMinistries.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> OrderDetails(int id)
+        public async Task<IActionResult> OrderDetails(
+            int id)
         {
-            var memberIdClaim = User.FindFirst("MemberId");
+            var memberIdClaim =
+                User.FindFirst("MemberId");
+
 
             if (memberIdClaim == null ||
-                !int.TryParse(memberIdClaim.Value, out int memberId))
+                !int.TryParse(
+                    memberIdClaim.Value,
+                    out int memberId))
             {
                 return RedirectToAction("Login");
             }
 
-            var order = await _db.Orders
-                .Include(o => o.OrderItems)
-                .FirstOrDefaultAsync(o =>
-                    o.OrderId == id &&
-                    o.MemberId == memberId);
+
+            var order =
+                await _db.Orders
+                    .Include(
+                        o => o.OrderItems)
+                    .FirstOrDefaultAsync(
+                        o =>
+                            o.OrderId == id &&
+                            o.MemberId == memberId);
+
 
             if (order == null)
             {
                 return NotFound();
             }
+
 
             return View(order);
         }
@@ -447,15 +807,21 @@ namespace SengeleMinistries.Controllers
         // LEGACY PASSWORD SUPPORT
         // ==========================================
 
-        private static string HashPassword(string password)
+        private static string HashPassword(
+            string password)
         {
-            using var sha = SHA256.Create();
+            using var sha =
+                SHA256.Create();
+
 
             var bytes =
-                Encoding.UTF8.GetBytes(password ?? string.Empty);
+                Encoding.UTF8.GetBytes(
+                    password ?? string.Empty);
+
 
             var hash =
                 sha.ComputeHash(bytes);
+
 
             return Convert.ToHexString(hash);
         }

@@ -84,6 +84,15 @@ namespace SengeleMinistries.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmailConfirmationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EmailConfirmationTokenExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
