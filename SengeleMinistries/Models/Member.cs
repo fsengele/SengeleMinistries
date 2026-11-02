@@ -65,5 +65,12 @@ namespace SengeleMinistries.Models
 
         // Administrator flag - do not expose in public forms
         public bool IsAdmin { get; set; } = false;
+
+        // Password reset
+        public string? PasswordResetToken { get; set; }
+
+        public DateTime? PasswordResetTokenExpiresAt { get; set; }
     }
+
+
 }
