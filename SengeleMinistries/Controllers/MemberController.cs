@@ -531,6 +531,74 @@ namespace SengeleMinistries.Controllers
             return View(model);
         }
 
+        // ==========================================
+        // RESET PASSWORD - POST
+        // ==========================================
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(
+            ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var member = await _db.Members
+                .FirstOrDefaultAsync(m => m.Id == model.MemberId);
+
+            if (member == null ||
+                string.IsNullOrWhiteSpace(member.PasswordResetToken) ||
+                member.PasswordResetTokenExpiresAt == null ||
+                member.PasswordResetTokenExpiresAt <= DateTime.UtcNow ||
+                string.IsNullOrWhiteSpace(model.Token))
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "This password reset link is invalid or expired.");
+
+                return View(model);
+            }
+
+            // Verify the reset token
+            var tokenHash = Convert.ToHexString(
+                SHA256.HashData(
+                    Encoding.UTF8.GetBytes(model.Token)));
+
+            if (!string.Equals(
+                member.PasswordResetToken,
+                tokenHash,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "This password reset link is invalid or expired.");
+
+                return View(model);
+            }
+
+            // Hash and save the new password
+            var hasher =
+                new Microsoft.AspNetCore.Identity.PasswordHasher<Member>();
+
+            member.PasswordHash =
+                hasher.HashPassword(member, model.NewPassword);
+
+            // Make the reset link unusable
+            member.PasswordResetToken = null;
+            member.PasswordResetTokenExpiresAt = null;
+
+            await _db.SaveChangesAsync();
+
+            TempData["SuccessMessage"] =
+                "Your password has been reset successfully. You can now sign in.";
+
+            return RedirectToAction("Login");
+        }
+
+
 
         // ==========================================
         // LOGIN - GET
