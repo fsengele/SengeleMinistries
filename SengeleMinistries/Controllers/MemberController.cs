@@ -328,6 +328,209 @@ namespace SengeleMinistries.Controllers
             return RedirectToAction("Login");
         }
 
+        // ==========================================
+        // FORGOT PASSWORD - GET
+        // ==========================================
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordViewModel());
+        }
+
+
+
+        // ==========================================
+        // FORGOT PASSWORD - POST
+        // ==========================================
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(
+            ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var email = model.Email.Trim();
+
+            var member = await _db.Members
+                .FirstOrDefaultAsync(m => m.Email == email);
+
+            if (member != null)
+            {
+
+
+
+
+                // ==========================================
+                // GENERATE SECURE RESET TOKEN
+                // ==========================================
+
+                var token = Convert.ToHexString(
+                    RandomNumberGenerator.GetBytes(32));
+
+                // Store only the token hash in database
+                var tokenHash = SHA256.HashData(
+                    Encoding.UTF8.GetBytes(token));
+
+                member.PasswordResetToken =
+                    Convert.ToHexString(tokenHash);
+
+                // Token expires after 30 minutes
+                member.PasswordResetTokenExpiresAt =
+                    DateTime.UtcNow.AddMinutes(30);
+
+                await _db.SaveChangesAsync();
+
+                // ==========================================
+                // CREATE PASSWORD RESET LINK
+                // ==========================================
+
+                var resetUrl = Url.Action(
+                    "ResetPassword",
+                    "Member",
+                    new
+                    {
+                        memberId = member.Id,
+                        token = token
+                    },
+                    Request.Scheme);
+
+                // ==========================================
+                // SEND PASSWORD RESET EMAIL
+                // ==========================================
+
+                if (string.IsNullOrEmpty(resetUrl))
+                {
+                    _logger.LogError(
+                        "Could not generate reset URL for member {MemberId}",
+                        member.Id);
+                }
+                else
+                {
+                    try
+                    {
+                        var safeUrl =
+                            System.Net.WebUtility.HtmlEncode(resetUrl);
+
+                        var subject =
+                            "Reset your password - Sengele Ministries";
+
+                        var html = $@"
+                            <div style='font-family:Arial,Helvetica,sans-serif;
+                                        color:#222;
+                                        line-height:1.6;
+                                        max-width:650px;'>
+
+                                <h2>SENGELE MINISTRIES</h2>
+
+                                <p>Hello,</p>
+
+                                <p>
+                                    We received a request to reset
+                                    your account password.
+                                </p>
+
+                                <p style='margin:30px 0;'>
+                                    <a href='{safeUrl}'
+                                       style='background:#111;
+                                              color:#ffffff;
+                                              padding:14px 24px;
+                                              text-decoration:none;
+                                              display:inline-block;
+                                              font-weight:600;'>
+                                        RESET MY PASSWORD
+                                    </a>
+                                </p>
+
+                                <p>
+                                    This link will expire in 30 minutes.
+                                </p>
+
+                                <p>
+                                    If you did not request a password reset,
+                                    you can safely ignore this email.
+                                </p>
+
+                            </div>";
+
+                        await _emailSender.SendEmailAsync(
+                            member.Email,
+                            subject,
+                            html);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(
+                            ex,
+                            "Error sending password reset email for member {MemberId}",
+                            member.Id);
+                    }
+                }
+            }
+
+            // ==========================================
+            // SAME RESPONSE FOR ALL EMAIL ADDRESSES
+            // ==========================================
+
+            TempData["SuccessMessage"] =
+                "If an account exists with this email, " +
+                "a password reset link will be sent.";
+
+            return RedirectToAction("Login");
+        }
+
+
+
+
+
+        // ==========================================
+        // RESET PASSWORD - GET
+        // ==========================================
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(int memberId, string? token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return BadRequest("Invalid password reset link.");
+            }
+
+            var member = await _db.Members
+                .FirstOrDefaultAsync(m => m.Id == memberId);
+
+            if (member == null ||
+                string.IsNullOrWhiteSpace(member.PasswordResetToken) ||
+                member.PasswordResetTokenExpiresAt == null ||
+                member.PasswordResetTokenExpiresAt <= DateTime.UtcNow)
+            {
+                return BadRequest("This password reset link is invalid or expired.");
+            }
+
+            var tokenHash = Convert.ToHexString(
+                SHA256.HashData(Encoding.UTF8.GetBytes(token)));
+
+            if (!string.Equals(member.PasswordResetToken, tokenHash,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest("This password reset link is invalid or expired.");
+            }
+
+            var model = new ResetPasswordViewModel
+            {
+                MemberId = member.Id,
+                Token = token
+            };
+
+            return View(model);
+        }
+
 
         // ==========================================
         // LOGIN - GET
