@@ -1,8 +1,9 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
-using System.Globalization;
+using Microsoft.EntityFrameworkCore;
+using SengeleMinistries.Data;
 using SengeleMinistries.Models;
 using SengeleMinistries.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -177,6 +178,13 @@ app.MapControllerRoute(
     pattern:
         "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+// Appliquer automatiquement les migrations au démarrage
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
 
 
 app.Run();
