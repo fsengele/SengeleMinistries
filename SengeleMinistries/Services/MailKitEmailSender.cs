@@ -1,4 +1,4 @@
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -35,7 +35,7 @@ namespace SengeleMinistries.Services
                 // Disable certificate revocation checking only. Keep full certificate/hostname validation enabled.
                 client.CheckCertificateRevocation = false;
                 var secureSocket = _settings.UseSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.Auto;
-                await client.ConnectAsync(_settings.SmtpHost, _settings.SmtpPort, secureSocket);
+                await client.ConnectAsync(_settings.SmtpHost ?? throw new InvalidOperationException("SMTP host is not configured"), _settings.SmtpPort, secureSocket);
 
                 if (!string.IsNullOrWhiteSpace(_settings.SmtpUser))
                 {
