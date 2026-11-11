@@ -1,0 +1,89 @@
+﻿@model SengeleMinistries.Models.ResendConfirmationViewModel
+@using System.Globalization
+
+@{
+    bool isFrench =
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "fr";
+
+    ViewData["Title"] = isFrench
+        ? "Renvoyer l'e-mail de confirmation"
+        : "Resend Confirmation Email";
+}
+
+<div class="section">
+    <div class="container-wide">
+
+        <div style="max-width:480px;
+            margin:0 auto;
+            background:var(--sm-white);
+            padding:2rem;
+            border-radius:8px;
+            box-shadow:0 10px 30px rgba(16,16,16,0.06)">
+
+            <h2 class="lead-heading">
+                @(isFrench
+                    ? "Renvoyer l'e-mail de confirmation"
+                    : "Resend Confirmation Email")
+            </h2>
+
+            <p class="muted">
+                @(isFrench
+                    ? "Vous n'avez pas reçu votre e-mail de confirmation ? Entrez votre adresse e-mail pour recevoir un nouveau lien."
+                    : "Didn't receive your confirmation email? Enter your email address to get a new link.")
+            </p>
+
+            <form asp-controller="Member"
+                  asp-action="ResendConfirmation"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">
+                        @(isFrench
+                            ? "Adresse e-mail"
+                            : "Email address")
+                    </label>
+
+                    <input asp-for="Email"
+                           class="form-control"
+                           type="email"
+                           autocomplete="email" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-cta">
+                    @(isFrench
+                        ? "Renvoyer le lien de confirmation"
+                        : "Resend Confirmation Link")
+                </button>
+
+                <p class="mt-3 muted">
+                    @(isFrench
+                        ? "Vous avez déjà confirmé votre adresse ?"
+                        : "Already confirmed your email?")
+
+                    <a asp-controller="Member"
+                       asp-action="Login"
+                       class="link-accent">
+                        @(isFrench
+                            ? "Retour à la connexion"
+                            : "Back to Login")
+                    </a>
+                </p>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

@@ -271,15 +271,20 @@ namespace SengeleMinistries.Controllers
             }
 
 
-            // Already confirmed
+
+            // ==========================================
+            // PREVENT TOKEN REUSE
+            // ==========================================
+
             if (member.EmailConfirmed)
             {
-                TempData["SuccessMessage"] =
-                    "Your email is already confirmed. " +
-                    "You may log in.";
+                TempData["ErrorMessage"] =
+                    "This confirmation link has already been used " +
+                    "or is no longer valid.";
 
                 return RedirectToAction("Login");
             }
+
 
 
             // Check token
@@ -327,6 +332,123 @@ namespace SengeleMinistries.Controllers
 
             return RedirectToAction("Login");
         }
+
+
+        // ==========================================
+        // RESEND CONFIRMATION EMAIL - GET
+        // ==========================================
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResendConfirmation()
+        {
+            return View(new ResendConfirmationViewModel());
+        }
+
+
+        // ==========================================
+        // RESEND CONFIRMATION EMAIL - POST
+        // ==========================================
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResendConfirmation(
+            ResendConfirmationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var email = model.Email.Trim();
+
+            var member = await _db.Members
+                .FirstOrDefaultAsync(m => m.Email == email);
+
+            if (member != null && !member.EmailConfirmed)
+            {
+                // Generate a new confirmation token
+                var token = Convert.ToHexString(
+                    RandomNumberGenerator.GetBytes(32));
+
+                member.EmailConfirmationToken = token;
+                member.EmailConfirmationTokenExpiresAt =
+                    DateTime.UtcNow.AddHours(24);
+
+                await _db.SaveChangesAsync();
+
+                // Create the confirmation URL
+                var confirmationUrl = Url.Action(
+                    "ConfirmEmail",
+                    "Member",
+                    new
+                    {
+                        memberId = member.Id,
+                        token = token
+                    },
+                    Request.Scheme);
+
+                if (!string.IsNullOrWhiteSpace(confirmationUrl))
+                {
+                    try
+                    {
+                        var safeUrl =
+                            System.Net.WebUtility.HtmlEncode(
+                                confirmationUrl);
+
+                        var subject =
+                            "Confirm your email - Sengele Ministries";
+
+                        var html = $@"
+                            <div style='font-family:Arial,Helvetica,sans-serif;
+                                        color:#222;line-height:1.6;'>
+                                <h2>SENGELE MINISTRIES</h2>
+
+                                <p>Hello,</p>
+
+                                <p>
+                                    Please confirm your email address
+                                    by clicking the button below.
+                                </p>
+
+                                <p>
+                                    <a href='{safeUrl}'
+                                       style='background:#111;
+                                              color:#fff;
+                                              padding:14px 24px;
+                                              text-decoration:none;
+                                              display:inline-block;'>
+                                        CONFIRM MY EMAIL
+                                    </a>
+                                </p>
+
+                                <p>This link expires in 24 hours.</p>
+                            </div>";
+
+                        await _emailSender.SendEmailAsync(
+                            member.Email,
+                            subject,
+                            html);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(
+                            ex,
+                            "Error resending confirmation email for member {MemberId}",
+                            member.Id);
+                    }
+                }
+            }
+
+            // Same response whether the email exists or not
+            TempData["SuccessMessage"] =
+                "If your account needs confirmation, " +
+                "a new confirmation link will be sent.";
+
+            return RedirectToAction("Login");
+        }
+
 
         // ==========================================
         // FORGOT PASSWORD - GET

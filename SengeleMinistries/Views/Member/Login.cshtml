@@ -55,6 +55,19 @@
                           class="text-danger"></span>
                 </div>
 
+                
+                <!-- RESEND CONFIRMATION EMAIL -->
+                <div class="mb-3">
+                    <a asp-controller="Member"
+                       asp-action="ResendConfirmation"
+                       class="link-accent">
+                        @(isFrench
+                            ? "Renvoyer l'e-mail de confirmation"
+                            : "Resend Confirmation Email")
+                    </a>
+                </div>
+
+
                 <!-- FORGOT PASSWORD -->
                 <div class="mb-3">
                     <a asp-controller="Member"
