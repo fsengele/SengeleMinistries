@@ -148,6 +148,27 @@ namespace SengeleMinistries.Controllers
                 }
 
 
+                // Amazon affiliate products must be purchased on Amazon.
+                // Never include them in a Sengele Ministries order.
+                if (product.ProductType != "OwnProduct")
+                {
+                    ModelState.AddModelError(
+                        string.Empty,
+                        $"{product.Title} cannot be purchased through this checkout. Please buy it on Amazon.");
+
+                    continue;
+                }
+
+                // Invalid quantities cannot be ordered.
+                if (cartItem.Quantity <= 0)
+                {
+                    ModelState.AddModelError(
+                        string.Empty,
+                        $"The quantity for {product.Title} is invalid.");
+
+                    continue;
+                }
+
                 // Product is out of stock
                 if (product.StockQuantity.HasValue &&
                     product.StockQuantity.Value <= 0)
@@ -426,7 +447,14 @@ namespace SengeleMinistries.Controllers
                         databaseItem.ProductId);
 
 
-                if (product == null)
+                // Only published, own products can enter checkout.
+                if (product == null ||
+                    !product.IsPublished ||
+                    product.ProductType != "OwnProduct" ||
+                    databaseItem.Quantity <= 0 ||
+                    (product.StockQuantity.HasValue &&
+                     (product.StockQuantity.Value <= 0 ||
+                      databaseItem.Quantity > product.StockQuantity.Value)))
                 {
                     continue;
                 }

@@ -1,4 +1,5 @@
-﻿@model SengeleMinistries.Models.Product
+﻿
+@model SengeleMinistries.Models.Product
 
 @{
     ViewData["Title"] = "Update Product";
@@ -21,18 +22,48 @@
 
         </div>
 
-
         <div class="admin-product-card">
 
             <form method="post">
 
-                @* Product ID must be sent back to the controller *@
+                @Html.AntiForgeryToken()
+
+                @* Product ID is sent back to the controller. *@
                 <input asp-for="ProductId" type="hidden" />
 
                 <div asp-validation-summary="ModelOnly"
                      class="text-danger mb-3">
                 </div>
 
+                @* =========================
+                   PRODUCT TYPE
+                   ========================= *@
+                <div class="admin-form-group">
+
+                    <label asp-for="ProductType"
+                           class="form-label">
+                        Product Type
+                    </label>
+
+                    <select asp-for="ProductType"
+                            class="form-control"
+                            id="productType">
+
+                        <option value="OwnProduct">
+                            Sengele Ministries Product
+                        </option>
+
+                        <option value="AmazonAffiliate">
+                            Amazon Affiliate Product
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="ProductType"
+                          class="text-danger">
+                    </span>
+
+                </div>
 
                 @* =========================
                    TITLE
@@ -52,14 +83,13 @@
 
                 </div>
 
-
                 @* =========================
                    CATEGORY
                    ========================= *@
                 <div class="admin-form-group">
 
                     <label asp-for="Category"
-                           class="form-label">
+                            class="form-label">
                     </label>
 
                     <select asp-for="Category"
@@ -85,6 +115,14 @@
                             Apparel
                         </option>
 
+                        <option value="Electronics">
+                            Electronics
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
                     </select>
 
                     <span asp-validation-for="Category"
@@ -92,7 +130,6 @@
                     </span>
 
                 </div>
-
 
                 @* =========================
                    SHORT DESCRIPTION
@@ -113,7 +150,6 @@
 
                 </div>
 
-
                 @* =========================
                    FULL DESCRIPTION
                    ========================= *@
@@ -126,8 +162,7 @@
 
                     <textarea asp-for="Description"
                               class="form-control"
-                              rows="6">
-                    </textarea>
+                              rows="6"></textarea>
 
                     <span asp-validation-for="Description"
                           class="text-danger">
@@ -135,11 +170,38 @@
 
                 </div>
 
+                @* =========================
+                   AMAZON AFFILIATE LINK
+                   ========================= *@
+                <div class="admin-form-group"
+                     id="amazonLinkSection"
+                     style="display:none;">
+
+                    <label asp-for="AffiliateUrl"
+                           class="form-label">
+                        Amazon Affiliate Link
+                    </label>
+
+                    <input asp-for="AffiliateUrl"
+                           class="form-control"
+                           type="url"
+                           placeholder="https://link.amazon/..." />
+
+                    <span asp-validation-for="AffiliateUrl"
+                          class="text-danger">
+                    </span>
+
+                    <p class="admin-form-note">
+                        Paste your Amazon Associates affiliate link here.
+                    </p>
+
+                </div>
 
                 @* =========================
                    PRICE + STOCK
                    ========================= *@
-                <div class="admin-form-row">
+                <div class="admin-form-row"
+                     id="ownProductSection">
 
                     <div class="admin-form-group">
 
@@ -155,7 +217,6 @@
                         </span>
 
                     </div>
-
 
                     <div class="admin-form-group">
 
@@ -177,7 +238,6 @@
 
                 </div>
 
-
                 @* =========================
                    IMAGE
                    ========================= *@
@@ -196,8 +256,14 @@
                           class="text-danger">
                     </span>
 
-                </div>
+                    <p class="admin-form-note"
+                       id="amazonImageNote"
+                       style="display:none;">
+                        Use an image you are authorized to display.
+                        Amazon images are not automatically imported yet.
+                    </p>
 
+                </div>
 
                 @* =========================
                    PUBLISH
@@ -214,12 +280,21 @@
 
                 </div>
 
-
-                <p class="admin-form-note">
-                    Published products appear in the public Shop
+                <p class="admin-form-note"
+                   id="ownProductNote">
+                    Published Sengele Ministries products
+                    appear in the public Shop
                     and can be added to the shopping cart.
                 </p>
 
+                <p class="admin-form-note"
+                   id="amazonProductNote"
+                   style="display:none;">
+                    Amazon affiliate products will redirect
+                    customers to Amazon for purchasing.
+                    As an Amazon Associate, I earn from
+                    qualifying purchases.
+                </p>
 
                 @* =========================
                    BUTTONS
@@ -246,9 +321,70 @@
     </div>
 </section>
 
-
 @section Scripts {
+
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
     }
+
+    <script>
+        // Show fields based on the selected product type.
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const productType =
+                document.getElementById("productType");
+
+            const amazonLinkSection =
+                document.getElementById("amazonLinkSection");
+
+            const ownProductSection =
+                document.getElementById("ownProductSection");
+
+            const amazonImageNote =
+                document.getElementById("amazonImageNote");
+
+            const ownProductNote =
+                document.getElementById("ownProductNote");
+
+            const amazonProductNote =
+                document.getElementById("amazonProductNote");
+
+            const affiliateInput =
+                document.getElementById("AffiliateUrl");
+
+            function updateProductFields() {
+
+                const isAmazon =
+                    productType.value === "AmazonAffiliate";
+
+                amazonLinkSection.style.display =
+                    isAmazon ? "block" : "none";
+
+                ownProductSection.style.display =
+                    isAmazon ? "none" : "flex";
+
+                amazonImageNote.style.display =
+                    isAmazon ? "block" : "none";
+
+                ownProductNote.style.display =
+                    isAmazon ? "none" : "block";
+
+                amazonProductNote.style.display =
+                    isAmazon ? "block" : "none";
+
+                affiliateInput.required = isAmazon;
+
+                // Clear affiliate link only for own products.
+                if (!isAmazon) {
+                    affiliateInput.value = "";
+                }
+            }
+
+            productType.addEventListener(
+                "change", updateProductFields);
+
+            updateProductFields();
+        });
+    </script>
 }

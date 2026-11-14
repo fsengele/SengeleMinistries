@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SengeleMinistries.Data;
@@ -20,6 +21,7 @@ namespace SengeleMinistries.Areas.Admin.Controllers
         // =========================================================
         // INDEX
         // GET: /Admin/Products
+        // Shows all products in the admin dashboard.
         // =========================================================
         public async Task<IActionResult> Index()
         {
@@ -28,6 +30,126 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                 .ToListAsync();
 
             return View(products);
+        }
+
+        // =========================================================
+        // AMAZON LINK VALIDATION
+        // Checks if the link belongs to Amazon.
+        // =========================================================
+        private static bool IsValidAmazonLink(string? link)
+        {
+            if (string.IsNullOrWhiteSpace(link))
+            {
+                return false;
+            }
+
+            if (!Uri.TryCreate(link.Trim(),
+                UriKind.Absolute, out var uri))
+            {
+                return false;
+            }
+
+            if (uri.Scheme != Uri.UriSchemeHttps)
+            {
+                return false;
+            }
+
+            string host = uri.Host.ToLowerInvariant();
+
+            // Amazon short affiliate links.
+            if (host == "link.amazon" ||
+                host == "amzn.to")
+            {
+                return true;
+            }
+
+            // Amazon product pages.
+            string[] amazonDomains =
+            {
+                "amazon.com",
+                "amazon.ca",
+                "amazon.co.uk"
+            };
+
+            return amazonDomains.Any(domain =>
+                host == domain ||
+                host.EndsWith("." + domain,
+                    StringComparison.Ordinal));
+        }
+
+        // =========================================================
+        // PRODUCT VALIDATION
+        // Used by Create and Edit.
+        // =========================================================
+        private void ValidateProduct(Product product)
+        {
+            // Check the product title.
+            if (string.IsNullOrWhiteSpace(product.Title))
+            {
+                ModelState.AddModelError(
+                    nameof(Product.Title),
+                    "Title is required.");
+            }
+
+            // Check the product category.
+            if (string.IsNullOrWhiteSpace(product.Category))
+            {
+                ModelState.AddModelError(
+                    nameof(Product.Category),
+                    "Category is required.");
+            }
+
+            // Check the product type.
+            if (product.ProductType != "OwnProduct" &&
+                product.ProductType != "AmazonAffiliate")
+            {
+                ModelState.AddModelError(
+                    nameof(Product.ProductType),
+                    "Please select a valid product type.");
+            }
+
+            // Validate Sengele Ministries products.
+            if (product.ProductType == "OwnProduct")
+            {
+                if (product.Price < 0)
+                {
+                    ModelState.AddModelError(
+                        nameof(Product.Price),
+                        "Price cannot be negative.");
+                }
+
+                // Own products do not use affiliate links.
+                product.AffiliateUrl = null;
+                ModelState.Remove(
+                    nameof(Product.AffiliateUrl));
+            }
+
+            // Validate Amazon affiliate products.
+            if (product.ProductType == "AmazonAffiliate")
+            {
+                if (string.IsNullOrWhiteSpace(
+                    product.AffiliateUrl))
+                {
+                    ModelState.AddModelError(
+                        nameof(Product.AffiliateUrl),
+                        "Amazon affiliate link is required.");
+                }
+                else if (!IsValidAmazonLink(
+                    product.AffiliateUrl))
+                {
+                    ModelState.AddModelError(
+                        nameof(Product.AffiliateUrl),
+                        "Please enter a valid Amazon HTTPS link.");
+                }
+
+                // Amazon manages its own prices and stock.
+                product.Price = 0;
+                product.StockQuantity = null;
+
+                ModelState.Remove(nameof(Product.Price));
+                ModelState.Remove(
+                    nameof(Product.StockQuantity));
+            }
         }
 
         // =========================================================
@@ -43,38 +165,19 @@ namespace SengeleMinistries.Areas.Admin.Controllers
         // =========================================================
         // CREATE - POST
         // POST: /Admin/Products/Create
+        // Saves a new product.
         // =========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            // These values are generated by the application,
-            // not entered by the user.
+            // These values are set by the application.
             ModelState.Remove(nameof(Product.ProductId));
             ModelState.Remove(nameof(Product.CreatedAt));
             ModelState.Remove(nameof(Product.UpdatedAt));
 
-            // Required fields
-            if (string.IsNullOrWhiteSpace(product.Title))
-            {
-                ModelState.AddModelError(
-                    nameof(Product.Title),
-                    "Title is required.");
-            }
-
-            if (string.IsNullOrWhiteSpace(product.Category))
-            {
-                ModelState.AddModelError(
-                    nameof(Product.Category),
-                    "Category is required.");
-            }
-
-            if (product.Price < 0)
-            {
-                ModelState.AddModelError(
-                    nameof(Product.Price),
-                    "Price cannot be negative.");
-            }
+            // Validate product information.
+            ValidateProduct(product);
 
             if (!ModelState.IsValid)
             {
@@ -113,6 +216,7 @@ namespace SengeleMinistries.Areas.Admin.Controllers
         // =========================================================
         // EDIT - POST
         // POST: /Admin/Products/Edit/5
+        // Updates an existing product.
         // =========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -125,6 +229,9 @@ namespace SengeleMinistries.Areas.Admin.Controllers
 
             ModelState.Remove(nameof(Product.CreatedAt));
             ModelState.Remove(nameof(Product.UpdatedAt));
+
+            // Validate both types of products.
+            ValidateProduct(product);
 
             if (!ModelState.IsValid)
             {
@@ -139,6 +246,7 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            // Update product information.
             existingProduct.Title = product.Title;
             existingProduct.Category = product.Category;
             existingProduct.ShortDescription =
@@ -151,6 +259,12 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                 product.StockQuantity;
             existingProduct.IsPublished =
                 product.IsPublished;
+
+            // Save the product type and affiliate link.
+            existingProduct.ProductType =
+                product.ProductType;
+            existingProduct.AffiliateUrl =
+                product.AffiliateUrl;
 
             existingProduct.UpdatedAt = DateTime.UtcNow;
 

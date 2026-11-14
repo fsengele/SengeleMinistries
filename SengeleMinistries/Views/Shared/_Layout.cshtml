@@ -8,20 +8,40 @@
     <title>@ViewData["Title"] - Sengele Ministries</title>
     <meta name="description" content="Sengele Ministries - Hope, Prayer and The Word" />
 
-    <!-- Google Analytics - Sengele Ministries -->
+    <!-- ========================================== -->
+    <!-- PWA - SENGELE MINISTRIES MOBILE APP -->
+    <!-- ========================================== -->
+
+    <link rel="manifest" href="~/manifest.json" />
+    <meta name="theme-color" content="#111111" />
+
+    <!-- iPhone / iPad -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Sengele Ministries" />
+    <link rel="apple-touch-icon" href="~/images/icons/icon-192.png" />
+
+    <!-- ========================================== -->
+    <!-- GOOGLE ANALYTICS - SENGELE MINISTRIES -->
+    <!-- ========================================== -->
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ5LK350KR"></script>
     <script>
             window.dataLayer = window.dataLayer || [];
+
             function gtag() {
                 dataLayer.push(arguments);
             }
+
             gtag('js', new Date());
             gtag('config', 'G-BJ5LK350KR');
     </script>
-    <!-- End Google Analytics -->
 
+    <!-- End Google Analytics -->
+    <!-- CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
 </head>
 
 <body class="site-body">
@@ -73,16 +93,24 @@
 
                     <ul class="list-unstyled footer-list">
                         <li>
-                            <a asp-controller="About" asp-action="Index">About</a>
+                            <a asp-controller="About" asp-action="Index">
+                                About
+                            </a>
                         </li>
                         <li>
-                            <a asp-controller="Messages" asp-action="Index">Messages</a>
+                            <a asp-controller="Messages" asp-action="Index">
+                                Messages
+                            </a>
                         </li>
                         <li>
-                            <a asp-controller="Events" asp-action="Index">Events</a>
+                            <a asp-controller="Events" asp-action="Index">
+                                Events
+                            </a>
                         </li>
                         <li>
-                            <a asp-controller="Prayer" asp-action="Index">Prayer</a>
+                            <a asp-controller="Prayer" asp-action="Index">
+                                Prayer
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -92,13 +120,19 @@
 
                     <ul class="list-unstyled footer-list">
                         <li>
-                            <a asp-controller="Contact" asp-action="Index">Contact</a>
+                            <a asp-controller="Contact" asp-action="Index">
+                                Contact
+                            </a>
                         </li>
                         <li>
-                            <a asp-controller="Member" asp-action="Login">My Account</a>
+                            <a asp-controller="Member" asp-action="Login">
+                                My Account
+                            </a>
                         </li>
                         <li>
-                            <a asp-controller="Home" asp-action="Donate">Give</a>
+                            <a asp-controller="Home" asp-action="Donate">
+                                Give
+                            </a>
                         </li>
                         <li>
                             <a class="btn btn-outline-cta btn-sm px-2 py-1 mt-2"
@@ -161,10 +195,39 @@
         </div>
     </footer>
 
+    <!-- JavaScript -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <!-- ========================================== -->
+    <!-- PWA SERVICE WORKER - SENGELE MINISTRIES -->
+    <!-- ========================================== -->
+
+    <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function () {
+
+                    navigator.serviceWorker.register('/service-worker.js')
+                        .then(function (registration) {
+                            console.log(
+                                'Sengele Ministries PWA registered:',
+                                registration.scope
+                            );
+                        })
+                        .catch(function (error) {
+                            console.error(
+                                'PWA registration failed:',
+                                error
+                            );
+                        });
+
+                });
+            }
+    </script>
+
+    <!-- End PWA Service Worker -->
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

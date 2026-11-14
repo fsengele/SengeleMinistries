@@ -66,6 +66,13 @@ namespace SengeleMinistries.Controllers
                 return NotFound();
             }
 
+            // Affiliate products are purchased on Amazon, not in this cart.
+            if (product.ProductType == "AmazonAffiliate")
+            {
+                TempData["CartError"] = "This product must be purchased on Amazon.";
+                return RedirectToAction("Details", "Shop", new { id = productId });
+            }
+
             // Product out of stock
             if (product.StockQuantity.HasValue &&
                 product.StockQuantity.Value <= 0)
@@ -193,6 +200,15 @@ namespace SengeleMinistries.Controllers
                 TempData["CartError"] =
                     "This product is no longer available.";
 
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Remove an item if it has since become an Amazon affiliate product.
+            if (product.ProductType == "AmazonAffiliate")
+            {
+                _context.ShoppingCartItems.Remove(cartItem);
+                await _context.SaveChangesAsync();
+                TempData["CartError"] = "Amazon products cannot be kept in this cart.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -397,7 +413,9 @@ namespace SengeleMinistries.Controllers
                         p.ProductId ==
                         databaseItem.ProductId);
 
-                if (product == null)
+                // Do not display affiliate or unpublished products in the local cart.
+                if (product == null || !product.IsPublished ||
+                    product.ProductType == "AmazonAffiliate")
                 {
                     continue;
                 }

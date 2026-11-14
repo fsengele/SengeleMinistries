@@ -31,6 +31,18 @@ namespace SengeleMinistries.Models
 
         public int? StockQuantity { get; set; }
 
+        // Identifies whether the product belongs to
+        // Sengele Ministries or Amazon Affiliate.
+        [Required]
+        [StringLength(30)]
+        public string ProductType { get; set; } = "OwnProduct";
+
+        // Stores the Amazon affiliate link.
+        // This field is optional for Sengele Ministries products.
+        [StringLength(2000)]
+        [Url]
+        public string? AffiliateUrl { get; set; }
+
         public bool IsPublished { get; set; } = false;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

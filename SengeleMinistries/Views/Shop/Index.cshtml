@@ -123,6 +123,15 @@
 
                 @foreach (var p in Model)
                 {
+                    @* Amazon products redirect to Amazon; own products use our cart. *@
+                    var isAmazon = p.ProductType == "AmazonAffiliate";
+                    var hasAffiliateLink = Uri.TryCreate(p.AffiliateUrl, UriKind.Absolute, out var affiliateUri)
+                        && (affiliateUri.Scheme == Uri.UriSchemeHttps || affiliateUri.Scheme == Uri.UriSchemeHttp)
+                        && (affiliateUri.Host.Equals("amazon.com", StringComparison.OrdinalIgnoreCase)
+                            || affiliateUri.Host.EndsWith(".amazon.com", StringComparison.OrdinalIgnoreCase)
+                            || affiliateUri.Host.Equals("amzn.to", StringComparison.OrdinalIgnoreCase)
+                            || affiliateUri.Host.Equals("link.amazon", StringComparison.OrdinalIgnoreCase));
+
                     <article class="shop-product-card">
 
 
@@ -161,14 +170,14 @@
 
                                 @* STOCK BADGE *@
 
-                                @if (p.StockQuantity.HasValue &&
+                                @if (!isAmazon && p.StockQuantity.HasValue &&
                                      p.StockQuantity.Value <= 0)
                                 {
                                     <span class="shop-stock-badge sold-out">
                                         @Localizer["SoldOut"]
                                     </span>
                                 }
-                                else if (p.StockQuantity.HasValue &&
+                                else if (!isAmazon && p.StockQuantity.HasValue &&
                                          p.StockQuantity.Value <= 5)
                                 {
                                     <span class="shop-stock-badge low-stock">
@@ -219,33 +228,31 @@
                             }
 
 
-                            <div class="shop-product-price-row">
-
-                                <span class="shop-product-price">
-                                    $@p.Price.ToString("0.00")
-                                </span>
-
-
-                                @if (!p.StockQuantity.HasValue)
-                                {
-                                    <span class="shop-product-availability">
-                                        @Localizer["Available"]
-                                    </span>
-                                }
-                                else if (p.StockQuantity.Value > 0)
-                                {
-                                    <span class="shop-product-availability">
-                                        @Localizer["InStock"]
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="shop-product-unavailable">
-                                        @Localizer["OutOfStock"]
-                                    </span>
-                                }
-
-                            </div>
+                            @if (isAmazon)
+                            {
+                                <div class="shop-product-price-row">
+                                    <span class="shop-product-availability">Available on Amazon</span>
+                                </div>
+                                <p class="shop-affiliate-disclosure">As an Amazon Associate, we earn from qualifying purchases.</p>
+                            }
+                            else
+                            {
+                                <div class="shop-product-price-row">
+                                    <span class="shop-product-price">$@p.Price.ToString("0.00")</span>
+                                    @if (!p.StockQuantity.HasValue)
+                                    {
+                                        <span class="shop-product-availability">@Localizer["Available"]</span>
+                                    }
+                                    else if (p.StockQuantity.Value > 0)
+                                    {
+                                        <span class="shop-product-availability">@Localizer["InStock"]</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="shop-product-unavailable">@Localizer["OutOfStock"]</span>
+                                    }
+                                </div>
+                            }
 
 
                             @* =========================================
@@ -264,42 +271,32 @@
                                 </a>
 
 
-                                @if (!p.StockQuantity.HasValue ||
-                                     p.StockQuantity.Value > 0)
+                                @if (isAmazon)
                                 {
-                                    <form asp-controller="Cart"
-                                          asp-action="AddToCart"
-                                          method="post"
-                                          class="shop-cart-form">
-
+                                    @if (hasAffiliateLink)
+                                    {
+                                        <a href="@p.AffiliateUrl"
+                                           target="_blank"
+                                           rel="sponsored noopener noreferrer"
+                                           class="shop-add-btn shop-amazon-btn">Buy on Amazon</a>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="shop-add-btn disabled" disabled>Link unavailable</button>
+                                    }
+                                }
+                                else if (!p.StockQuantity.HasValue || p.StockQuantity.Value > 0)
+                                {
+                                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="shop-cart-form">
                                         @Html.AntiForgeryToken()
-
-                                        <input type="hidden"
-                                               name="productId"
-                                               value="@p.ProductId" />
-
-                                        <input type="hidden"
-                                               name="quantity"
-                                               value="1" />
-
-                                        <button type="submit"
-                                                class="shop-add-btn">
-
-                                            @Localizer["AddToCart"]
-
-                                        </button>
-
+                                        <input type="hidden" name="productId" value="@p.ProductId" />
+                                        <input type="hidden" name="quantity" value="1" />
+                                        <button type="submit" class="shop-add-btn">@Localizer["AddToCart"]</button>
                                     </form>
                                 }
                                 else
                                 {
-                                    <button type="button"
-                                            class="shop-add-btn disabled"
-                                            disabled>
-
-                                        @Localizer["SoldOut"]
-
-                                    </button>
+                                    <button type="button" class="shop-add-btn disabled" disabled>@Localizer["SoldOut"]</button>
                                 }
 
                             </div>
