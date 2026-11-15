@@ -1,3 +1,4 @@
+
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,9 +26,26 @@ namespace SengeleMinistries.Models
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
+        // IMAGE 1: Main product image.
+        // Keep this property for existing products.
         [StringLength(1000)]
         [DataType(DataType.ImageUrl)]
         public string? ImageUrl { get; set; }
+
+        // IMAGE 2: Additional product image.
+        [StringLength(1000)]
+        [DataType(DataType.ImageUrl)]
+        public string? ImageUrl2 { get; set; }
+
+        // IMAGE 3: Additional product image.
+        [StringLength(1000)]
+        [DataType(DataType.ImageUrl)]
+        public string? ImageUrl3 { get; set; }
+
+        // IMAGE 4: Additional product image.
+        [StringLength(1000)]
+        [DataType(DataType.ImageUrl)]
+        public string? ImageUrl4 { get; set; }
 
         public int? StockQuantity { get; set; }
 
