@@ -1,5 +1,4 @@
-﻿
-@model SengeleMinistries.Models.Product
+﻿@model SengeleMinistries.Models.Product
 
 @{
     ViewData["Title"] = "Create New Product";
@@ -235,28 +234,94 @@
                 </div>
 
                 @* =========================
-                   IMAGE
+                   PRODUCT IMAGES
+                   Local paths and HTTPS URLs supported
                    ========================= *@
+
                 <div class="admin-form-group">
 
                     <label asp-for="ImageUrl"
                            class="form-label">
-                        Image URL
+                        Image 1 URL - Main Photo
                     </label>
 
                     <input asp-for="ImageUrl"
                            class="form-control"
-                           placeholder="https://..." />
+                           type="text"
+                           placeholder="/images/Francis10.jpeg or https://..." />
 
                     <span asp-validation-for="ImageUrl"
                           class="text-danger">
                     </span>
 
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ImageUrl2"
+                           class="form-label">
+                        Image 2 URL
+                    </label>
+
+                    <input asp-for="ImageUrl2"
+                           class="form-control"
+                           type="text"
+                           placeholder="/images/Francis11.jpeg or https://..." />
+
+                    <span asp-validation-for="ImageUrl2"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ImageUrl3"
+                           class="form-label">
+                        Image 3 URL
+                    </label>
+
+                    <input asp-for="ImageUrl3"
+                           class="form-control"
+                           type="text"
+                           placeholder="/images/1910.png or https://..." />
+
+                    <span asp-validation-for="ImageUrl3"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ImageUrl4"
+                           class="form-label">
+                        Image 4 URL
+                    </label>
+
+                    <input asp-for="ImageUrl4"
+                           class="form-control"
+                           type="text"
+                           placeholder="/images/Francis12.jpeg or https://..." />
+
+                    <span asp-validation-for="ImageUrl4"
+                          class="text-danger">
+                    </span>
+
+                    <p class="admin-form-note">
+                        Add up to 4 product images.
+                        You can use local image paths beginning with
+                        /images/ or full HTTPS image URLs.
+                        The product details page displays the images
+                        in a carousel with automatic sliding
+                        every 3 seconds and navigation arrows.
+                    </p>
+
                     <p class="admin-form-note"
                        id="amazonImageNote"
                        style="display:none;">
-                        Use an image you are authorized to display.
-                        Amazon images are not automatically imported yet.
+                        Use images you are authorized to display.
+                        Amazon images are not automatically imported.
                     </p>
 
                 </div>
