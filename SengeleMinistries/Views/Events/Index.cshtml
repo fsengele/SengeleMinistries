@@ -1,5 +1,13 @@
+
 @{
-    ViewData["Title"] = "Events";
+    var currentCulture =
+        System.Globalization.CultureInfo
+            .CurrentUICulture
+            .TwoLetterISOLanguageName;
+
+    var isFrench = currentCulture == "fr";
+
+    ViewData["Title"] = isFrench ? "Événements" : "Events";
 }
 
 <!-- =========================================================
@@ -12,7 +20,6 @@
 
         <div class="events-hero-grid">
 
-
             <!-- LEFT SIDE -->
             <div class="events-hero-copy">
 
@@ -20,24 +27,40 @@
                     SENGELE MINISTRIES
                 </p>
 
-
                 <h1>
-                    LET US<br />
-                    <span>GATHER.</span>
+                    @if (isFrench)
+                    {
+                        <text>RASSEMBLONS-NOUS<br />
+                        <span>ENSEMBLE.</span></text>
+                    }
+                    else
+                    {
+                        <text>LET US<br />
+                        <span>GATHER.</span></text>
+                    }
                 </h1>
 
-
                 <p class="events-hero-description">
-                    Join us to pray, hear the Word and gather
-                    in fellowship. All are welcome.
+                    @if (isFrench)
+                    {
+                        <text>
+                            Rejoignez-nous pour prier, écouter la Parole
+                            et partager un moment de communion fraternelle.
+                            Tous sont les bienvenus.
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            Join us to pray, hear the Word and gather
+                            in fellowship. All are welcome.
+                        </text>
+                    }
                 </p>
-
 
                 <div class="events-gold-line"></div>
 
             </div>
-
-
 
             <!-- RIGHT SIDE : PHOTO AND SENGELE MINISTRIES -->
             <div class="events-hero-image">
@@ -46,7 +69,6 @@
 
                     <img src="~/images/Francis10.jpeg"
                          alt="Sengele Ministries Events" />
-
 
                     <div class="feature-image-label">
 
@@ -64,17 +86,13 @@
 
             </div>
 
-
         </div>
 
     </div>
 
 </header>
 
-
-
 <main>
-
 
     <!-- =========================================================
          EVENTS LIST
@@ -86,7 +104,6 @@
 
             <div class="events-list">
 
-
                 <!-- EVENT 01 -->
                 <article class="event-row">
 
@@ -97,19 +114,27 @@
                         </div>
 
                         <div class="event-label">
-                            WEEKLY / PRAYER
+                            @(isFrench
+                                ? "HEBDOMADAIRE / PRIÈRE"
+                                : "WEEKLY / PRAYER")
                         </div>
 
                     </div>
 
-
                     <div class="event-body">
 
                         <h3 class="event-title">
-                            ONLINE<br />
-                            PRAYER TIMES
+                            @if (isFrench)
+                            {
+                                <text>HEURES DE PRIÈRE<br />
+                                EN LIGNE</text>
+                            }
+                            else
+                            {
+                                <text>ONLINE<br />
+                                PRAYER TIMES</text>
+                            }
                         </h3>
-
 
                         <p class="event-desc muted">
                             12h25 — Washington State<br />
@@ -120,13 +145,9 @@
 
                 </article>
 
-
-
                 <div class="event-sep"
                      aria-hidden="true">
                 </div>
-
-
 
                 <!-- EVENT 02 -->
                 <article class="event-row">
@@ -138,30 +159,56 @@
                         </div>
 
                         <div class="event-label">
-                            MONTHLY / GATHERING
+                            @(isFrench
+                                ? "MENSUEL / RASSEMBLEMENT"
+                                : "MONTHLY / GATHERING")
                         </div>
 
                     </div>
 
-
                     <div class="event-body">
 
                         <h3 class="event-title">
-                            FIRST SATURDAY<br />
-                            GATHERING
+                            @if (isFrench)
+                            {
+                                <text>RASSEMBLEMENT<br />
+                                DU PREMIER SAMEDI</text>
+                            }
+                            else
+                            {
+                                <text>FIRST SATURDAY<br />
+                                GATHERING</text>
+                            }
                         </h3>
-
 
                         <p class="event-desc muted">
 
-                            Chaque premier samedi du mois, nous organisons
-                            un grand programme spirituel où des personnes
-                            viennent de partout pour répondre à l’appel et
-                            à la direction que le Seigneur nous a donnée
-                            pour la bénédiction de son peuple.
+                            @if (isFrench)
+                            {
+                                <text>
+                                    Chaque premier samedi du mois, nous organisons
+                                    un grand programme spirituel où des personnes
+                                    viennent de partout pour répondre à l’appel et
+                                    à la direction que le Seigneur nous a donnée
+                                    pour la bénédiction de son peuple.
 
-                            Le programme inclut prière, message
-                            et temps d’édification.
+                                    Le programme inclut prière, message
+                                    et temps d’édification.
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    Every first Saturday of the month, we organize
+                                    a special spiritual gathering where people
+                                    come from different places to respond to the
+                                    calling and direction the Lord has given us
+                                    for the blessing of His people.
+
+                                    The program includes prayer, a message,
+                                    and a time of spiritual growth.
+                                </text>
+                            }
 
                         </p>
 
@@ -169,14 +216,11 @@
 
                 </article>
 
-
             </div>
 
         </div>
 
     </section>
-
-
 
     <!-- =========================================================
          CLOSING SECTION
@@ -187,24 +231,43 @@
         <div class="container-wide text-center">
 
             <div class="eyebrow">
-                COME AS YOU ARE
+                @(isFrench
+                    ? "VENEZ COMME VOUS ÊTES"
+                    : "COME AS YOU ARE")
             </div>
 
-
             <h2 class="close-head">
-                IL Y A UNE PLACE<br />
-                POUR VOUS.
+                @if (isFrench)
+                {
+                    <text>IL Y A UNE PLACE<br />
+                    POUR VOUS.</text>
+                }
+                else
+                {
+                    <text>THERE IS A PLACE<br />
+                    FOR YOU.</text>
+                }
             </h2>
 
-
             <p class="muted">
-                We gather to pray, to hear the Word
-                and to stand together in hope.
+                @if (isFrench)
+                {
+                    <text>
+                        Nous nous réunissons pour prier,
+                        écouter la Parole et rester unis dans l'espérance.
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        We gather to pray, to hear the Word
+                        and to stand together in hope.
+                    </text>
+                }
             </p>
 
         </div>
 
     </section>
-
 
 </main>
