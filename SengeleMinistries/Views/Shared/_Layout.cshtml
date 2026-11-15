@@ -27,17 +27,18 @@
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ5LK350KR"></script>
     <script>
-            window.dataLayer = window.dataLayer || [];
+        window.dataLayer = window.dataLayer || [];
 
-            function gtag() {
-                dataLayer.push(arguments);
-            }
+        function gtag() {
+            dataLayer.push(arguments);
+        }
 
-            gtag('js', new Date());
-            gtag('config', 'G-BJ5LK350KR');
+        gtag('js', new Date());
+        gtag('config', 'G-BJ5LK350KR');
     </script>
 
     <!-- End Google Analytics -->
+
     <!-- CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -135,10 +136,11 @@
                             </a>
                         </li>
                         <li>
+                            @* Official announcement video *@
                             <a class="btn btn-outline-cta btn-sm px-2 py-1 mt-2"
-                               href="https://www.youtube.com/@@SengeleMinistries"
+                               href="https://www.youtube.com/watch?v=wTcNUOmCoJ8"
                                target="_blank"
-                               rel="noopener">
+                               rel="noopener noreferrer">
                                 Watch Now
                             </a>
                         </li>
@@ -150,10 +152,11 @@
 
                     <ul class="list-unstyled d-flex gap-3 footer-social">
                         <li>
+                            @* YouTube announcement video *@
                             <a class="footer-yt"
-                               href="https://www.youtube.com/@@SengeleMinistries"
+                               href="https://www.youtube.com/watch?v=wTcNUOmCoJ8"
                                target="_blank"
-                               rel="noopener">
+                               rel="noopener noreferrer">
                                 YouTube
                             </a>
                         </li>
@@ -205,25 +208,25 @@
     <!-- ========================================== -->
 
     <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function () {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
 
-                    navigator.serviceWorker.register('/service-worker.js')
-                        .then(function (registration) {
-                            console.log(
-                                'Sengele Ministries PWA registered:',
-                                registration.scope
-                            );
-                        })
-                        .catch(function (error) {
-                            console.error(
-                                'PWA registration failed:',
-                                error
-                            );
-                        });
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function (registration) {
+                        console.log(
+                            'Sengele Ministries PWA registered:',
+                            registration.scope
+                        );
+                    })
+                    .catch(function (error) {
+                        console.error(
+                            'PWA registration failed:',
+                            error
+                        );
+                    });
 
-                });
-            }
+            });
+        }
     </script>
 
     <!-- End PWA Service Worker -->
