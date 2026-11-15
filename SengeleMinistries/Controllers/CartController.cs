@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SengeleMinistries.Data;
 using SengeleMinistries.Models;
@@ -14,7 +15,6 @@ namespace SengeleMinistries.Controllers
         {
             _context = context;
         }
-
 
         // =========================================================
         // SHOW SHOPPING CART
@@ -38,7 +38,6 @@ namespace SengeleMinistries.Controllers
 
             return View(viewModel);
         }
-
 
         // =========================================================
         // ADD PRODUCT TO CART
@@ -155,7 +154,6 @@ namespace SengeleMinistries.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
 
         // =========================================================
         // UPDATE PRODUCT QUANTITY
@@ -274,7 +272,6 @@ namespace SengeleMinistries.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         // =========================================================
         // REMOVE PRODUCT FROM CART
         // =========================================================
@@ -315,7 +312,6 @@ namespace SengeleMinistries.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         // =========================================================
         // CLEAR SHOPPING CART
         // =========================================================
@@ -350,7 +346,6 @@ namespace SengeleMinistries.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         // =========================================================
         // GET MEMBER ID FROM LOGIN CLAIM
         // =========================================================
@@ -371,7 +366,6 @@ namespace SengeleMinistries.Controllers
 
             return null;
         }
-
 
         // =========================================================
         // GET MEMBER CART FROM SQL SERVER

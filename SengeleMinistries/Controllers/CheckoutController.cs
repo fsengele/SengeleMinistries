@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SengeleMinistries.Data;
 using SengeleMinistries.Models;
+using SengeleMinistries.Services;
 using System.Security.Claims;
+using System.Text;
+using System.Net;
 
 namespace SengeleMinistries.Controllers
 {
@@ -11,12 +15,15 @@ namespace SengeleMinistries.Controllers
     public class CheckoutController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
 
-        public CheckoutController(ApplicationDbContext context)
+        public CheckoutController(
+            ApplicationDbContext context,
+            IEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
-
 
         // =========================================================
         // CHECKOUT PAGE
@@ -37,7 +44,7 @@ namespace SengeleMinistries.Controllers
             if (cart.Count == 0)
             {
                 TempData["CartError"] =
-                    "Your shopping cart is empty.";
+                    "Your shopping cart is empty or its products are not available for checkout.";
 
                 return RedirectToAction("Index", "Cart");
             }
@@ -51,27 +58,20 @@ namespace SengeleMinistries.Controllers
                 return RedirectToAction("Login", "Member");
             }
 
-            decimal subtotal =
-                cart.Sum(item => item.Total);
+            decimal subtotal = cart.Sum(item => item.Total);
 
             var order = new Order
             {
                 MemberId = member.Id,
-
                 FirstName = member.FirstName,
-
                 LastName = member.LastName,
-
                 Email = member.Email,
-
                 Subtotal = subtotal,
-
                 Total = subtotal
             };
 
             return View(order);
         }
-
 
         // =========================================================
         // PLACE ORDER
@@ -79,16 +79,13 @@ namespace SengeleMinistries.Controllers
         // =========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PlaceOrder(
-            Order model)
+        public async Task<IActionResult> PlaceOrder(Order model)
         {
             var memberId = GetMemberId();
 
             if (memberId == null)
             {
-                return RedirectToAction(
-                    "Login",
-                    "Member");
+                return RedirectToAction("Login", "Member");
             }
 
             var member = await _context.Members
@@ -97,15 +94,12 @@ namespace SengeleMinistries.Controllers
 
             if (member == null)
             {
-                return RedirectToAction(
-                    "Login",
-                    "Member");
+                return RedirectToAction("Login", "Member");
             }
 
             var databaseCartItems =
                 await _context.ShoppingCartItems
-                    .Where(c =>
-                        c.MemberId == memberId.Value)
+                    .Where(c => c.MemberId == memberId.Value)
                     .ToListAsync();
 
             if (databaseCartItems.Count == 0)
@@ -113,30 +107,22 @@ namespace SengeleMinistries.Controllers
                 TempData["CartError"] =
                     "Your shopping cart is empty.";
 
-                return RedirectToAction(
-                    "Index",
-                    "Cart");
+                return RedirectToAction("Index", "Cart");
             }
-
 
             // =====================================================
             // ALWAYS TRUST DATABASE PRICES
             // =====================================================
             decimal subtotal = 0;
 
-            var orderItems =
-                new List<OrderItem>();
+            var orderItems = new List<OrderItem>();
 
-
-            foreach (var cartItem
-                     in databaseCartItems)
+            foreach (var cartItem in databaseCartItems)
             {
-                var product =
-                    await _context.Products
-                        .FirstOrDefaultAsync(p =>
-                            p.ProductId ==
-                            cartItem.ProductId &&
-                            p.IsPublished);
+                var product = await _context.Products
+                    .FirstOrDefaultAsync(p =>
+                        p.ProductId == cartItem.ProductId &&
+                        p.IsPublished);
 
                 if (product == null)
                 {
@@ -147,14 +133,27 @@ namespace SengeleMinistries.Controllers
                     continue;
                 }
 
-
-                // Amazon affiliate products must be purchased on Amazon.
-                // Never include them in a Sengele Ministries order.
-                if (product.ProductType != "OwnProduct")
+                // =================================================
+                // AMAZON AFFILIATE PROTECTION
+                // Allow older products with an empty ProductType.
+                // Amazon products must still be purchased on Amazon.
+                // =================================================
+                if (product.ProductType == "AmazonAffiliate")
                 {
                     ModelState.AddModelError(
                         string.Empty,
                         $"{product.Title} cannot be purchased through this checkout. Please buy it on Amazon.");
+
+                    continue;
+                }
+
+                // Reject unexpected non-empty product types.
+                if (!string.IsNullOrWhiteSpace(product.ProductType) &&
+                    product.ProductType != "OwnProduct")
+                {
+                    ModelState.AddModelError(
+                        string.Empty,
+                        $"{product.Title} has an unsupported product type.");
 
                     continue;
                 }
@@ -169,7 +168,7 @@ namespace SengeleMinistries.Controllers
                     continue;
                 }
 
-                // Product is out of stock
+                // Product is out of stock.
                 if (product.StockQuantity.HasValue &&
                     product.StockQuantity.Value <= 0)
                 {
@@ -180,11 +179,9 @@ namespace SengeleMinistries.Controllers
                     continue;
                 }
 
-
-                // Quantity exceeds available stock
+                // Quantity exceeds available stock.
                 if (product.StockQuantity.HasValue &&
-                    cartItem.Quantity >
-                    product.StockQuantity.Value)
+                    cartItem.Quantity > product.StockQuantity.Value)
                 {
                     ModelState.AddModelError(
                         string.Empty,
@@ -193,111 +190,66 @@ namespace SengeleMinistries.Controllers
                     continue;
                 }
 
+                subtotal += product.Price * cartItem.Quantity;
 
-                subtotal +=
-                    product.Price *
-                    cartItem.Quantity;
-
-
-                orderItems.Add(
-                    new OrderItem
-                    {
-                        ProductId =
-                            product.ProductId,
-
-                        ProductTitle =
-                            product.Title,
-
-                        Price =
-                            product.Price,
-
-                        Quantity =
-                            cartItem.Quantity
-                    });
+                orderItems.Add(new OrderItem
+                {
+                    ProductId = product.ProductId,
+                    ProductTitle = product.Title,
+                    Price = product.Price,
+                    Quantity = cartItem.Quantity
+                });
             }
-
 
             // =====================================================
             // VALIDATION ERROR
             // RETURN CUSTOMER TO CHECKOUT
             // =====================================================
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || orderItems.Count == 0)
             {
-                model.MemberId =
-                    member.Id;
+                if (orderItems.Count == 0)
+                {
+                    ModelState.AddModelError(
+                        string.Empty,
+                        "There are no valid products to order.");
+                }
 
-                model.FirstName =
-                    member.FirstName;
+                model.MemberId = member.Id;
+                model.FirstName = member.FirstName;
+                model.LastName = member.LastName;
+                model.Email = member.Email;
+                model.Subtotal = subtotal;
+                model.Total = subtotal;
 
-                model.LastName =
-                    member.LastName;
-
-                model.Email =
-                    member.Email;
-
-                model.Subtotal =
-                    subtotal;
-
-                model.Total =
-                    subtotal;
-
-                return View(
-                    "Index",
-                    model);
+                return View("Index", model);
             }
-
 
             // =====================================================
             // CREATE ORDER
             // =====================================================
             var order = new Order
             {
-                MemberId =
-                    member.Id,
+                MemberId = member.Id,
 
-                FirstName =
-                    member.FirstName,
+                FirstName = member.FirstName,
+                LastName = member.LastName,
+                Email = member.Email,
 
-                LastName =
-                    member.LastName,
+                Phone = model.Phone,
+                Address = model.Address,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
 
-                Email =
-                    member.Email,
+                Subtotal = subtotal,
+                Total = subtotal,
 
-                Phone =
-                    model.Phone,
+                OrderStatus = "Pending",
+                PaymentStatus = "Pending",
 
-                Address =
-                    model.Address,
-
-                City =
-                    model.City,
-
-                State =
-                    model.State,
-
-                ZipCode =
-                    model.ZipCode,
-
-                Subtotal =
-                    subtotal,
-
-                Total =
-                    subtotal,
-
-                OrderStatus =
-                    "Pending",
-
-                PaymentStatus =
-                    "Pending",
-
-                CreatedAt =
-                    DateTime.UtcNow,
-
-                OrderItems =
-                    orderItems
+                CreatedAt = DateTime.UtcNow,
+                OrderItems = orderItems
             };
-
 
             // =====================================================
             // SAVE ORDER TO SQL SERVER
@@ -305,7 +257,6 @@ namespace SengeleMinistries.Controllers
             _context.Orders.Add(order);
 
             await _context.SaveChangesAsync();
-
 
             // =====================================================
             // CLEAR MEMBER CART FROM SQL SERVER
@@ -316,58 +267,100 @@ namespace SengeleMinistries.Controllers
 
             await _context.SaveChangesAsync();
 
+            // =====================================================
+            // SEND ORDER CONFIRMATION EMAIL TO CUSTOMER
+            // =====================================================
+            try
+            {
+                var emailBody = new StringBuilder();
+
+                emailBody.Append(
+                    "<h2>Sengele Ministries - Order Confirmation</h2>");
+
+                emailBody.Append(
+                    $"<p>Dear {WebUtility.HtmlEncode(order.FirstName)},</p>");
+
+                emailBody.Append(
+                    "<p>Thank you! We have received your order.</p>");
+
+                emailBody.Append(
+                    $"<p><strong>Order Number:</strong> #{order.OrderId}</p>");
+
+                emailBody.Append(
+                    $"<p><strong>Order Date:</strong> {order.CreatedAt:MMMM dd, yyyy} (UTC)</p>");
+
+                emailBody.Append("<h3>Order Items</h3>");
+                emailBody.Append("<ul>");
+
+                foreach (var item in orderItems)
+                {
+                    emailBody.Append(
+                        $"<li>{WebUtility.HtmlEncode(item.ProductTitle)} - " +
+                        $"Quantity: {item.Quantity} - " +
+                        $"${item.Total:0.00}</li>");
+                }
+
+                emailBody.Append("</ul>");
+
+                emailBody.Append(
+                    $"<p><strong>Total:</strong> ${order.Total:0.00}</p>");
+
+                emailBody.Append(
+                    $"<p><strong>Payment Status:</strong> {WebUtility.HtmlEncode(order.PaymentStatus)}</p>");
+
+                emailBody.Append(
+                    "<p>Your order is pending processing. This email is not a payment receipt.</p>");
+
+                emailBody.Append(
+                    "<p>Thank you for supporting Sengele Ministries.</p>");
+
+                await _emailSender.SendEmailAsync(
+                    order.Email,
+                    $"Sengele Ministries - Order Confirmation #{order.OrderId}",
+                    emailBody.ToString());
+            }
+            catch (Exception)
+            {
+                // Email failure must not cancel a saved order.
+                TempData["EmailWarning"] =
+                    "Your order was saved, but the confirmation email could not be sent.";
+            }
 
             TempData["OrderSuccess"] =
                 $"Thank you! Your order #{order.OrderId} has been created.";
 
-
             return RedirectToAction(
                 nameof(Confirmation),
-                new
-                {
-                    id = order.OrderId
-                });
+                new { id = order.OrderId });
         }
-
 
         // =========================================================
         // ORDER CONFIRMATION
         // GET: /Checkout/Confirmation/1
         // =========================================================
         [HttpGet]
-        public async Task<IActionResult> Confirmation(
-            int id)
+        public async Task<IActionResult> Confirmation(int id)
         {
             var memberId = GetMemberId();
 
             if (memberId == null)
             {
-                return RedirectToAction(
-                    "Login",
-                    "Member");
+                return RedirectToAction("Login", "Member");
             }
 
-            var order =
-                await _context.Orders
-
-                    .Include(o =>
-                        o.OrderItems)
-
-                    .FirstOrDefaultAsync(o =>
-                        o.OrderId == id &&
-                        o.MemberId ==
-                        memberId.Value);
-
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o =>
+                    o.OrderId == id &&
+                    o.MemberId == memberId.Value);
 
             if (order == null)
             {
                 return NotFound();
             }
 
-
             return View(order);
         }
-
 
         // =========================================================
         // GET CURRENT MEMBER ID
@@ -376,81 +369,57 @@ namespace SengeleMinistries.Controllers
         {
             var claim =
                 User.FindFirst("MemberId")
-                ?? User.FindFirst(
-                    ClaimTypes.NameIdentifier);
-
+                ?? User.FindFirst(ClaimTypes.NameIdentifier);
 
             if (claim != null &&
-                int.TryParse(
-                    claim.Value,
-                    out int memberId))
+                int.TryParse(claim.Value, out int memberId))
             {
                 return memberId;
             }
 
-
             return null;
         }
-
 
         // =========================================================
         // GET MEMBER CART FROM SQL SERVER
         // =========================================================
-        private async Task<List<CartItem>>
-            GetCartAsync(int memberId)
+        private async Task<List<CartItem>> GetCartAsync(int memberId)
         {
             var databaseItems =
                 await _context.ShoppingCartItems
-
-                    .Where(c =>
-                        c.MemberId ==
-                        memberId)
-
+                    .Where(c => c.MemberId == memberId)
                     .ToListAsync();
-
 
             if (databaseItems.Count == 0)
             {
                 return new List<CartItem>();
             }
 
+            var productIds = databaseItems
+                .Select(c => c.ProductId)
+                .ToList();
 
-            var productIds =
-                databaseItems
+            var products = await _context.Products
+                .Where(p => productIds.Contains(p.ProductId))
+                .ToListAsync();
 
-                    .Select(c =>
-                        c.ProductId)
+            var cart = new List<CartItem>();
 
-                    .ToList();
-
-
-            var products =
-                await _context.Products
-
-                    .Where(p =>
-                        productIds.Contains(
-                            p.ProductId))
-
-                    .ToListAsync();
-
-
-            var cart =
-                new List<CartItem>();
-
-
-            foreach (var databaseItem
-                     in databaseItems)
+            foreach (var databaseItem in databaseItems)
             {
-                var product =
-                    products.FirstOrDefault(p =>
-                        p.ProductId ==
-                        databaseItem.ProductId);
+                var product = products.FirstOrDefault(p =>
+                    p.ProductId == databaseItem.ProductId);
 
-
-                // Only published, own products can enter checkout.
+                // =================================================
+                // CHECKOUT PRODUCT VALIDATION
+                // Accept older products with empty ProductType.
+                // Never accept Amazon affiliate products.
+                // =================================================
                 if (product == null ||
                     !product.IsPublished ||
-                    product.ProductType != "OwnProduct" ||
+                    product.ProductType == "AmazonAffiliate" ||
+                    (!string.IsNullOrWhiteSpace(product.ProductType) &&
+                     product.ProductType != "OwnProduct") ||
                     databaseItem.Quantity <= 0 ||
                     (product.StockQuantity.HasValue &&
                      (product.StockQuantity.Value <= 0 ||
@@ -459,27 +428,15 @@ namespace SengeleMinistries.Controllers
                     continue;
                 }
 
-
-                cart.Add(
-                    new CartItem
-                    {
-                        ProductId =
-                            product.ProductId,
-
-                        Title =
-                            product.Title,
-
-                        Price =
-                            product.Price,
-
-                        Quantity =
-                            databaseItem.Quantity,
-
-                        ImageUrl =
-                            product.ImageUrl
-                    });
+                cart.Add(new CartItem
+                {
+                    ProductId = product.ProductId,
+                    Title = product.Title,
+                    Price = product.Price,
+                    Quantity = databaseItem.Quantity,
+                    ImageUrl = product.ImageUrl
+                });
             }
-
 
             return cart;
         }
