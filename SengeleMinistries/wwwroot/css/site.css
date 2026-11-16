@@ -5962,3 +5962,82 @@ img {
         padding: 75px 18px;
     }
 }
+
+/* =========================================================
+   SENGELE MINISTRIES - MOBILE NAVIGATION FIX
+   Fix transparent menu and invisible text on phones
+   Desktop design remains unchanged
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+
+    /* Solid background for mobile navbar */
+    #mainNavbar {
+        background: #111111 !important;
+    }
+
+        /* White brand name */
+        #mainNavbar .navbar-brand,
+        #mainNavbar .brand-name-small {
+            color: #ffffff !important;
+        }
+
+        /* Mobile menu background */
+        #mainNavbar .navbar-collapse {
+            background: #111111;
+            padding: 15px;
+            max-height: calc(100dvh - 75px);
+            overflow-y: auto;
+        }
+
+        /* Make navigation links visible */
+        #mainNavbar .navbar-nav .nav-link {
+            color: #ffffff !important;
+            opacity: 1 !important;
+        }
+
+            /* Gold hover and focus */
+            #mainNavbar .navbar-nav .nav-link:hover,
+            #mainNavbar .navbar-nav .nav-link:focus {
+                color: #c9a24d !important;
+            }
+
+        /* Dropdown background */
+        #mainNavbar .dropdown-menu {
+            background: #202020 !important;
+            border: 1px solid rgba(201, 162, 77, 0.25);
+        }
+
+            /* Dropdown text */
+            #mainNavbar .dropdown-menu .dropdown-item {
+                color: #ffffff !important;
+            }
+
+                /* Dropdown hover */
+                #mainNavbar .dropdown-menu .dropdown-item:hover,
+                #mainNavbar .dropdown-menu .dropdown-item:focus {
+                    background: #333333 !important;
+                    color: #c9a24d !important;
+                }
+
+        /* Hamburger button */
+        #mainNavbar .navbar-toggler {
+            border: 1px solid #c9a24d;
+            color: #ffffff;
+        }
+
+        /* Visible hamburger icon */
+        #mainNavbar .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        /* Ensure action buttons remain readable */
+        #mainNavbar .btn-outline-cta {
+            color: #ffffff;
+            border-color: #c9a24d;
+        }
+
+        #mainNavbar .btn-cta {
+            color: #111111;
+        }
+}
