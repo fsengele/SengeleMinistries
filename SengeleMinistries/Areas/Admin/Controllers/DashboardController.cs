@@ -28,7 +28,7 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                 TotalProducts = await _db.Products.CountAsync(),
                 RecentMembers = await _db.Members!
                     .OrderByDescending(m => m.CreatedAt)
-                    .Take(5)
+                    .Take(10)
                     .ToListAsync()
             };
 
