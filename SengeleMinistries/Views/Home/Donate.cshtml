@@ -1,292 +1,462 @@
+
+@using System.Globalization
 @{
     ViewData["Title"] = "Give";
+    bool isFrench = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "fr";
 }
+
+<style>
+    /* Animations complémentaires : les couleurs existantes restent intactes */
+    .giving-page .giving-reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity .75s ease, transform .75s ease;
+    }
+
+    .giving-page .giving-reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .giving-page .giving-amount {
+        transition: transform .22s ease, box-shadow .22s ease,
+                    background-color .22s ease, border-color .22s ease,
+                    color .22s ease;
+    }
+
+    .giving-page .giving-amount:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 24px rgba(0,0,0,.08);
+    }
+
+    .giving-page .giving-amount:focus-visible,
+    .giving-page .giving-method-button:focus-visible {
+        outline: 3px solid #a68128;
+        outline-offset: 3px;
+    }
+
+    .giving-page .giving-method-card {
+        transition: transform .3s ease, box-shadow .3s ease,
+                    border-color .3s ease;
+    }
+
+    .giving-page .giving-method-card:hover {
+        transform: translateY(-7px);
+        border-color: #c7b88f;
+        box-shadow: 0 20px 45px rgba(0,0,0,.08);
+    }
+
+    .giving-page .giving-method-button {
+        transition: transform .2s ease, background-color .2s ease;
+    }
+
+    .giving-page .giving-method-button:hover {
+        transform: translateY(-2px);
+    }
+
+    .giving-page .giving-method-button:disabled {
+        background: #d8d4ca;
+        color: #555650;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .giving-page .giving-selected-total {
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .giving-page .giving-selected-total strong {
+        font-size: 26px;
+        font-weight: 800;
+    }
+
+    .giving-page .giving-payment-badge {
+        display: inline-block;
+        margin-bottom: 16px;
+        padding: 7px 12px;
+        background: #f7f5ef;
+        color: #8d6d2d;
+        border: 1px solid #dedbd2;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .giving-page .giving-method-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .giving-page .giving-method-card {
+        min-width: 0;
+    }
+
+    .giving-page .giving-card-notice {
+        margin: 0 0 18px;
+        color: #77756f;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .giving-page .giving-status {
+        margin-top: 12px;
+        color: #77756f;
+        font-size: 13px;
+    }
+
+    .giving-page .giving-custom-input:focus-within {
+        border-color: #a68128;
+        box-shadow: 0 0 0 3px rgba(166,129,40,.12);
+    }
+
+
+    /* Sliding gold highlight: follows hover, returns to selection */
+    .giving-page .giving-amounts {
+        position: relative;
+        isolation: isolate;
+    }
+    .giving-page .giving-amounts .giving-hover-highlight {
+        position: absolute;
+        z-index: 0;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-radius: 6px;
+        background: linear-gradient(120deg, #96732e, #dfbd68, #c9a24d);
+        box-shadow: 0 10px 25px rgba(166,129,40,.34);
+        pointer-events: none;
+        opacity: 0;
+        transition: transform .34s cubic-bezier(.22,1,.36,1),
+                    width .34s cubic-bezier(.22,1,.36,1),
+                    height .34s cubic-bezier(.22,1,.36,1),
+                    opacity .2s ease;
+    }
+    .giving-page .giving-amounts .giving-amount {
+        position: relative;
+        z-index: 1;
+        background: transparent !important;
+        transition: color .2s ease, transform .2s ease;
+    }
+    .giving-page .giving-amounts .giving-amount.active {
+        border-color: #c9a24d;
+    }
+    .giving-page .giving-amounts .giving-amount.highlighted {
+        color: #111 !important;
+        border-color: transparent !important;
+    }
+    .giving-page .giving-amounts .giving-amount:hover {
+        box-shadow: none;
+    }
+
+    @@media (max-width: 1000px) {
+        .giving-page .giving-method-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .giving-page .giving-method-card {
+            min-height: auto;
+        }
+    }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .giving-page .giving-reveal {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+
+        .giving-page .giving-method-card,
+        .giving-page .giving-amount,
+        .giving-page .giving-method-button,
+        .giving-page .giving-hover-highlight {
+            transition: none;
+        }
+    }
+</style>
 
 <div class="giving-page">
 
-    <!-- ==========================================
-         GIVE PAGE HEADER
-         ========================================== -->
+    <!-- HERO -->
     <section class="giving-hero">
-        <div class="giving-container giving-hero-inner">
+        <div class="giving-container giving-hero-inner giving-reveal">
 
             <p class="giving-eyebrow">
                 SENGELE MINISTRIES
             </p>
 
             <h1>
-                Give With Purpose
+                @(isFrench ? "Donnez avec un objectif" : "Give With Purpose")
             </h1>
 
             <p class="giving-scripture">
-                “God loves a cheerful giver.”
+                @(isFrench
+                    ? "« Dieu aime celui qui donne avec joie. »"
+                    : "“God loves a cheerful giver.”")
             </p>
 
             <p class="giving-scripture-reference">
-                2 Corinthians 9:7
+                @(isFrench ? "2 Corinthiens 9:7" : "2 Corinthians 9:7")
             </p>
 
             <p class="giving-intro">
-                Your generosity helps Sengele Ministries continue sharing
-                the message of hope, prayer and the Word.
-                Give freely, securely and with purpose.
+                @(isFrench
+                    ? "Votre générosité aide Sengele Ministries à continuer de partager l'espérance, la prière et la Parole de Dieu. Donnez librement et avec un objectif."
+                    : "Your generosity helps Sengele Ministries continue sharing the message of hope, prayer and the Word. Give freely and with purpose.")
             </p>
 
         </div>
     </section>
 
-
     <div class="giving-container">
 
-        <!-- ==========================================
-             01 - CHOOSE YOUR GIFT
-             ========================================== -->
-        <section class="giving-section giving-amount-section">
+        <!-- STEP 01 : AMOUNT -->
+        <section class="giving-section giving-amount-section giving-reveal">
 
             <div class="giving-step">
                 <span class="giving-step-number">01</span>
                 <span class="giving-step-title">
-                    CHOOSE YOUR GIFT
+                    @(isFrench ? "CHOISISSEZ VOTRE DON" : "CHOOSE YOUR GIFT")
                 </span>
             </div>
 
-            <h2>Select an amount</h2>
+            <h2>
+                @(isFrench ? "Choisissez un montant" : "Select an amount")
+            </h2>
 
             <p class="giving-section-description">
-                Choose an amount below or enter your own gift.
+                @(isFrench
+                    ? "Choisissez un montant ou entrez votre propre contribution."
+                    : "Choose an amount below or enter your own gift.")
             </p>
 
+            <div class="giving-amounts" id="givingAmounts" role="group"
+                 aria-label="@(isFrench ? "Montant du don" : "Gift amount")">
 
-            <!-- PRESET AMOUNTS -->
-            <div class="giving-amounts">
+                <span class="giving-hover-highlight" aria-hidden="true"></span>
 
-                <button type="button"
-                        class="giving-amount"
-                        data-amount="20">
-                    $20
-                </button>
+                <button type="button" class="giving-amount"
+                        data-amount="20" aria-pressed="false">$20</button>
 
-                <button type="button"
-                        class="giving-amount"
-                        data-amount="50">
-                    $50
-                </button>
+                <button type="button" class="giving-amount"
+                        data-amount="50" aria-pressed="false">$50</button>
 
-                <button type="button"
-                        class="giving-amount"
-                        data-amount="100">
-                    $100
-                </button>
+                <button type="button" class="giving-amount"
+                        data-amount="100" aria-pressed="false">$100</button>
 
-                <button type="button"
-                        class="giving-amount active"
-                        data-amount="250">
-                    $250
-                </button>
+                <button type="button" class="giving-amount active"
+                        data-amount="250" aria-pressed="true">$250</button>
 
-                <button type="button"
-                        class="giving-amount"
-                        data-amount="500">
-                    $500
-                </button>
+                <button type="button" class="giving-amount"
+                        data-amount="500" aria-pressed="false">$500</button>
 
-                <button type="button"
-                        class="giving-amount"
-                        data-amount="1000">
-                    $1,000
-                </button>
-
+                <button type="button" class="giving-amount"
+                        data-amount="1000" aria-pressed="false">$1,000</button>
             </div>
 
-
-            <!-- OTHER AMOUNT -->
             <div class="giving-other-amount">
-
                 <label for="customGivingAmount">
-                    Other Amount
+                    @(isFrench ? "Autre montant" : "Other Amount")
                 </label>
 
                 <div class="giving-custom-input">
                     <span>$</span>
-
                     <input type="number"
                            id="customGivingAmount"
                            min="1"
-                           step="1"
-                           placeholder="Enter amount" />
+                           step="0.01"
+                           inputmode="decimal"
+                           placeholder="@(isFrench ? "Entrez un montant" : "Enter amount")" />
                 </div>
-
             </div>
 
+            <div class="giving-selected-total" aria-live="polite">
+                <span>
+                    @(isFrench ? "Votre don :" : "Your Gift:")
+                </span>
 
-            <!-- SELECTED GIFT -->
-            <div class="giving-selected-total">
-                <span>Your Gift:</span>
-
-                <strong id="selectedGivingAmount">
-                    $250
-                </strong>
+                <strong id="selectedGivingAmount">$250.00</strong>
             </div>
 
         </section>
 
-
-        <!-- ==========================================
-             02 - CHOOSE HOW TO GIVE
-             ========================================== -->
-        <section class="giving-section giving-method-section">
+        <!-- STEP 02 : PAYMENT METHODS -->
+        <section class="giving-section giving-method-section giving-reveal">
 
             <div class="giving-step">
                 <span class="giving-step-number">02</span>
-
                 <span class="giving-step-title">
-                    CHOOSE HOW TO GIVE
+                    @(isFrench ? "MOYENS DE PAIEMENT" : "CHOOSE HOW TO GIVE")
                 </span>
             </div>
 
-            <h2>Give securely</h2>
+            <h2>
+                @(isFrench ? "Comment souhaitez-vous donner ?" : "Give securely")
+            </h2>
 
             <p class="giving-section-description">
-                Choose the giving method that is most convenient for you.
+                @(isFrench
+                    ? "Choisissez le moyen de paiement qui vous convient."
+                    : "Choose the giving method that is most convenient for you.")
             </p>
-
 
             <div class="giving-method-grid">
 
-                <!-- ==================================
-                     ZELLE
-                     ================================== -->
+                <!-- ZELLE -->
                 <article class="giving-method-card">
-
-                    <p class="giving-method-label">
-                        ZELLE
-                    </p>
+                    <p class="giving-method-label">ZELLE</p>
 
                     <h3>
-                        Give with Zelle
+                        @(isFrench ? "Donner avec Zelle" : "Give with Zelle")
                     </h3>
 
                     <p class="giving-method-description">
-                        Send your gift directly using the official
-                        Zelle information for Sengele Ministries.
+                        @(isFrench
+                            ? "Envoyez votre don directement avec les informations Zelle officielles de Sengele Ministries."
+                            : "Send your gift directly using the official Zelle information for Sengele Ministries.")
                     </p>
 
                     <div class="giving-method-info">
                         <span>
-                            Zelle Giving Information
+                            @(isFrench ? "Informations Zelle" : "Zelle Giving Information")
                         </span>
-
-                        <strong>
-                            francis.sengele@gmail.com
-                        </strong>
+                        <strong>francis.sengele@gmail.com</strong>
                     </div>
 
                     <a href="mailto:francis.sengele@gmail.com"
                        class="giving-method-button giving-method-link">
-                        GIVE WITH ZELLE
+                        @(isFrench ? "DONNER AVEC ZELLE" : "GIVE WITH ZELLE")
                     </a>
-
                 </article>
 
-
-                <!-- ==================================
-                     CASH APP
-                     ================================== -->
+                <!-- CASH APP -->
                 <article class="giving-method-card">
-
-                    <p class="giving-method-label">
-                        CASH APP
-                    </p>
+                    <p class="giving-method-label">CASH APP</p>
 
                     <h3>
-                        Give with Cash App
+                        @(isFrench ? "Donner avec Cash App" : "Give with Cash App")
                     </h3>
 
                     <p class="giving-method-description">
-                        Give quickly through the official
-                        Sengele Ministries Cash App account.
+                        @(isFrench
+                            ? "Soutenez notre ministère avec notre compte Cash App officiel."
+                            : "Give quickly through the official Sengele Ministries Cash App account.")
                     </p>
 
                     <div class="giving-method-info">
                         <span>
-                            Cash App Giving Information
+                            @(isFrench ? "Compte Cash App" : "Cash App Giving Information")
                         </span>
-
-                        <strong>
-                            $francissengel
-                        </strong>
+                        <strong>$francissengel</strong>
                     </div>
 
                     <a href="https://cash.app/$francissengel"
                        target="_blank"
                        rel="noopener noreferrer"
                        class="giving-method-button giving-method-link">
-                        GIVE WITH CASH APP
+                        @(isFrench ? "DONNER AVEC CASH APP" : "GIVE WITH CASH APP")
                     </a>
+                </article>
 
+                <!-- CARD : FUTURE STRIPE INTEGRATION -->
+                <article class="giving-method-card">
+
+                    <p class="giving-method-label">
+                        @(isFrench ? "CARTE BANCAIRE" : "CREDIT / DEBIT CARD")
+                    </p>
+
+                    <h3>
+                        @(isFrench ? "Donner par carte" : "Give by Card")
+                    </h3>
+
+                    <p class="giving-method-description">
+                        @(isFrench
+                            ? "Nous préparons une solution sécurisée pour accepter les dons par carte Visa, Mastercard et autres cartes compatibles."
+                            : "We are preparing a secure way to accept donations by Visa, Mastercard and other supported cards.")
+                    </p>
+
+                    <div class="giving-method-info">
+                        <span>
+                            @(isFrench ? "Montant sélectionné" : "Selected amount")
+                        </span>
+                        <strong id="cardGivingAmount">$250.00</strong>
+                    </div>
+
+                    <span class="giving-payment-badge">
+                        @(isFrench ? "INTÉGRATION EN PRÉPARATION" : "INTEGRATION IN PROGRESS")
+                    </span>
+
+                    <p class="giving-card-notice">
+                        @(isFrench
+                            ? "Le paiement par carte sera disponible après la configuration du prestataire sécurisé."
+                            : "Card payments will become available after the secure payment provider is configured.")
+                    </p>
+
+                    <button type="button"
+                            class="giving-method-button"
+                            disabled>
+                        @(isFrench ? "BIENTÔT DISPONIBLE" : "COMING SOON")
+                    </button>
                 </article>
 
             </div>
 
+            <p class="giving-status" id="givingAmountNote">
+                @(isFrench
+                    ? "Pour Zelle et Cash App, vérifiez le montant dans votre application avant de confirmer le don."
+                    : "For Zelle and Cash App, confirm the amount in your payment app before sending your gift.")
+            </p>
+
         </section>
 
-
-        <!-- ==========================================
-             GIVE PRIVATELY
-             ========================================== -->
-        <section class="giving-privacy">
+        <!-- PRIVACY -->
+        <section class="giving-privacy giving-reveal">
 
             <h2>
-                Give Privately. Give Freely.
+                @(isFrench
+                    ? "Donnez librement. Donnez en privé."
+                    : "Give Privately. Give Freely.")
             </h2>
 
             <p>
-                Your gift is an act of worship between you and God.
-                You do not need to contact us before giving.
+                @(isFrench
+                    ? "Votre don est un acte d'adoration entre vous et Dieu. Vous n'avez pas besoin de nous contacter avant de donner."
+                    : "Your gift is an act of worship between you and God. You do not need to contact us before giving.")
             </p>
 
             <blockquote>
-                “When you give to the needy, do not let your left hand
-                know what your right hand is doing.”
+                @(isFrench
+                    ? "« Quand tu fais l'aumône, que ta main gauche ne sache pas ce que fait ta droite. »"
+                    : "“When you give to the needy, do not let your left hand know what your right hand is doing.”")
             </blockquote>
 
             <p class="giving-privacy-reference">
-                Matthew 6:3
+                @(isFrench ? "Matthieu 6:3" : "Matthew 6:3")
             </p>
 
         </section>
 
-
-        <!-- ==========================================
-             SECURITY MESSAGE
-             ========================================== -->
-        <section class="giving-security">
+        <!-- SECURITY -->
+        <section class="giving-security giving-reveal">
 
             <strong>
-                Your security matters.
+                @(isFrench ? "Votre sécurité est importante." : "Your security matters.")
             </strong>
 
             <p>
-                Sengele Ministries will never ask for your online banking
-                password, PIN, routing number or bank account number
-                through this page.
+                @(isFrench
+                    ? "Sengele Ministries ne vous demandera jamais votre mot de passe bancaire, votre code PIN ou vos informations bancaires sensibles directement sur cette page. Les futurs paiements par carte seront traités par un prestataire sécurisé."
+                    : "Sengele Ministries will never ask for your online banking password, PIN or sensitive banking information directly on this page. Future card payments will be processed by a secure payment provider.")
             </p>
 
         </section>
 
     </div>
-
 </div>
 
-
 @section Scripts {
-
     <script>
-
-        // ==========================================
-        // GIVING AMOUNT SELECTION
-        // ==========================================
-
         document.addEventListener("DOMContentLoaded", function () {
 
             const amountButtons =
@@ -298,63 +468,153 @@
             const selectedAmount =
                 document.getElementById("selectedGivingAmount");
 
+            const cardAmount =
+                document.getElementById("cardGivingAmount");
 
-            // ======================================
-            // PRESET AMOUNT BUTTONS
-            // ======================================
+            const currency = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD"
+            });
 
+            function updateAmount(amount) {
+                const validAmount =
+                    Number.isFinite(amount) && amount > 0
+                        ? amount
+                        : 0;
+
+                const formatted = currency.format(validAmount);
+
+                selectedAmount.textContent = formatted;
+                cardAmount.textContent = formatted;
+            }
+
+            // Gold highlight follows the mouse without selecting a new gift.
+            const amountGroup = document.getElementById("givingAmounts");
+            const highlight = amountGroup.querySelector(".giving-hover-highlight");
+            const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            function selectedButton() {
+                return amountGroup.querySelector(".giving-amount.active");
+            }
+
+            function moveHighlight(button) {
+                amountButtons.forEach(function (item) {
+                    item.classList.toggle("highlighted", item === button);
+                });
+                if (!button) {
+                    highlight.style.opacity = "0";
+                    return;
+                }
+                const groupRect = amountGroup.getBoundingClientRect();
+                const rect = button.getBoundingClientRect();
+                highlight.style.width = rect.width + "px";
+                highlight.style.height = rect.height + "px";
+                highlight.style.transform = "translate(" +
+                    (rect.left - groupRect.left) + "px, " +
+                    (rect.top - groupRect.top) + "px)";
+                highlight.style.opacity = "1";
+            }
+
+            amountButtons.forEach(function (button) {
+                button.addEventListener("mouseenter", function () {
+                    moveHighlight(button);
+                });
+                button.addEventListener("focus", function () {
+                    moveHighlight(button);
+                });
+            });
+
+            amountGroup.addEventListener("mouseleave", function () {
+                moveHighlight(selectedButton());
+            });
+            amountGroup.addEventListener("focusout", function (event) {
+                if (!amountGroup.contains(event.relatedTarget)) {
+                    moveHighlight(selectedButton());
+                }
+            });
+            window.addEventListener("resize", function () {
+                moveHighlight(amountGroup.querySelector(".giving-amount.highlighted") || selectedButton());
+            });
+
+            // Initialize the highlight after layout is ready.
+            requestAnimationFrame(function () {
+                moveHighlight(selectedButton());
+            });
+
+            // Preset amounts
             amountButtons.forEach(function (button) {
 
                 button.addEventListener("click", function () {
 
                     amountButtons.forEach(function (item) {
                         item.classList.remove("active");
+                        item.setAttribute("aria-pressed", "false");
                     });
 
                     button.classList.add("active");
-
-                    const amount =
-                        Number(button.dataset.amount);
-
-                    selectedAmount.textContent =
-                        "$" + amount.toLocaleString();
+                    button.setAttribute("aria-pressed", "true");
 
                     customAmount.value = "";
 
+                    updateAmount(Number(button.dataset.amount));
+                    moveHighlight(button);
                 });
-
             });
 
-
-            // ======================================
-            // CUSTOM GIVING AMOUNT
-            // ======================================
-
+            // Custom amount
             customAmount.addEventListener("input", function () {
 
                 amountButtons.forEach(function (item) {
                     item.classList.remove("active");
+                    item.setAttribute("aria-pressed", "false");
                 });
 
-                const amount =
-                    Number(customAmount.value);
+                updateAmount(Number(customAmount.value));
+                moveHighlight(null);
+            });
 
-                if (amount > 0) {
+            // Smooth reveal animation
+            const revealElements =
+                document.querySelectorAll(".giving-reveal");
 
-                    selectedAmount.textContent =
-                        "$" + amount.toLocaleString();
+            if (!("IntersectionObserver" in window) || reducedMotion) {
 
-                }
-                else {
+                revealElements.forEach(function (element) {
+                    element.classList.add("is-visible");
+                });
 
-                    selectedAmount.textContent = "$0";
+            } else {
 
-                }
+                const observer = new IntersectionObserver(
+                    function (entries) {
 
+                        entries.forEach(function (entry) {
+
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("is-visible");
+                                observer.unobserve(entry.target);
+                            }
+                        });
+
+                    },
+                    {
+                        threshold: 0.08,
+                        rootMargin: "0px 0px -25px 0px"
+                    }
+                );
+
+                revealElements.forEach(function (element) {
+                    observer.observe(element);
+                });
+            }
+
+            // Make sure all content remains visible when printing
+            window.addEventListener("beforeprint", function () {
+                revealElements.forEach(function (element) {
+                    element.classList.add("is-visible");
+                });
             });
 
         });
-
     </script>
-
 }
