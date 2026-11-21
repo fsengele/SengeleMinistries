@@ -1,6 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
 	<url>
 		<loc>https://www.sengeleministries.com/</loc>
 	</url>
+
+	<url>
+		<loc>https://www.sengeleministries.com/About</loc>
+	</url>
+
+	<url>
+		<loc>https://www.sengeleministries.com/Messages</loc>
+	</url>
+
+	<url>
+		<loc>https://www.sengeleministries.com/Prayer</loc>
+	</url>
+
+	<url>
+		<loc>https://www.sengeleministries.com/Programs</loc>
+	</url>
+
+	<url>
+		<loc>https://www.sengeleministries.com/Serve</loc>
+	</url>
+
+	<url>
+		<loc>https://www.sengeleministries.com/Contact</loc>
+	</url>
+
+	<url>
+		<loc>https://www.sengeleministries.com/Events</loc>
+	</url>
+
+	<url>
+		<loc>https://www.sengeleministries.com/Shop</loc>
+	</url>
+
 </urlset>
