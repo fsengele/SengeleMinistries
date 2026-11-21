@@ -192,18 +192,25 @@ img {
     }
 
 .btn-outline-cta {
-    background: transparent;
-    color: var(--sm-text-light);
-    border: 1px solid rgba(255,255,255,0.06);
-    padding: .5rem .85rem;
-    border-radius: 6px
+    background: #171717;
+    color: #ffffff;
+    border: 2px solid #c9a24d;
+    padding: .6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 700;
+    opacity: 1;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transition: all 0.3s ease;
 }
 
     .btn-outline-cta:hover {
-        border-color: var(--sm-gold);
-        color: var(--sm-gold);
-        background: rgba(255,255,255,0.02)
+        background: #c9a24d;
+        color: #171717;
+        border-color: #c9a24d;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(201,162,77,0.35);
     }
+
 
 /* HERO */
 .hero {

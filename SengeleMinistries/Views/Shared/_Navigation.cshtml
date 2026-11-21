@@ -661,3 +661,71 @@
     </div>
 
 </nav>
+
+@* =====================================================
+   DESKTOP DROPDOWNS: OPEN ON HOVER
+   Mobile and keyboard Bootstrap behavior remain intact.
+   ===================================================== *@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const desktopQuery = window.matchMedia("(min-width: 992px) and (hover: hover) and (pointer: fine)");
+        const dropdownItems = document.querySelectorAll("#mainNavbar .nav-item.dropdown");
+        const closeTimers = new WeakMap();
+
+        function cancelClose(item) {
+            const timer = closeTimers.get(item);
+            if (timer) {
+                clearTimeout(timer);
+                closeTimers.delete(item);
+            }
+        }
+
+        function closeDropdown(item) {
+            const toggle = item.querySelector(":scope > [data-bs-toggle='dropdown']");
+            if (!toggle || !window.bootstrap || !bootstrap.Dropdown) return;
+            bootstrap.Dropdown.getOrCreateInstance(toggle).hide();
+        }
+
+        dropdownItems.forEach(function (item) {
+            const toggle = item.querySelector(":scope > [data-bs-toggle='dropdown']");
+            if (!toggle) return;
+
+            item.addEventListener("mouseenter", function () {
+                if (!desktopQuery.matches || !window.bootstrap || !bootstrap.Dropdown) return;
+                cancelClose(item);
+
+                // Only one desktop dropdown stays open at a time.
+                dropdownItems.forEach(function (other) {
+                    if (other !== item) {
+                        cancelClose(other);
+                        closeDropdown(other);
+                    }
+                });
+
+                bootstrap.Dropdown.getOrCreateInstance(toggle).show();
+            });
+
+            item.addEventListener("mouseleave", function () {
+                if (!desktopQuery.matches) return;
+                cancelClose(item);
+                closeTimers.set(item, setTimeout(function () {
+                    closeDropdown(item);
+                    closeTimers.delete(item);
+                }, 180));
+            });
+        });
+
+        function resetOnLayoutChange() {
+            dropdownItems.forEach(function (item) {
+                cancelClose(item);
+                closeDropdown(item);
+            });
+        }
+
+        if (desktopQuery.addEventListener) {
+            desktopQuery.addEventListener("change", resetOnLayoutChange);
+        } else if (desktopQuery.addListener) {
+            desktopQuery.addListener(resetOnLayoutChange);
+        }
+    });
+</script>
