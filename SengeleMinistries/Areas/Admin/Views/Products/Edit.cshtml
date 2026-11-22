@@ -9,7 +9,6 @@
     <div class="admin-product-form-container">
 
         <div class="admin-product-form-header">
-
             <p class="admin-eyebrow">
                 SENGELE MINISTRIES ADMIN
             </p>
@@ -19,7 +18,6 @@
             <p class="admin-form-subtitle">
                 Update the product information below.
             </p>
-
         </div>
 
         <div class="admin-product-card">
@@ -28,7 +26,6 @@
 
                 @Html.AntiForgeryToken()
 
-                @* Product ID is sent back to the controller. *@
                 <input asp-for="ProductId" type="hidden" />
 
                 <div asp-validation-summary="ModelOnly"
@@ -89,7 +86,7 @@
                 <div class="admin-form-group">
 
                     <label asp-for="Category"
-                            class="form-label">
+                           class="form-label">
                     </label>
 
                     <select asp-for="Category"
@@ -238,29 +235,244 @@
 
                 </div>
 
+                @* ==========================================
+                   SHIPPING INFORMATION
+                   ========================================== *@
+                <div id="shippingSection">
+
+                    <hr class="my-4" />
+
+                    <h3 class="mb-3">
+                        Shipping Information
+                    </h3>
+
+                    <div class="admin-form-group">
+
+                        <label asp-for="RequiresShipping"
+                               class="form-label">
+                            Product Delivery Type
+                        </label>
+
+                        <select asp-for="RequiresShipping"
+                                class="form-control"
+                                id="requiresShipping">
+
+                            <option value="true">
+                                Physical Product - Requires Shipping
+                            </option>
+
+                            <option value="false">
+                                Digital Product - No Shipping
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="RequiresShipping"
+                              class="text-danger">
+                        </span>
+
+                        <p class="admin-form-note">
+                            Select Physical Product for items
+                            shipped to customers.
+                            Select Digital Product for items
+                            delivered electronically.
+                        </p>
+
+                    </div>
+
+                    <div id="shippingDimensionsSection">
+
+                        <h4 class="mb-3">
+                            Product Weight and Dimensions
+                        </h4>
+
+                        <p class="admin-form-note">
+                            These measurements can be used
+                            when shipping calculations
+                            are configured.
+                        </p>
+
+                        <div class="admin-form-row">
+
+                            <div class="admin-form-group">
+
+                                <label asp-for="WeightOz"
+                                       class="form-label">
+                                    Weight (oz)
+                                </label>
+
+                                <input asp-for="WeightOz"
+                                       class="form-control"
+                                       type="number"
+                                       min="0.01"
+                                       step="0.01"
+                                       placeholder="Example: 16" />
+
+                                <span asp-validation-for="WeightOz"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="admin-form-group">
+
+                                <label asp-for="LengthIn"
+                                       class="form-label">
+                                    Length (inches)
+                                </label>
+
+                                <input asp-for="LengthIn"
+                                       class="form-control"
+                                       type="number"
+                                       min="0.01"
+                                       step="0.01"
+                                       placeholder="Example: 10" />
+
+                                <span asp-validation-for="LengthIn"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-form-row">
+
+                            <div class="admin-form-group">
+
+                                <label asp-for="WidthIn"
+                                       class="form-label">
+                                    Width (inches)
+                                </label>
+
+                                <input asp-for="WidthIn"
+                                       class="form-control"
+                                       type="number"
+                                       min="0.01"
+                                       step="0.01"
+                                       placeholder="Example: 8" />
+
+                                <span asp-validation-for="WidthIn"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="admin-form-group">
+
+                                <label asp-for="HeightIn"
+                                       class="form-label">
+                                    Height (inches)
+                                </label>
+
+                                <input asp-for="HeightIn"
+                                       class="form-control"
+                                       type="number"
+                                       min="0.01"
+                                       step="0.01"
+                                       placeholder="Example: 3" />
+
+                                <span asp-validation-for="HeightIn"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <p class="admin-form-note">
+                            Measurements are optional while
+                            shipping setup is being prepared.
+                        </p>
+
+                    </div>
+
+                </div>
+
                 @* =========================
-                   IMAGE
+                   PRODUCT IMAGES
                    ========================= *@
                 <div class="admin-form-group">
 
                     <label asp-for="ImageUrl"
                            class="form-label">
-                        Image URL
+                        Image 1 URL - Main Photo
                     </label>
 
                     <input asp-for="ImageUrl"
                            class="form-control"
-                           placeholder="https://..." />
+                           type="text"
+                           placeholder="/images/product.jpg or https://..." />
 
                     <span asp-validation-for="ImageUrl"
                           class="text-danger">
                     </span>
 
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ImageUrl2"
+                           class="form-label">
+                        Image 2 URL
+                    </label>
+
+                    <input asp-for="ImageUrl2"
+                           class="form-control"
+                           type="text"
+                           placeholder="/images/product2.jpg or https://..." />
+
+                    <span asp-validation-for="ImageUrl2"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ImageUrl3"
+                           class="form-label">
+                        Image 3 URL
+                    </label>
+
+                    <input asp-for="ImageUrl3"
+                           class="form-control"
+                           type="text"
+                           placeholder="/images/product3.jpg or https://..." />
+
+                    <span asp-validation-for="ImageUrl3"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ImageUrl4"
+                           class="form-label">
+                        Image 4 URL
+                    </label>
+
+                    <input asp-for="ImageUrl4"
+                           class="form-control"
+                           type="text"
+                           placeholder="/images/product4.jpg or https://..." />
+
+                    <span asp-validation-for="ImageUrl4"
+                          class="text-danger">
+                    </span>
+
+                    <p class="admin-form-note">
+                        Add up to four product images.
+                        Use local image paths beginning with
+                        /images/ or full HTTPS image URLs.
+                    </p>
+
                     <p class="admin-form-note"
                        id="amazonImageNote"
                        style="display:none;">
-                        Use an image you are authorized to display.
-                        Amazon images are not automatically imported yet.
+                        Use images you are authorized to display.
+                        Amazon images are not automatically imported.
                     </p>
 
                 </div>
@@ -329,7 +541,6 @@
     }
 
     <script>
-        // Show fields based on the selected product type.
         document.addEventListener("DOMContentLoaded", function () {
 
             const productType =
@@ -340,6 +551,15 @@
 
             const ownProductSection =
                 document.getElementById("ownProductSection");
+
+            const shippingSection =
+                document.getElementById("shippingSection");
+
+            const requiresShipping =
+                document.getElementById("requiresShipping");
+
+            const shippingDimensionsSection =
+                document.getElementById("shippingDimensionsSection");
 
             const amazonImageNote =
                 document.getElementById("amazonImageNote");
@@ -353,6 +573,20 @@
             const affiliateInput =
                 document.getElementById("AffiliateUrl");
 
+            function updateShippingFields() {
+
+                const isAmazon =
+                    productType.value === "AmazonAffiliate";
+
+                const isPhysical =
+                    requiresShipping.value === "true";
+
+                shippingDimensionsSection.style.display =
+                    !isAmazon && isPhysical
+                        ? "block"
+                        : "none";
+            }
+
             function updateProductFields() {
 
                 const isAmazon =
@@ -363,6 +597,9 @@
 
                 ownProductSection.style.display =
                     isAmazon ? "none" : "flex";
+
+                shippingSection.style.display =
+                    isAmazon ? "none" : "block";
 
                 amazonImageNote.style.display =
                     isAmazon ? "block" : "none";
@@ -375,14 +612,20 @@
 
                 affiliateInput.required = isAmazon;
 
-                // Clear affiliate link only for own products.
                 if (!isAmazon) {
                     affiliateInput.value = "";
                 }
+
+                updateShippingFields();
             }
 
             productType.addEventListener(
-                "change", updateProductFields);
+                "change",
+                updateProductFields);
+
+            requiresShipping.addEventListener(
+                "change",
+                updateShippingFields);
 
             updateProductFields();
         });

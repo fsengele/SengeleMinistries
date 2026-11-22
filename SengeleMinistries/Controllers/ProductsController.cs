@@ -18,11 +18,9 @@ namespace SengeleMinistries.Areas.Admin.Controllers
             _context = context;
         }
 
-        // =========================================================
+        // ==========================================
         // INDEX
-        // GET: /Admin/Products
-        // Shows all products in the admin dashboard.
-        // =========================================================
+        // ==========================================
         public async Task<IActionResult> Index()
         {
             var products = await _context.Products
@@ -32,38 +30,29 @@ namespace SengeleMinistries.Areas.Admin.Controllers
             return View(products);
         }
 
-        // =========================================================
+        // ==========================================
         // AMAZON LINK VALIDATION
-        // Checks if the link belongs to Amazon.
-        // =========================================================
+        // ==========================================
         private static bool IsValidAmazonLink(string? link)
         {
             if (string.IsNullOrWhiteSpace(link))
-            {
                 return false;
-            }
 
-            if (!Uri.TryCreate(link.Trim(),
-                UriKind.Absolute, out var uri))
-            {
+            if (!Uri.TryCreate(
+                link.Trim(),
+                UriKind.Absolute,
+                out var uri))
                 return false;
-            }
 
             if (uri.Scheme != Uri.UriSchemeHttps)
-            {
                 return false;
-            }
 
             string host = uri.Host.ToLowerInvariant();
 
-            // Amazon short affiliate links.
             if (host == "link.amazon" ||
                 host == "amzn.to")
-            {
                 return true;
-            }
 
-            // Amazon product pages.
             string[] amazonDomains =
             {
                 "amazon.com",
@@ -73,17 +62,16 @@ namespace SengeleMinistries.Areas.Admin.Controllers
 
             return amazonDomains.Any(domain =>
                 host == domain ||
-                host.EndsWith("." + domain,
+                host.EndsWith(
+                    "." + domain,
                     StringComparison.Ordinal));
         }
 
-        // =========================================================
+        // ==========================================
         // PRODUCT VALIDATION
-        // Used by Create and Edit.
-        // =========================================================
+        // ==========================================
         private void ValidateProduct(Product product)
         {
-            // Check the product title.
             if (string.IsNullOrWhiteSpace(product.Title))
             {
                 ModelState.AddModelError(
@@ -91,7 +79,6 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                     "Title is required.");
             }
 
-            // Check the product category.
             if (string.IsNullOrWhiteSpace(product.Category))
             {
                 ModelState.AddModelError(
@@ -99,7 +86,6 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                     "Category is required.");
             }
 
-            // Check the product type.
             if (product.ProductType != "OwnProduct" &&
                 product.ProductType != "AmazonAffiliate")
             {
@@ -108,7 +94,9 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                     "Please select a valid product type.");
             }
 
-            // Validate Sengele Ministries products.
+            // ======================================
+            // OWN PRODUCTS
+            // ======================================
             if (product.ProductType == "OwnProduct")
             {
                 if (product.Price < 0)
@@ -118,13 +106,30 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                         "Price cannot be negative.");
                 }
 
-                // Own products do not use affiliate links.
                 product.AffiliateUrl = null;
+
                 ModelState.Remove(
                     nameof(Product.AffiliateUrl));
+
+                // Digital products do not need
+                // physical shipping measurements.
+                if (!product.RequiresShipping)
+                {
+                    product.WeightOz = null;
+                    product.LengthIn = null;
+                    product.WidthIn = null;
+                    product.HeightIn = null;
+
+                    ModelState.Remove(nameof(Product.WeightOz));
+                    ModelState.Remove(nameof(Product.LengthIn));
+                    ModelState.Remove(nameof(Product.WidthIn));
+                    ModelState.Remove(nameof(Product.HeightIn));
+                }
             }
 
-            // Validate Amazon affiliate products.
+            // ======================================
+            // AMAZON AFFILIATE PRODUCTS
+            // ======================================
             if (product.ProductType == "AmazonAffiliate")
             {
                 if (string.IsNullOrWhiteSpace(
@@ -142,41 +147,46 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                         "Please enter a valid Amazon HTTPS link.");
                 }
 
-                // Amazon manages its own prices and stock.
                 product.Price = 0;
                 product.StockQuantity = null;
 
+                // Amazon handles delivery.
+                product.RequiresShipping = false;
+                product.WeightOz = null;
+                product.LengthIn = null;
+                product.WidthIn = null;
+                product.HeightIn = null;
+
                 ModelState.Remove(nameof(Product.Price));
-                ModelState.Remove(
-                    nameof(Product.StockQuantity));
+                ModelState.Remove(nameof(Product.StockQuantity));
+                ModelState.Remove(nameof(Product.RequiresShipping));
+                ModelState.Remove(nameof(Product.WeightOz));
+                ModelState.Remove(nameof(Product.LengthIn));
+                ModelState.Remove(nameof(Product.WidthIn));
+                ModelState.Remove(nameof(Product.HeightIn));
             }
         }
 
-        // =========================================================
+        // ==========================================
         // CREATE - GET
-        // GET: /Admin/Products/Create
-        // =========================================================
+        // ==========================================
         [HttpGet]
         public IActionResult Create()
         {
             return View(new Product());
         }
 
-        // =========================================================
+        // ==========================================
         // CREATE - POST
-        // POST: /Admin/Products/Create
-        // Saves a new product.
-        // =========================================================
+        // ==========================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            // These values are set by the application.
             ModelState.Remove(nameof(Product.ProductId));
             ModelState.Remove(nameof(Product.CreatedAt));
             ModelState.Remove(nameof(Product.UpdatedAt));
 
-            // Validate product information.
             ValidateProduct(product);
 
             if (!ModelState.IsValid)
@@ -188,6 +198,7 @@ namespace SengeleMinistries.Areas.Admin.Controllers
             product.UpdatedAt = null;
 
             _context.Products.Add(product);
+
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] =
@@ -196,10 +207,9 @@ namespace SengeleMinistries.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // =========================================================
+        // ==========================================
         // EDIT - GET
-        // GET: /Admin/Products/Edit/5
-        // =========================================================
+        // ==========================================
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -213,14 +223,14 @@ namespace SengeleMinistries.Areas.Admin.Controllers
             return View(product);
         }
 
-        // =========================================================
+        // ==========================================
         // EDIT - POST
-        // POST: /Admin/Products/Edit/5
-        // Updates an existing product.
-        // =========================================================
+        // ==========================================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product)
+        public async Task<IActionResult> Edit(
+            int id,
+            Product product)
         {
             if (id != product.ProductId)
             {
@@ -230,7 +240,6 @@ namespace SengeleMinistries.Areas.Admin.Controllers
             ModelState.Remove(nameof(Product.CreatedAt));
             ModelState.Remove(nameof(Product.UpdatedAt));
 
-            // Validate both types of products.
             ValidateProduct(product);
 
             if (!ModelState.IsValid)
@@ -246,7 +255,7 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Update product information.
+            // Existing product information
             existingProduct.Title = product.Title;
             existingProduct.Category = product.Category;
             existingProduct.ShortDescription =
@@ -255,16 +264,69 @@ namespace SengeleMinistries.Areas.Admin.Controllers
                 product.Description;
             existingProduct.Price = product.Price;
             existingProduct.ImageUrl = product.ImageUrl;
+
+            // Preserve additional images unless
+            // their fields are submitted by the form.
+            if (Request.Form.ContainsKey(nameof(Product.ImageUrl2)))
+                existingProduct.ImageUrl2 = product.ImageUrl2;
+
+            if (Request.Form.ContainsKey(nameof(Product.ImageUrl3)))
+                existingProduct.ImageUrl3 = product.ImageUrl3;
+
+            if (Request.Form.ContainsKey(nameof(Product.ImageUrl4)))
+                existingProduct.ImageUrl4 = product.ImageUrl4;
+
             existingProduct.StockQuantity =
                 product.StockQuantity;
+
             existingProduct.IsPublished =
                 product.IsPublished;
 
-            // Save the product type and affiliate link.
             existingProduct.ProductType =
                 product.ProductType;
+
             existingProduct.AffiliateUrl =
                 product.AffiliateUrl;
+
+            // ======================================
+            // SHIPPING INFORMATION
+            // ======================================
+            // Preserve the current shipping setting
+            // until the admin form includes this field.
+            if (Request.Form.ContainsKey(
+                nameof(Product.RequiresShipping)))
+            {
+                existingProduct.RequiresShipping =
+                    product.RequiresShipping;
+            }
+
+            if (existingProduct.ProductType ==
+                "AmazonAffiliate")
+            {
+                existingProduct.RequiresShipping = false;
+            }
+
+            if (!existingProduct.RequiresShipping)
+            {
+                existingProduct.WeightOz = null;
+                existingProduct.LengthIn = null;
+                existingProduct.WidthIn = null;
+                existingProduct.HeightIn = null;
+            }
+            else
+            {
+                if (Request.Form.ContainsKey(nameof(Product.WeightOz)))
+                    existingProduct.WeightOz = product.WeightOz;
+
+                if (Request.Form.ContainsKey(nameof(Product.LengthIn)))
+                    existingProduct.LengthIn = product.LengthIn;
+
+                if (Request.Form.ContainsKey(nameof(Product.WidthIn)))
+                    existingProduct.WidthIn = product.WidthIn;
+
+                if (Request.Form.ContainsKey(nameof(Product.HeightIn)))
+                    existingProduct.HeightIn = product.HeightIn;
+            }
 
             existingProduct.UpdatedAt = DateTime.UtcNow;
 
@@ -276,15 +338,15 @@ namespace SengeleMinistries.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // =========================================================
+        // ==========================================
         // DELETE - GET
-        // GET: /Admin/Products/Delete/5
-        // =========================================================
+        // ==========================================
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _context.Products
-                .FirstOrDefaultAsync(p => p.ProductId == id);
+                .FirstOrDefaultAsync(p =>
+                    p.ProductId == id);
 
             if (product == null)
             {
@@ -294,10 +356,9 @@ namespace SengeleMinistries.Areas.Admin.Controllers
             return View(product);
         }
 
-        // =========================================================
+        // ==========================================
         // DELETE - POST
-        // POST: /Admin/Products/Delete/5
-        // =========================================================
+        // ==========================================
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
