@@ -178,6 +178,13 @@ namespace SengeleMinistries.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<DateTime?>("PaidAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -188,12 +195,22 @@ namespace SengeleMinistries.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<decimal>("ShippingAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("State")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("StripePaymentIntentId")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
                     b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TaxAmount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Total")
@@ -306,6 +323,9 @@ namespace SengeleMinistries.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("HeightIn")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -325,6 +345,9 @@ namespace SengeleMinistries.Migrations
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
+                    b.Property<decimal?>("LengthIn")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -332,6 +355,9 @@ namespace SengeleMinistries.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
+
+                    b.Property<bool>("RequiresShipping")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ShortDescription")
                         .HasMaxLength(500)
@@ -347,6 +373,12 @@ namespace SengeleMinistries.Migrations
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("WeightOz")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("WidthIn")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ProductId");
 
