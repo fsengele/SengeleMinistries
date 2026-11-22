@@ -660,6 +660,11 @@
             const publishableKey =
                 stripeCard.dataset.publishableKey;
 
+                //JUSTE POUR LA FONCTIONNALITE MAIS CELA ET RETIRABLE
+
+                console.log("Stripe public key available:", !!publishableKey);
+                console.log("Stripe.js loaded:", typeof window.Stripe === "function");
+
             const stripe =
                 publishableKey && window.Stripe
                     ? Stripe(publishableKey)
