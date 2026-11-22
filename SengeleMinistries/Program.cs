@@ -1,11 +1,26 @@
+
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using SengeleMinistries.Data;
 using SengeleMinistries.Models;
 using SengeleMinistries.Services;
+using Stripe;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+// =========================================================
+// STRIPE PAYMENT CONFIGURATION
+// Used for Donations and Online Shop
+// Secret key is stored in User Secrets (local development)
+// =========================================================
+var stripeSecretKey = builder.Configuration["Stripe:SecretKey"];
+
+if (!string.IsNullOrWhiteSpace(stripeSecretKey))
+{
+    StripeConfiguration.ApiKey = stripeSecretKey;
+}
 
 
 // =========================================================
@@ -179,7 +194,10 @@ app.MapControllerRoute(
         "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-// Appliquer automatiquement les migrations au démarrage
+
+// =========================================================
+// AUTOMATIC DATABASE MIGRATIONS
+// =========================================================
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
