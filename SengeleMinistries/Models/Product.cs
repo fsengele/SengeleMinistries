@@ -15,7 +15,7 @@ namespace SengeleMinistries.Models
 
         [Required]
         [StringLength(100)]
-        public string Category { get; set; } = string.Empty; // Books, Teachings, EventCollections, Apparel
+        public string Category { get; set; } = string.Empty;
 
         [StringLength(500)]
         public string? ShortDescription { get; set; }
@@ -26,42 +26,77 @@ namespace SengeleMinistries.Models
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
-        // IMAGE 1: Main product image.
-        // Keep this property for existing products.
+        // ==========================================
+        // PRODUCT IMAGES
+        // ==========================================
+
         [StringLength(1000)]
         [DataType(DataType.ImageUrl)]
         public string? ImageUrl { get; set; }
 
-        // IMAGE 2: Additional product image.
         [StringLength(1000)]
         [DataType(DataType.ImageUrl)]
         public string? ImageUrl2 { get; set; }
 
-        // IMAGE 3: Additional product image.
         [StringLength(1000)]
         [DataType(DataType.ImageUrl)]
         public string? ImageUrl3 { get; set; }
 
-        // IMAGE 4: Additional product image.
         [StringLength(1000)]
         [DataType(DataType.ImageUrl)]
         public string? ImageUrl4 { get; set; }
 
+        // ==========================================
+        // INVENTORY
+        // ==========================================
+
         public int? StockQuantity { get; set; }
 
-        // Identifies whether the product belongs to
-        // Sengele Ministries or Amazon Affiliate.
+        // ==========================================
+        // PRODUCT TYPE
+        // ==========================================
+
         [Required]
         [StringLength(30)]
         public string ProductType { get; set; } = "OwnProduct";
 
-        // Stores the Amazon affiliate link.
-        // This field is optional for Sengele Ministries products.
         [StringLength(2000)]
         [Url]
         public string? AffiliateUrl { get; set; }
 
+        // ==========================================
+        // SHIPPING INFORMATION
+        // ==========================================
+
+        // True = physical product
+        // False = digital product
+        public bool RequiresShipping { get; set; } = true;
+
+        // Product weight in ounces
+        [Range(0.01, 100000)]
+        public decimal? WeightOz { get; set; }
+
+        // Product length in inches
+        [Range(0.01, 10000)]
+        public decimal? LengthIn { get; set; }
+
+        // Product width in inches
+        [Range(0.01, 10000)]
+        public decimal? WidthIn { get; set; }
+
+        // Product height in inches
+        [Range(0.01, 10000)]
+        public decimal? HeightIn { get; set; }
+
+        // ==========================================
+        // PUBLICATION
+        // ==========================================
+
         public bool IsPublished { get; set; } = false;
+
+        // ==========================================
+        // DATES
+        // ==========================================
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
