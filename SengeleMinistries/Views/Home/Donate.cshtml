@@ -6,7 +6,7 @@
 }
 
 <style>
-    /* Animations complémentaires : les couleurs existantes restent intactes */
+    /* ANIMATIONS */
     .giving-page .giving-reveal {
         opacity: 0;
         transform: translateY(28px);
@@ -18,36 +18,168 @@
         transform: translateY(0);
     }
 
+    /* AMOUNT BUTTONS */
     .giving-page .giving-amount {
-        transition: transform .22s ease, box-shadow .22s ease,
-                    background-color .22s ease, border-color .22s ease,
-                    color .22s ease;
+        transition: transform .22s ease, color .22s ease;
     }
 
     .giving-page .giving-amount:hover {
         transform: translateY(-4px);
-        box-shadow: 0 10px 24px rgba(0,0,0,.08);
     }
 
-    .giving-page .giving-amount:focus-visible,
-    .giving-page .giving-method-button:focus-visible {
+    .giving-page .giving-amounts {
+        position: relative;
+        isolation: isolate;
+    }
+
+    .giving-page .giving-hover-highlight {
+        position: absolute;
+        z-index: 0;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-radius: 6px;
+        background: linear-gradient(
+            120deg, #96732e, #dfbd68, #c9a24d
+        );
+        box-shadow: 0 10px 25px rgba(166,129,40,.34);
+        pointer-events: none;
+        opacity: 0;
+        transition:
+            transform .34s cubic-bezier(.22,1,.36,1),
+            width .34s,
+            height .34s,
+            opacity .2s;
+    }
+
+    .giving-page .giving-amounts .giving-amount {
+        position: relative;
+        z-index: 1;
+        background: transparent !important;
+    }
+
+    .giving-page .giving-amount.highlighted {
+        color: #111 !important;
+        border-color: transparent !important;
+    }
+
+    .giving-page .giving-amount.active {
+        border-color: #c9a24d;
+    }
+
+    /* UNIFIED PAYMENT FORM */
+    .giving-page .giving-unified-payment {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: clamp(18px, 4vw, 36px);
+        background: #fff;
+        border: 1px solid #e3ded2;
+    }
+
+    .giving-page .giving-payment-choices {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 26px;
+    }
+
+    .giving-page .giving-payment-choice {
+        cursor: pointer;
+        min-width: 0;
+    }
+
+    .giving-page .giving-payment-choice input {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+    }
+
+    .giving-page .giving-payment-choice span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 64px;
+        padding: 10px;
+        border: 1px solid #d9d5cb;
+        background: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        transition: background .2s, border-color .2s;
+    }
+
+    .giving-page .giving-payment-choice input:checked + span {
+        border-color: #a68128;
+        background: #f7f0df;
+        box-shadow: inset 0 0 0 1px #a68128;
+    }
+
+    .giving-page .giving-payment-choice input:focus-visible + span {
         outline: 3px solid #a68128;
         outline-offset: 3px;
     }
 
-    .giving-page .giving-method-card {
-        transition: transform .3s ease, box-shadow .3s ease,
-                    border-color .3s ease;
+    .giving-page .giving-payment-details[hidden],
+    .giving-page .giving-stripe-panel[hidden] {
+        display: none !important;
     }
 
-    .giving-page .giving-method-card:hover {
-        transform: translateY(-7px);
-        border-color: #c7b88f;
-        box-shadow: 0 20px 45px rgba(0,0,0,.08);
+    .giving-page .giving-payment-details h3 {
+        margin-bottom: 16px;
+    }
+
+    .giving-page .giving-payment-details .giving-method-info {
+        margin: 18px 0;
+    }
+
+    .giving-page .giving-payment-badge {
+        display: inline-block;
+        padding: 8px 12px;
+        margin-bottom: 18px;
+        background: #f7f5ef;
+        color: #8d6d2d;
+        border: 1px solid #dedbd2;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .giving-page .giving-card-notice {
+        margin-bottom: 18px;
+        color: #77756f;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .giving-page .giving-stripe-panel {
+        margin-top: 22px;
+    }
+
+    .giving-page #payment-element {
+        margin: 20px 0;
+    }
+
+    .giving-page .giving-status {
+        margin-top: 14px;
+        color: #77756f;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .giving-page #stripeMessage[role="alert"] {
+        color: #a12626;
+    }
+
+    .giving-page #stripeMessage[data-success="true"] {
+        color: #167347;
+        font-weight: 700;
+        font-size: 16px;
     }
 
     .giving-page .giving-method-button {
-        transition: transform .2s ease, background-color .2s ease;
+        transition: transform .2s, background-color .2s;
     }
 
     .giving-page .giving-method-button:hover {
@@ -55,10 +187,13 @@
     }
 
     .giving-page .giving-method-button:disabled {
-        background: #d8d4ca;
-        color: #555650;
+        opacity: .6;
         cursor: not-allowed;
-        transform: none;
+    }
+
+    .giving-page .giving-method-button:focus-visible {
+        outline: 3px solid #a68128;
+        outline-offset: 3px;
     }
 
     .giving-page .giving-selected-total {
@@ -72,91 +207,14 @@
         font-weight: 800;
     }
 
-    .giving-page .giving-payment-badge {
-        display: inline-block;
-        margin-bottom: 16px;
-        padding: 7px 12px;
-        background: #f7f5ef;
-        color: #8d6d2d;
-        border: 1px solid #dedbd2;
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 1px;
-    }
-
-    .giving-page .giving-method-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .giving-page .giving-method-card {
-        min-width: 0;
-    }
-
-    .giving-page .giving-card-notice {
-        margin: 0 0 18px;
-        color: #77756f;
-        font-size: 13px;
-        line-height: 1.6;
-    }
-
-    .giving-page .giving-status {
-        margin-top: 12px;
-        color: #77756f;
-        font-size: 13px;
-    }
-
     .giving-page .giving-custom-input:focus-within {
         border-color: #a68128;
         box-shadow: 0 0 0 3px rgba(166,129,40,.12);
     }
 
-
-    /* Sliding gold highlight: follows hover, returns to selection */
-    .giving-page .giving-amounts {
-        position: relative;
-        isolation: isolate;
-    }
-    .giving-page .giving-amounts .giving-hover-highlight {
-        position: absolute;
-        z-index: 0;
-        left: 0;
-        top: 0;
-        width: 0;
-        height: 0;
-        border-radius: 6px;
-        background: linear-gradient(120deg, #96732e, #dfbd68, #c9a24d);
-        box-shadow: 0 10px 25px rgba(166,129,40,.34);
-        pointer-events: none;
-        opacity: 0;
-        transition: transform .34s cubic-bezier(.22,1,.36,1),
-                    width .34s cubic-bezier(.22,1,.36,1),
-                    height .34s cubic-bezier(.22,1,.36,1),
-                    opacity .2s ease;
-    }
-    .giving-page .giving-amounts .giving-amount {
-        position: relative;
-        z-index: 1;
-        background: transparent !important;
-        transition: color .2s ease, transform .2s ease;
-    }
-    .giving-page .giving-amounts .giving-amount.active {
-        border-color: #c9a24d;
-    }
-    .giving-page .giving-amounts .giving-amount.highlighted {
-        color: #111 !important;
-        border-color: transparent !important;
-    }
-    .giving-page .giving-amounts .giving-amount:hover {
-        box-shadow: none;
-    }
-
-    @@media (max-width: 1000px) {
-        .giving-page .giving-method-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .giving-page .giving-method-card {
-            min-height: auto;
+    @@media (max-width: 650px) {
+        .giving-page .giving-payment-choices {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
@@ -167,9 +225,7 @@
             transition: none;
         }
 
-        .giving-page .giving-method-card,
         .giving-page .giving-amount,
-        .giving-page .giving-method-button,
         .giving-page .giving-hover-highlight {
             transition: none;
         }
@@ -231,28 +287,43 @@
                     : "Choose an amount below or enter your own gift.")
             </p>
 
-            <div class="giving-amounts" id="givingAmounts" role="group"
+            <div class="giving-amounts"
+                 id="givingAmounts"
+                 role="group"
                  aria-label="@(isFrench ? "Montant du don" : "Gift amount")">
 
-                <span class="giving-hover-highlight" aria-hidden="true"></span>
+                <span class="giving-hover-highlight"
+                      aria-hidden="true"></span>
 
-                <button type="button" class="giving-amount"
-                        data-amount="20" aria-pressed="false">$20</button>
+                <button type="button"
+                        class="giving-amount"
+                        data-amount="20"
+                        aria-pressed="false">$20</button>
 
-                <button type="button" class="giving-amount"
-                        data-amount="50" aria-pressed="false">$50</button>
+                <button type="button"
+                        class="giving-amount"
+                        data-amount="50"
+                        aria-pressed="false">$50</button>
 
-                <button type="button" class="giving-amount"
-                        data-amount="100" aria-pressed="false">$100</button>
+                <button type="button"
+                        class="giving-amount"
+                        data-amount="100"
+                        aria-pressed="false">$100</button>
 
-                <button type="button" class="giving-amount active"
-                        data-amount="250" aria-pressed="true">$250</button>
+                <button type="button"
+                        class="giving-amount active"
+                        data-amount="250"
+                        aria-pressed="true">$250</button>
 
-                <button type="button" class="giving-amount"
-                        data-amount="500" aria-pressed="false">$500</button>
+                <button type="button"
+                        class="giving-amount"
+                        data-amount="500"
+                        aria-pressed="false">$500</button>
 
-                <button type="button" class="giving-amount"
-                        data-amount="1000" aria-pressed="false">$1,000</button>
+                <button type="button"
+                        class="giving-amount"
+                        data-amount="1000"
+                        aria-pressed="false">$1,000</button>
             </div>
 
             <div class="giving-other-amount">
@@ -265,6 +336,7 @@
                     <input type="number"
                            id="customGivingAmount"
                            min="1"
+                           max="10000"
                            step="0.01"
                            inputmode="decimal"
                            placeholder="@(isFrench ? "Entrez un montant" : "Enter amount")" />
@@ -287,93 +359,74 @@
             <div class="giving-step">
                 <span class="giving-step-number">02</span>
                 <span class="giving-step-title">
-                    @(isFrench ? "MOYENS DE PAIEMENT" : "CHOOSE HOW TO GIVE")
+                    @(isFrench ? "MOYENS DE PAIEMENT" : "PAYMENT METHODS")
                 </span>
             </div>
 
             <h2>
-                @(isFrench ? "Comment souhaitez-vous donner ?" : "Give securely")
+                @(isFrench
+                    ? "Comment souhaitez-vous donner ?"
+                    : "How would you like to give?")
             </h2>
 
             <p class="giving-section-description">
                 @(isFrench
-                    ? "Choisissez le moyen de paiement qui vous convient."
-                    : "Choose the giving method that is most convenient for you.")
+                    ? "Choisissez votre moyen de paiement."
+                    : "Choose your preferred payment method.")
             </p>
 
-            <div class="giving-method-grid">
+            <div class="giving-unified-payment"
+                 id="stripeDonationCard"
+                 data-publishable-key="@ViewBag.StripePublishableKey">
 
-                <!-- ZELLE -->
-                <article class="giving-method-card">
-                    <p class="giving-method-label">ZELLE</p>
+                <!-- PAYMENT CHOICES -->
+                <div class="giving-payment-choices"
+                     role="radiogroup"
+                     aria-label="@(isFrench ? "Moyen de paiement" : "Payment method")">
 
-                    <h3>
-                        @(isFrench ? "Donner avec Zelle" : "Give with Zelle")
-                    </h3>
-
-                    <p class="giving-method-description">
-                        @(isFrench
-                            ? "Envoyez votre don directement avec les informations Zelle officielles de Sengele Ministries."
-                            : "Send your gift directly using the official Zelle information for Sengele Ministries.")
-                    </p>
-
-                    <div class="giving-method-info">
+                    <label class="giving-payment-choice">
+                        <input type="radio"
+                               name="givingMethod"
+                               value="card"
+                               checked />
                         <span>
-                            @(isFrench ? "Informations Zelle" : "Zelle Giving Information")
+                            💳 @(isFrench ? "Carte bancaire" : "Credit / Debit Card")
                         </span>
-                        <strong>francis.sengele@gmail.com</strong>
-                    </div>
+                    </label>
 
-                    <a href="mailto:francis.sengele@gmail.com"
-                       class="giving-method-button giving-method-link">
-                        @(isFrench ? "DONNER AVEC ZELLE" : "GIVE WITH ZELLE")
-                    </a>
-                </article>
+                    <label class="giving-payment-choice">
+                        <input type="radio"
+                               name="givingMethod"
+                               value="paypal" />
+                        <span>PayPal</span>
+                    </label>
 
-                <!-- CASH APP -->
-                <article class="giving-method-card">
-                    <p class="giving-method-label">CASH APP</p>
+                    <label class="giving-payment-choice">
+                        <input type="radio"
+                               name="givingMethod"
+                               value="zelle" />
+                        <span>Zelle</span>
+                    </label>
 
-                    <h3>
-                        @(isFrench ? "Donner avec Cash App" : "Give with Cash App")
-                    </h3>
+                    <label class="giving-payment-choice">
+                        <input type="radio"
+                               name="givingMethod"
+                               value="cashapp" />
+                        <span>Cash App</span>
+                    </label>
+                </div>
 
-                    <p class="giving-method-description">
-                        @(isFrench
-                            ? "Soutenez notre ministère avec notre compte Cash App officiel."
-                            : "Give quickly through the official Sengele Ministries Cash App account.")
-                    </p>
-
-                    <div class="giving-method-info">
-                        <span>
-                            @(isFrench ? "Compte Cash App" : "Cash App Giving Information")
-                        </span>
-                        <strong>$francissengel</strong>
-                    </div>
-
-                    <a href="https://cash.app/$francissengel"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="giving-method-button giving-method-link">
-                        @(isFrench ? "DONNER AVEC CASH APP" : "GIVE WITH CASH APP")
-                    </a>
-                </article>
-
-                <!-- CARD : FUTURE STRIPE INTEGRATION -->
-                <article class="giving-method-card">
-
-                    <p class="giving-method-label">
-                        @(isFrench ? "CARTE BANCAIRE" : "CREDIT / DEBIT CARD")
-                    </p>
+                <!-- STRIPE CARD -->
+                <div class="giving-payment-details" id="cardMethodPanel">
 
                     <h3>
                         @(isFrench ? "Donner par carte" : "Give by Card")
                     </h3>
 
-                    <p class="giving-method-description">
+                    <p class="giving-card-notice">
                         @(isFrench
-                            ? "Nous préparons une solution sécurisée pour accepter les dons par carte Visa, Mastercard et autres cartes compatibles."
-                            : "We are preparing a secure way to accept donations by Visa, Mastercard and other supported cards.")
+                            ? "Effectuez un don sécurisé avec Stripe. Mode test uniquement."
+                            : "Make a secure donation with Stripe. Test mode only.")
                     </p>
 
                     <div class="giving-method-info">
@@ -384,22 +437,113 @@
                     </div>
 
                     <span class="giving-payment-badge">
-                        @(isFrench ? "INTÉGRATION EN PRÉPARATION" : "INTEGRATION IN PROGRESS")
+                        STRIPE SANDBOX
                     </span>
+
+                    <form id="stripeDonationForm" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <button type="button"
+                                id="startStripeDonation"
+                                class="giving-method-button">
+                            @(isFrench
+                                ? "CONTINUER PAR CARTE"
+                                : "CONTINUE WITH CARD")
+                        </button>
+
+                        <div id="stripePaymentPanel"
+                             class="giving-stripe-panel"
+                             hidden>
+
+                            <div id="payment-element"></div>
+
+                            <button type="submit"
+                                    id="confirmStripeDonation"
+                                    class="giving-method-button">
+                                @(isFrench
+                                    ? "CONFIRMER LE DON TEST"
+                                    : "CONFIRM TEST DONATION")
+                            </button>
+                        </div>
+
+                        <p id="stripeMessage"
+                           class="giving-status"
+                           aria-live="polite"></p>
+                    </form>
+                </div>
+
+                <!-- PAYPAL -->
+                <div class="giving-payment-details"
+                     id="paypalMethodPanel"
+                     hidden>
+
+                    <h3>PayPal</h3>
 
                     <p class="giving-card-notice">
                         @(isFrench
-                            ? "Le paiement par carte sera disponible après la configuration du prestataire sécurisé."
-                            : "Card payments will become available after the secure payment provider is configured.")
+                            ? "PayPal sera disponible après la connexion d'un compte PayPal autorisé à recevoir des paiements."
+                            : "PayPal will be available after an eligible PayPal account is connected.")
                     </p>
 
-                    <button type="button"
-                            class="giving-method-button"
-                            disabled>
-                        @(isFrench ? "BIENTÔT DISPONIBLE" : "COMING SOON")
-                    </button>
-                </article>
+                    <span class="giving-payment-badge">
+                        @(isFrench ? "EN PRÉPARATION" : "COMING SOON")
+                    </span>
+                </div>
 
+                <!-- ZELLE -->
+                <div class="giving-payment-details"
+                     id="zelleMethodPanel"
+                     hidden>
+
+                    <h3>
+                        @(isFrench ? "Donner avec Zelle" : "Give with Zelle")
+                    </h3>
+
+                    <p>
+                        @(isFrench
+                            ? "Envoyez votre don à cette adresse avec votre application Zelle."
+                            : "Send your donation to this address using Zelle.")
+                    </p>
+
+                    <div class="giving-method-info">
+                        <strong>francis.sengele@gmail.com</strong>
+                    </div>
+
+                    <button type="button"
+                            id="copyZelle"
+                            class="giving-method-button">
+                        @(isFrench
+                            ? "COPIER L'ADRESSE ZELLE"
+                            : "COPY ZELLE ADDRESS")
+                    </button>
+
+                    <p id="zelleCopyStatus"
+                       class="giving-status"
+                       aria-live="polite"></p>
+                </div>
+
+                <!-- CASH APP -->
+                <div class="giving-payment-details"
+                     id="cashappMethodPanel"
+                     hidden>
+
+                    <h3>
+                        @(isFrench ? "Donner avec Cash App" : "Give with Cash App")
+                    </h3>
+
+                    <div class="giving-method-info">
+                        <strong>$francissengel</strong>
+                    </div>
+
+                    <a href="https://cash.app/$francissengel"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="giving-method-button giving-method-link">
+                        @(isFrench
+                            ? "OUVRIR CASH APP"
+                            : "OPEN CASH APP")
+                    </a>
+                </div>
             </div>
 
             <p class="giving-status" id="givingAmountNote">
@@ -434,31 +578,43 @@
             <p class="giving-privacy-reference">
                 @(isFrench ? "Matthieu 6:3" : "Matthew 6:3")
             </p>
-
         </section>
 
         <!-- SECURITY -->
         <section class="giving-security giving-reveal">
 
             <strong>
-                @(isFrench ? "Votre sécurité est importante." : "Your security matters.")
+                @(isFrench
+                    ? "Votre sécurité est importante."
+                    : "Your security matters.")
             </strong>
 
             <p>
                 @(isFrench
-                    ? "Sengele Ministries ne vous demandera jamais votre mot de passe bancaire, votre code PIN ou vos informations bancaires sensibles directement sur cette page. Les futurs paiements par carte seront traités par un prestataire sécurisé."
-                    : "Sengele Ministries will never ask for your online banking password, PIN or sensitive banking information directly on this page. Future card payments will be processed by a secure payment provider.")
+                    ? "Les informations de carte sont traitées par Stripe. Sengele Ministries ne vous demandera jamais votre mot de passe bancaire ou votre code PIN."
+                    : "Card details are processed by Stripe. Sengele Ministries will never ask for your banking password or PIN.")
             </p>
-
         </section>
 
     </div>
 </div>
 
 @section Scripts {
+    <script src="https://js.stripe.com/v3/"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
+            // ==========================================
+            // LANGUAGE
+            // ==========================================
+            const isFrench = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(isFrench)
+            );
+
+            // ==========================================
+            // ELEMENTS
+            // ==========================================
             const amountButtons =
                 document.querySelectorAll(".giving-amount");
 
@@ -471,80 +627,617 @@
             const cardAmount =
                 document.getElementById("cardGivingAmount");
 
+            const stripeCard =
+                document.getElementById("stripeDonationCard");
+
+            const stripeForm =
+                document.getElementById("stripeDonationForm");
+
+            const stripePanel =
+                document.getElementById("stripePaymentPanel");
+
+            const stripeStart =
+                document.getElementById("startStripeDonation");
+
+            const stripeConfirm =
+                document.getElementById("confirmStripeDonation");
+
+            const stripeMessage =
+                document.getElementById("stripeMessage");
+
             const currency = new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "USD"
             });
 
+            let selectedGift = 250;
+            let stripeElements = null;
+            let stripePaymentElement = null;
+            let requestInProgress = false;
+            let donationConfirmed = false;
+            let activePaymentIntentId = null;
+
+            const publishableKey =
+                stripeCard.dataset.publishableKey;
+
+            const stripe =
+                publishableKey && window.Stripe
+                    ? Stripe(publishableKey)
+                    : null;
+
+            // ==========================================
+            // DISPLAY MESSAGES
+            // ==========================================
+            function showMessage(
+                message,
+                isError = false,
+                isSuccess = false
+            ) {
+                stripeMessage.textContent = message;
+
+                if (isError) {
+                    stripeMessage.setAttribute("role", "alert");
+                } else {
+                    stripeMessage.removeAttribute("role");
+                }
+
+                if (isSuccess) {
+                    stripeMessage.dataset.success = "true";
+                } else {
+                    delete stripeMessage.dataset.success;
+                }
+            }
+
+            // ==========================================
+            // SELECTED DONATION AMOUNT
+            // ==========================================
+            function currentGiftAmount() {
+
+                if (customAmount.value !== "") {
+                    return Number(customAmount.value);
+                }
+
+                const active =
+                    document.querySelector(".giving-amount.active");
+
+                return active
+                    ? Number(active.dataset.amount)
+                    : 0;
+            }
+
+            // ==========================================
+            // RESET STRIPE PAYMENT FORM
+            // ==========================================
+            function invalidateStripeForm() {
+
+                if (requestInProgress) {
+                    return;
+                }
+
+                if (stripePaymentElement) {
+                    stripePaymentElement.destroy();
+                    stripePaymentElement = null;
+                }
+
+                stripeElements = null;
+                activePaymentIntentId = null;
+                donationConfirmed = false;
+
+                stripePanel.hidden = true;
+                stripeStart.hidden = false;
+                stripeConfirm.disabled = false;
+
+                showMessage("");
+            }
+
+            // ==========================================
+            // UPDATE DONATION AMOUNT
+            // ==========================================
             function updateAmount(amount) {
-                const validAmount =
+
+                const valid =
                     Number.isFinite(amount) && amount > 0
                         ? amount
                         : 0;
 
-                const formatted = currency.format(validAmount);
+                selectedGift = valid;
+
+                const formatted = currency.format(valid);
 
                 selectedAmount.textContent = formatted;
                 cardAmount.textContent = formatted;
+
+                invalidateStripeForm();
             }
 
-            // Gold highlight follows the mouse without selecting a new gift.
-            const amountGroup = document.getElementById("givingAmounts");
-            const highlight = amountGroup.querySelector(".giving-hover-highlight");
-            const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            // ==========================================
+            // PAYMENT METHOD PANELS
+            // ==========================================
+            const methodPanels = {
+                card: document.getElementById("cardMethodPanel"),
+                paypal: document.getElementById("paypalMethodPanel"),
+                zelle: document.getElementById("zelleMethodPanel"),
+                cashapp: document.getElementById("cashappMethodPanel")
+            };
+
+            document.querySelectorAll(
+                'input[name="givingMethod"]'
+            ).forEach(function (radio) {
+
+                radio.addEventListener("change", function () {
+
+                    Object.entries(methodPanels).forEach(
+                        function ([method, panel]) {
+                            panel.hidden = method !== radio.value;
+                        }
+                    );
+
+                    if (radio.value !== "card") {
+                        invalidateStripeForm();
+                    }
+                });
+            });
+
+            // ==========================================
+            // COPY ZELLE ADDRESS
+            // ==========================================
+            document.getElementById("copyZelle")
+                .addEventListener("click", async function () {
+
+                    const status =
+                        document.getElementById("zelleCopyStatus");
+
+                    try {
+                        await navigator.clipboard.writeText(
+                            "francis.sengele@gmail.com"
+                        );
+
+                        status.textContent = isFrench
+                            ? "Adresse copiée."
+                            : "Address copied.";
+
+                    } catch {
+                        status.textContent = isFrench
+                            ? "Copiez l'adresse affichée ci-dessus."
+                            : "Copy the address displayed above.";
+                    }
+                });
+
+            // ==========================================
+            // STRIPE VERIFICATION
+            // ==========================================
+            async function verifyDonation(paymentIntentId) {
+
+                if (!paymentIntentId ||
+                    !paymentIntentId.startsWith("pi_")) {
+
+                    showMessage(
+                        isFrench
+                            ? "Référence du paiement introuvable."
+                            : "Payment reference not found.",
+                        true
+                    );
+
+                    return;
+                }
+
+                showMessage(
+                    isFrench
+                        ? "Vérification du don auprès de Stripe..."
+                        : "Verifying your donation with Stripe..."
+                );
+
+                try {
+
+                    const token = stripeForm.querySelector(
+                        'input[name="__RequestVerificationToken"]'
+                    ).value;
+
+                    const body = new URLSearchParams({
+                        paymentIntentId: paymentIntentId
+                    });
+
+                    const response = await fetch(
+                        "/StripePayment/VerifyDonation",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded;charset=UTF-8",
+                                "RequestVerificationToken": token
+                            },
+                            body: body.toString()
+                        }
+                    );
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(
+                            result.error || "Verification failed."
+                        );
+                    }
+
+                    if (result.succeeded) {
+
+                        donationConfirmed = true;
+
+                        const formattedAmount =
+                            currency.format(result.amount);
+
+                        showMessage(
+                            isFrench
+                                ? "Merci ! Votre don de " +
+                                  formattedAmount +
+                                  " a été confirmé avec succès."
+                                : "Thank you! Your donation of " +
+                                  formattedAmount +
+                                  " was confirmed successfully.",
+                            false,
+                            true
+                        );
+
+                        stripeConfirm.disabled = true;
+                        stripeStart.hidden = true;
+
+                    } else if (
+                        result.status === "processing" ||
+                        result.status === "requires_capture"
+                    ) {
+
+                        showMessage(
+                            isFrench
+                                ? "Votre paiement est en cours de traitement. Il n'est pas encore confirmé."
+                                : "Your payment is processing and has not been confirmed yet."
+                        );
+
+                    } else {
+
+                        showMessage(
+                            isFrench
+                                ? "Le don n'est pas encore confirmé. Statut : " +
+                                  result.status
+                                : "Your donation is not confirmed yet. Status: " +
+                                  result.status,
+                            true
+                        );
+                    }
+
+                } catch (error) {
+
+                    showMessage(
+                        isFrench
+                            ? "Impossible de vérifier le don pour le moment. Consultez le statut dans Stripe avant de réessayer."
+                            : "Unable to verify the donation right now. Check its status in Stripe before trying again.",
+                        true
+                    );
+
+                    console.error("Stripe verification error:", error);
+                }
+            }
+
+            // ==========================================
+            // CREATE STRIPE PAYMENT
+            // ==========================================
+            stripeStart.addEventListener("click", async function () {
+
+                if (requestInProgress) return;
+
+                const amount = currentGiftAmount();
+                const cents = Math.round(amount * 100);
+
+                if (!Number.isFinite(amount) ||
+                    amount < 1 ||
+                    amount > 10000 ||
+                    Math.abs(amount * 100 - cents) > 0.000001) {
+
+                    showMessage(
+                        isFrench
+                            ? "Entrez un montant valide entre 1 $ et 10 000 $, avec deux décimales maximum."
+                            : "Enter a valid amount between $1 and $10,000 with no more than two decimal places.",
+                        true
+                    );
+
+                    return;
+                }
+
+                if (!stripe) {
+
+                    showMessage(
+                        isFrench
+                            ? "Stripe n'est pas encore configuré."
+                            : "Stripe is not configured.",
+                        true
+                    );
+
+                    return;
+                }
+
+                requestInProgress = true;
+                stripeStart.disabled = true;
+
+                showMessage(
+                    isFrench
+                        ? "Préparation du paiement..."
+                        : "Preparing payment..."
+                );
+
+                try {
+
+                    const token = stripeForm.querySelector(
+                        'input[name="__RequestVerificationToken"]'
+                    ).value;
+
+                    const body = new URLSearchParams({
+                        amount: amount.toFixed(2)
+                    });
+
+                    const response = await fetch(
+                        "/StripePayment/CreateDonationIntent",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded;charset=UTF-8",
+                                "RequestVerificationToken": token
+                            },
+                            body: body.toString()
+                        }
+                    );
+
+                    const result = await response.json();
+
+                    if (!response.ok || !result.clientSecret) {
+                        throw new Error(
+                            result.error || "Unable to prepare donation."
+                        );
+                    }
+
+                    stripeElements = stripe.elements({
+                        clientSecret: result.clientSecret
+                    });
+
+                    stripePaymentElement =
+                        stripeElements.create("payment", {
+                            layout: "tabs"
+                        });
+
+                    stripePaymentElement.mount("#payment-element");
+
+                    activePaymentIntentId =
+                        result.clientSecret.split("_secret_")[0];
+
+                    stripePanel.hidden = false;
+                    stripeStart.hidden = true;
+
+                    showMessage("");
+
+                } catch (error) {
+
+                    showMessage(
+                        error.message || "Payment setup failed.",
+                        true
+                    );
+
+                } finally {
+
+                    requestInProgress = false;
+                    stripeStart.disabled = false;
+                }
+            });
+
+            // ==========================================
+            // CONFIRM STRIPE PAYMENT
+            // ==========================================
+            stripeForm.addEventListener(
+                "submit",
+                async function (event) {
+
+                    event.preventDefault();
+
+                    if (!stripe ||
+                        !stripeElements ||
+                        requestInProgress ||
+                        donationConfirmed) {
+                        return;
+                    }
+
+                    if (currentGiftAmount() !== selectedGift) {
+
+                        invalidateStripeForm();
+
+                        showMessage(
+                            isFrench
+                                ? "Le montant a changé. Recommencez le paiement."
+                                : "The amount changed. Please restart payment.",
+                            true
+                        );
+
+                        return;
+                    }
+
+                    requestInProgress = true;
+                    stripeConfirm.disabled = true;
+
+                    showMessage(
+                        isFrench
+                            ? "Traitement du paiement..."
+                            : "Processing payment..."
+                    );
+
+                    const returnUrl = new URL(
+                        "/Home/Donate",
+                        window.location.origin
+                    );
+
+                    returnUrl.searchParams.set(
+                        "stripe_return",
+                        "1"
+                    );
+
+                    try {
+
+                        const result =
+                            await stripe.confirmPayment({
+                                elements: stripeElements,
+                                confirmParams: {
+                                    return_url:
+                                        returnUrl.toString()
+                                },
+                                redirect: "if_required"
+                            });
+
+                        if (result.error) {
+
+                            showMessage(
+                                result.error.message ||
+                                    "Payment failed.",
+                                true
+                            );
+
+                        } else if (result.paymentIntent) {
+
+                            await verifyDonation(
+                                result.paymentIntent.id
+                            );
+
+                        } else if (activePaymentIntentId) {
+
+                            await verifyDonation(
+                                activePaymentIntentId
+                            );
+
+                        } else {
+
+                            showMessage(
+                                isFrench
+                                    ? "Paiement envoyé. Vérification en attente."
+                                    : "Payment submitted. Verification pending."
+                            );
+                        }
+
+                    } catch (error) {
+
+                        showMessage(
+                            error.message || "Payment failed.",
+                            true
+                        );
+
+                    } finally {
+
+                        requestInProgress = false;
+
+                        if (!donationConfirmed) {
+                            stripeConfirm.disabled = false;
+                        }
+                    }
+                }
+            );
+
+            // ==========================================
+            // VERIFY AFTER STRIPE REDIRECT
+            // ==========================================
+            const stripeReturnParams =
+                new URLSearchParams(window.location.search);
+
+            if (stripeReturnParams.has("stripe_return")) {
+
+                const returnedPaymentIntent =
+                    stripeReturnParams.get("payment_intent");
+
+                if (returnedPaymentIntent) {
+
+                    document.querySelector(
+                        'input[name="givingMethod"][value="card"]'
+                    ).checked = true;
+
+                    Object.entries(methodPanels).forEach(
+                        function ([method, panel]) {
+                            panel.hidden = method !== "card";
+                        }
+                    );
+
+                    stripePanel.hidden = true;
+                    stripeStart.hidden = true;
+
+                    verifyDonation(returnedPaymentIntent);
+
+                } else {
+
+                    showMessage(
+                        isFrench
+                            ? "Retour de Stripe. Aucune référence de paiement trouvée."
+                            : "Returned from Stripe. No payment reference was found.",
+                        true
+                    );
+                }
+            }
+
+            // ==========================================
+            // GOLD HIGHLIGHT ANIMATION
+            // ==========================================
+            const amountGroup =
+                document.getElementById("givingAmounts");
+
+            const highlight =
+                amountGroup.querySelector(".giving-hover-highlight");
+
+            const reducedMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+            ).matches;
 
             function selectedButton() {
-                return amountGroup.querySelector(".giving-amount.active");
+                return amountGroup.querySelector(
+                    ".giving-amount.active"
+                );
             }
 
             function moveHighlight(button) {
+
                 amountButtons.forEach(function (item) {
-                    item.classList.toggle("highlighted", item === button);
+                    item.classList.toggle(
+                        "highlighted",
+                        item === button
+                    );
                 });
+
                 if (!button) {
                     highlight.style.opacity = "0";
                     return;
                 }
-                const groupRect = amountGroup.getBoundingClientRect();
+
+                const groupRect =
+                    amountGroup.getBoundingClientRect();
+
                 const rect = button.getBoundingClientRect();
+
                 highlight.style.width = rect.width + "px";
                 highlight.style.height = rect.height + "px";
-                highlight.style.transform = "translate(" +
+
+                highlight.style.transform =
+                    "translate(" +
                     (rect.left - groupRect.left) + "px, " +
                     (rect.top - groupRect.top) + "px)";
+
                 highlight.style.opacity = "1";
             }
 
+            // ==========================================
+            // AMOUNT BUTTON EVENTS
+            // ==========================================
             amountButtons.forEach(function (button) {
+
                 button.addEventListener("mouseenter", function () {
                     moveHighlight(button);
                 });
+
                 button.addEventListener("focus", function () {
                     moveHighlight(button);
                 });
-            });
-
-            amountGroup.addEventListener("mouseleave", function () {
-                moveHighlight(selectedButton());
-            });
-            amountGroup.addEventListener("focusout", function (event) {
-                if (!amountGroup.contains(event.relatedTarget)) {
-                    moveHighlight(selectedButton());
-                }
-            });
-            window.addEventListener("resize", function () {
-                moveHighlight(amountGroup.querySelector(".giving-amount.highlighted") || selectedButton());
-            });
-
-            // Initialize the highlight after layout is ready.
-            requestAnimationFrame(function () {
-                moveHighlight(selectedButton());
-            });
-
-            // Preset amounts
-            amountButtons.forEach(function (button) {
 
                 button.addEventListener("click", function () {
+
+                    if (requestInProgress) return;
 
                     amountButtons.forEach(function (item) {
                         item.classList.remove("active");
@@ -561,8 +1254,34 @@
                 });
             });
 
-            // Custom amount
+            amountGroup.addEventListener("mouseleave", function () {
+                moveHighlight(selectedButton());
+            });
+
+            amountGroup.addEventListener("focusout", function (event) {
+                if (!amountGroup.contains(event.relatedTarget)) {
+                    moveHighlight(selectedButton());
+                }
+            });
+
+            window.addEventListener("resize", function () {
+                moveHighlight(
+                    amountGroup.querySelector(
+                        ".giving-amount.highlighted"
+                    ) || selectedButton()
+                );
+            });
+
+            requestAnimationFrame(function () {
+                moveHighlight(selectedButton());
+            });
+
+            // ==========================================
+            // CUSTOM AMOUNT
+            // ==========================================
             customAmount.addEventListener("input", function () {
+
+                if (requestInProgress) return;
 
                 amountButtons.forEach(function (item) {
                     item.classList.remove("active");
@@ -573,7 +1292,9 @@
                 moveHighlight(null);
             });
 
-            // Smooth reveal animation
+            // ==========================================
+            // REVEAL ANIMATION
+            // ==========================================
             const revealElements =
                 document.querySelectorAll(".giving-reveal");
 
@@ -589,7 +1310,6 @@
                     function (entries) {
 
                         entries.forEach(function (entry) {
-
                             if (entry.isIntersecting) {
                                 entry.target.classList.add("is-visible");
                                 observer.unobserve(entry.target);
@@ -608,7 +1328,6 @@
                 });
             }
 
-            // Make sure all content remains visible when printing
             window.addEventListener("beforeprint", function () {
                 revealElements.forEach(function (element) {
                     element.classList.add("is-visible");
