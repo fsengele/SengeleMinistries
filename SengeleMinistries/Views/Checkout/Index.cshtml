@@ -35,14 +35,14 @@
 
                 <form asp-controller="Checkout"
                       asp-action="PlaceOrder"
-                      method="post">
+                      method="post"
+                      id="checkout-form">
 
                     @Html.AntiForgeryToken()
 
                     <div class="row">
 
                         <div class="col-md-6 mb-3">
-
                             <label asp-for="FirstName"
                                    class="form-label">
                                 First Name
@@ -51,11 +51,9 @@
                             <input asp-for="FirstName"
                                    class="form-control"
                                    readonly />
-
                         </div>
 
                         <div class="col-md-6 mb-3">
-
                             <label asp-for="LastName"
                                    class="form-label">
                                 Last Name
@@ -64,14 +62,11 @@
                             <input asp-for="LastName"
                                    class="form-control"
                                    readonly />
-
                         </div>
 
                     </div>
 
-
                     <div class="mb-3">
-
                         <label asp-for="Email"
                                class="form-label">
                             Email
@@ -80,12 +75,9 @@
                         <input asp-for="Email"
                                class="form-control"
                                readonly />
-
                     </div>
 
-
                     <div class="mb-3">
-
                         <label asp-for="Phone"
                                class="form-label">
                             Phone Number
@@ -98,12 +90,9 @@
                         <span asp-validation-for="Phone"
                               class="text-danger">
                         </span>
-
                     </div>
 
-
                     <div class="mb-3">
-
                         <label asp-for="Address"
                                class="form-label">
                             Street Address
@@ -116,14 +105,11 @@
                         <span asp-validation-for="Address"
                               class="text-danger">
                         </span>
-
                     </div>
-
 
                     <div class="row">
 
                         <div class="col-md-5 mb-3">
-
                             <label asp-for="City"
                                    class="form-label">
                                 City
@@ -136,12 +122,9 @@
                             <span asp-validation-for="City"
                                   class="text-danger">
                             </span>
-
                         </div>
 
-
                         <div class="col-md-3 mb-3">
-
                             <label asp-for="State"
                                    class="form-label">
                                 State
@@ -154,12 +137,9 @@
                             <span asp-validation-for="State"
                                   class="text-danger">
                             </span>
-
                         </div>
 
-
                         <div class="col-md-4 mb-3">
-
                             <label asp-for="ZipCode"
                                    class="form-label">
                                 ZIP Code
@@ -172,32 +152,39 @@
                             <span asp-validation-for="ZipCode"
                                   class="text-danger">
                             </span>
-
                         </div>
 
                     </div>
 
-
                     <hr class="my-4" />
 
-
+                    <!-- STRIPE PAYMENT -->
                     <h4 class="mb-3">
-                        Payment
+                        Secure Payment
                     </h4>
 
                     <div class="border rounded p-3 mb-4">
 
-                        <strong>
-                            Online Payment
-                        </strong>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <strong>
+                                Credit or Debit Card
+                            </strong>
+                        </div>
 
-                        <p class="text-muted small mb-0 mt-1">
-                            Secure online payment will be connected
-                            in the next step.
+                        <p class="text-muted small">
+                            Secure payment powered by Stripe.
                         </p>
 
-                    </div>
+                        <!-- Stripe Payment Element -->
+                        <div id="checkout-payment-element">
+                        </div>
 
+                        <div id="checkout-payment-message"
+                             class="text-danger small mt-3"
+                             role="alert">
+                        </div>
+
+                    </div>
 
                     <input type="hidden"
                            asp-for="MemberId" />
@@ -208,18 +195,24 @@
                     <input type="hidden"
                            asp-for="Total" />
 
-
+                    <!-- Disabled until Stripe is connected -->
                     <button type="submit"
-                            class="btn btn-dark btn-lg w-100">
-                        PLACE ORDER
+                            id="checkout-submit"
+                            class="btn btn-dark btn-lg w-100"
+                            disabled>
+                        PAY SECURELY
                     </button>
+
+                    <p class="small text-muted text-center mt-3">
+                        Payment will be enabled after
+                        secure checkout configuration.
+                    </p>
 
                 </form>
 
             </div>
 
         </div>
-
 
         <!-- ORDER SUMMARY -->
         <div class="col-lg-5">
@@ -230,28 +223,19 @@
                     Order Summary
                 </h3>
 
-
                 <div class="d-flex justify-content-between mb-3">
-
-                    <span>
-                        Subtotal
-                    </span>
+                    <span>Subtotal</span>
 
                     <strong>
                         $@Model.Subtotal.ToString("0.00")
                     </strong>
-
                 </div>
-
 
                 <hr />
 
-
                 <div class="d-flex justify-content-between">
 
-                    <strong>
-                        Total
-                    </strong>
+                    <strong>Total</strong>
 
                     <strong class="fs-4">
                         $@Model.Total.ToString("0.00")
@@ -259,23 +243,19 @@
 
                 </div>
 
-
                 <p class="small text-muted mt-4 mb-0">
-                    Your order will be saved securely
-                    before payment processing.
+                    Your payment will be securely
+                    processed by Stripe.
                 </p>
 
             </div>
 
-
             <div class="mt-3">
-
                 <a asp-controller="Cart"
                    asp-action="Index"
                    class="btn btn-outline-dark w-100">
                     BACK TO CART
                 </a>
-
             </div>
 
         </div>
