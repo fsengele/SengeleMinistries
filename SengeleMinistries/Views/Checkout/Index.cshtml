@@ -1,4 +1,5 @@
-﻿@model SengeleMinistries.Models.Order
+﻿
+@model SengeleMinistries.Models.Order
 
 @{
     ViewData["Title"] = "Checkout";
@@ -26,10 +27,10 @@
             <div class="border rounded p-4 bg-white">
 
                 <h3 class="mb-4">
-                    Shipping Information
+                    Customer Information
                 </h3>
 
-                <div asp-validation-summary="ModelOnly"
+                <div asp-validation-summary="All"
                      class="text-danger mb-3">
                 </div>
 
@@ -85,7 +86,8 @@
 
                         <input asp-for="Phone"
                                class="form-control"
-                               placeholder="Phone number" />
+                               placeholder="Phone number"
+                               required />
 
                         <span asp-validation-for="Phone"
                               class="text-danger">
@@ -100,7 +102,8 @@
 
                         <input asp-for="Address"
                                class="form-control"
-                               placeholder="Street address" />
+                               placeholder="Street address"
+                               required />
 
                         <span asp-validation-for="Address"
                               class="text-danger">
@@ -117,7 +120,8 @@
 
                             <input asp-for="City"
                                    class="form-control"
-                                   placeholder="City" />
+                                   placeholder="City"
+                                   required />
 
                             <span asp-validation-for="City"
                                   class="text-danger">
@@ -132,7 +136,8 @@
 
                             <input asp-for="State"
                                    class="form-control"
-                                   placeholder="WA" />
+                                   placeholder="WA"
+                                   required />
 
                             <span asp-validation-for="State"
                                   class="text-danger">
@@ -147,7 +152,8 @@
 
                             <input asp-for="ZipCode"
                                    class="form-control"
-                                   placeholder="ZIP Code" />
+                                   placeholder="ZIP Code"
+                                   required />
 
                             <span asp-validation-for="ZipCode"
                                   class="text-danger">
@@ -158,31 +164,22 @@
 
                     <hr class="my-4" />
 
-                    <!-- STRIPE PAYMENT -->
+                    <!-- PAYMENT INFORMATION -->
                     <h4 class="mb-3">
-                        Secure Payment
+                        Payment Information
                     </h4>
 
                     <div class="border rounded p-3 mb-4">
 
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <strong>
-                                Credit or Debit Card
-                            </strong>
-                        </div>
-
-                        <p class="text-muted small">
-                            Secure payment powered by Stripe.
+                        <p class="mb-2">
+                            Your order will be saved securely.
                         </p>
 
-                        <!-- Stripe Payment Element -->
-                        <div id="checkout-payment-element">
-                        </div>
-
-                        <div id="checkout-payment-message"
-                             class="text-danger small mt-3"
-                             role="alert">
-                        </div>
+                        <p class="small text-muted mb-0">
+                            Payment is not collected at this step.
+                            Your order will remain pending until
+                            secure online payment is available.
+                        </p>
 
                     </div>
 
@@ -195,17 +192,15 @@
                     <input type="hidden"
                            asp-for="Total" />
 
-                    <!-- Disabled until Stripe is connected -->
                     <button type="submit"
                             id="checkout-submit"
-                            class="btn btn-dark btn-lg w-100"
-                            disabled>
-                        PAY SECURELY
+                            class="btn btn-dark btn-lg w-100">
+                        PLACE ORDER - PAYMENT PENDING
                     </button>
 
                     <p class="small text-muted text-center mt-3">
-                        Payment will be enabled after
-                        secure checkout configuration.
+                        No payment will be charged when you
+                        submit this order.
                     </p>
 
                 </form>
@@ -244,8 +239,8 @@
                 </div>
 
                 <p class="small text-muted mt-4 mb-0">
-                    Your payment will be securely
-                    processed by Stripe.
+                    Your order will remain pending
+                    until payment is completed.
                 </p>
 
             </div>

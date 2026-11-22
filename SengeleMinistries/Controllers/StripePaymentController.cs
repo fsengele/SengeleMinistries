@@ -1,7 +1,15 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SengeleMinistries.Data;
 using Stripe;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SengeleMinistries.Controllers
 {
@@ -9,10 +17,14 @@ namespace SengeleMinistries.Controllers
     public class StripePaymentController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
-        public StripePaymentController(IConfiguration configuration)
+        public StripePaymentController(
+            IConfiguration configuration,
+            ApplicationDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
         // ==========================================
@@ -35,8 +47,6 @@ namespace SengeleMinistries.Controllers
                 });
             }
 
-            // Accept donations between $1 and $10,000
-            // Maximum two decimal places
             if (donationAmount < 1 ||
                 donationAmount > 10000 ||
                 decimal.Round(donationAmount, 2) != donationAmount)
@@ -47,7 +57,6 @@ namespace SengeleMinistries.Controllers
                 });
             }
 
-            // Convert dollars to cents
             long amountInCents = (long)(donationAmount * 100);
 
             var secretKey = _configuration["Stripe:SecretKey"];
@@ -150,8 +159,6 @@ namespace SengeleMinistries.Controllers
                     null,
                     requestOptions);
 
-                // Make sure this is a donation
-                // created for Sengele Ministries.
                 bool isDonation =
                     paymentIntent.Metadata != null &&
                     paymentIntent.Metadata.TryGetValue(
@@ -192,6 +199,112 @@ namespace SengeleMinistries.Controllers
                     error = "Unable to verify the donation. Please try again."
                 });
             }
+        }
+
+        // ==========================================
+        // CREATE SHOP ORDER PAYMENT INTENT
+        // ==========================================
+        [Authorize]
+        [HttpPost("CreateShopOrderIntent")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateShopOrderIntent(
+            [FromForm] int orderId)
+        {
+            var claim =
+                User.FindFirst("MemberId") ??
+                User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim == null ||
+                !int.TryParse(claim.Value, out int memberId))
+            {
+                return Unauthorized(new
+                {
+                    error = "Please sign in before checkout."
+                });
+            }
+
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o =>
+                    o.OrderId == orderId &&
+                    o.MemberId == memberId);
+
+            if (order == null)
+            {
+                return NotFound(new
+                {
+                    error = "Order not found."
+                });
+            }
+
+            if (order.PaymentStatus != "Pending" ||
+                order.OrderStatus != "Pending")
+            {
+                return BadRequest(new
+                {
+                    error = "This order is not available for payment."
+                });
+            }
+
+            if (order.OrderItems == null ||
+                order.OrderItems.Count == 0)
+            {
+                return BadRequest(new
+                {
+                    error = "This order has no products."
+                });
+            }
+
+            // Verify product eligibility.
+            foreach (var item in order.OrderItems)
+            {
+                var product = await _context.Products
+                    .FirstOrDefaultAsync(p =>
+                        p.ProductId == item.ProductId);
+
+                if (product == null ||
+                    !product.IsPublished ||
+                    product.ProductType == "AmazonAffiliate" ||
+                    (!string.IsNullOrWhiteSpace(product.ProductType) &&
+                     product.ProductType != "OwnProduct") ||
+                    product.RequiresShipping)
+                {
+                    return BadRequest(new
+                    {
+                        error = "This order contains a product that cannot be paid for yet."
+                    });
+                }
+
+                if (item.Quantity <= 0 ||
+                    item.Price <= 0 ||
+                    item.Price != decimal.Round(item.Price, 2))
+                {
+                    return BadRequest(new
+                    {
+                        error = "Invalid order item."
+                    });
+                }
+            }
+
+            // Recalculate the saved order items.
+            decimal calculatedSubtotal =
+                order.OrderItems.Sum(item =>
+                    item.Price * item.Quantity);
+
+            if (calculatedSubtotal != order.Subtotal)
+            {
+                return BadRequest(new
+                {
+                    error = "Order subtotal verification failed."
+                });
+            }
+
+            // Tax calculation is not configured yet.
+            // Prevent charging a possibly incomplete total.
+            return StatusCode(503, new
+            {
+                error = "Shop payments are not enabled until applicable taxes are configured."
+            });
         }
     }
 }
